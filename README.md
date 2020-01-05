@@ -1,3 +1,1 @@
-# @anchan828/nest-lerna-template
-
-This repository is template for nestjs with lerna.
+# @anchan828/nest-storage-packages

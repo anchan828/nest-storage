@@ -1,4 +1,41 @@
 {
-  "configurations": [],
+  "configurations": [
+    {
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}/packages/common",
+      "internalConsoleOptions": "neverOpen",
+      "name": "common test debug",
+      "port": 9229,
+      "request": "launch",
+      "runtimeArgs": ["run", "test:debug"],
+      "runtimeExecutable": "npm",
+      "sourceMaps": true,
+      "type": "node"
+    },
+    {
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}/packages/gcs",
+      "internalConsoleOptions": "neverOpen",
+      "name": "gcs test debug",
+      "port": 9229,
+      "request": "launch",
+      "runtimeArgs": ["run", "test:debug"],
+      "runtimeExecutable": "npm",
+      "sourceMaps": true,
+      "type": "node"
+    },
+    {
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}/packages/local",
+      "internalConsoleOptions": "neverOpen",
+      "name": "local test debug",
+      "port": 9229,
+      "request": "launch",
+      "runtimeArgs": ["run", "test:debug"],
+      "runtimeExecutable": "npm",
+      "sourceMaps": true,
+      "type": "node"
+    }
+  ],
   "version": "0.2.0"
 }
