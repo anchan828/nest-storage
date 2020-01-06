@@ -14,9 +14,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      - uses: anchan828/save-to-file@master
         with:
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          text: ${{ secrets.GCP_SA_KEY }}
+          file: "~/credentials.json"
+          encoding: "base64"
+      - name: Set NEST_STORAGE_GCS_KEY env
+        run: echo ::set-env name=NEST_STORAGE_GCS_KEY::"$HOME/credentials.json"
       - uses: actions/cache@v1
         with:
           path: ~/.npm

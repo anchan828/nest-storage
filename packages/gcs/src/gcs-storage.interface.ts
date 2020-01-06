@@ -6,19 +6,17 @@ import {
   StorageOptions as GCSStorageOptions,
   UploadOptions as GCSUploadOptions,
 } from "@google-cloud/storage";
-export interface GoogleCloudStorageModuleOptions extends StorageModuleOptions, GCSStorageOptions {
-  cacheDir?: string;
-}
+export interface GoogleCloudStorageModuleOptions extends StorageModuleOptions, GCSStorageOptions {}
 
 export type GoogleCloudStorageModuleAsyncOptions = StorageModuleAsyncOptions<GoogleCloudStorageModuleOptions>;
 
-export interface UploadOptions extends StorageOptions, GCSUploadOptions {}
-export interface DownloadOptions extends StorageOptions {
+export interface GoogleCloudStorageUploadOptions extends StorageOptions, GCSUploadOptions {}
+export interface GoogleCloudStorageDownloadOptions extends StorageOptions {
   fileOptions?: FileOptions;
   downloadOptions?: GCSDownloadOptions;
 }
 
-export interface DeleteOptions extends StorageOptions, DeleteFileOptions {
+export interface GoogleCloudStorageDeleteOptions extends StorageOptions, DeleteFileOptions {
   fileOptions?: FileOptions;
   deleteOptions?: DeleteFileOptions;
 }

@@ -3,26 +3,27 @@
 ## Install
 
 ```shell
-npm i @anchan828/nest-storage-gcs
+npm i @anchan828/nest-storage @anchan828/nest-storage-gcs
 ```
 
 ## Usage
 
 ```ts
-GoogleCloudStorageModule.register({
+StorageModule.register({
   bucket: "bucket",
   cacheDir: "path/to/cacheDir",
   keyFilename: "path/to/keyfile.json",
+  storage: GoogleCloudStorage,
 });
 ```
 
 ```ts
 export class Service {
-  constructor(private readonly service: GoogleCloudStorageService) {}
+  constructor(private readonly service: StorageService) {}
 
   public async uploadFile(): Promise<void> {
     const dataPath = "local-path.txt";
-    await this.service.upload(dataPath, "path/to/test.txt");
+    await this.service.upload<GoogleCloudStorageUploadOptions>(dataPath, "path/to/test.txt", { gzip: true });
   }
 }
 ```

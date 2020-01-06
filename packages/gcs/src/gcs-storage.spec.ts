@@ -1,27 +1,29 @@
 import { Test } from "@nestjs/testing";
 import { join } from "path";
 import { dirSync, fileSync } from "tmp";
-import { GoogleCloudStorageModule } from "./gcs-storage.module";
-import { GoogleCloudStorageService } from "./gcs-storage.service";
-describe("GoogleCloudStorageService", () => {
-  let service: GoogleCloudStorageService;
+import { StorageModule, StorageService } from "../../storage";
+import { GoogleCloudStorageModuleOptions, GoogleCloudStorageUploadOptions } from "./gcs-storage.interface";
+import { GoogleCloudStorage } from "./gcs.storage";
+describe("GoogleCloudStorage", () => {
+  let service: StorageService;
   let cacheDir: string;
   beforeEach(async () => {
     cacheDir = dirSync().name;
     const app = await Test.createTestingModule({
       imports: [
-        GoogleCloudStorageModule.register({
+        StorageModule.register<GoogleCloudStorageModuleOptions>({
           bucket: "nestjs-storage",
           cacheDir,
           keyFilename: process.env.NEST_STORAGE_GCS_KEY,
+          storage: GoogleCloudStorage,
         }),
       ],
     }).compile();
-    service = app.get<GoogleCloudStorageService>(GoogleCloudStorageService);
+    service = app.get<StorageService>(StorageService);
   });
 
   it("should be defined", () => {
-    expect(GoogleCloudStorageService).toBeDefined();
+    expect(GoogleCloudStorage).toBeDefined();
     expect(service).toBeDefined();
   });
 
@@ -30,11 +32,11 @@ describe("GoogleCloudStorageService", () => {
       expect(service.upload).toBeDefined();
     });
 
-    it("should upload to dir", async () => {
+    it("should upload to gcs", async () => {
       await expect(service.upload(fileSync().name, "path/to/test.txt")).resolves.toBe("path/to/test.txt");
-      await expect(service.upload(fileSync().name, "path/to/test.txt", { gzip: true })).resolves.toBe(
-        "path/to/test.txt",
-      );
+      await expect(
+        service.upload<GoogleCloudStorageUploadOptions>(fileSync().name, "path/to/test.txt", { gzip: true }),
+      ).resolves.toBe("path/to/test.txt");
     });
   });
 
@@ -46,15 +48,6 @@ describe("GoogleCloudStorageService", () => {
     it("should download file", async () => {
       await expect(service.upload(fileSync().name, "path/to/test.txt")).resolves.toBe("path/to/test.txt");
       await expect(service.download("path/to/test.txt")).resolves.toBe(join(cacheDir, "path/to/test.txt"));
-    });
-
-    it("should download file with prefix", async () => {
-      await expect(service.upload(fileSync().name, "path/to/test.txt", { prefix: "prefix" })).resolves.toBe(
-        "prefix/path/to/test.txt",
-      );
-      await expect(service.download("path/to/test.txt", { prefix: "prefix" })).resolves.toBe(
-        join(cacheDir, "prefix/path/to/test.txt"),
-      );
     });
 
     it("should error if file not found", async () => {

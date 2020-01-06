@@ -13,7 +13,7 @@
   "homepage": "https://github.com/anchan828/nest-lerna-template/tree/master/packages/local#readme",
   "license": "MIT",
   "main": "./dist/index.js",
-  "name": "@anchan828/nest-storage-local",
+  "name": "@anchan828/nest-storage",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anchan828/nest-lerna-template.git"
