@@ -14,9 +14,11 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      - uses: anchan828/save-to-file@v1
         with:
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          text: ${{ secrets.GCP_SA_KEY }}
+          file: "credentials.json"
+          encoding: "base64"
       - uses: actions/cache@v1
         with:
           path: ~/.npm
@@ -32,6 +34,7 @@ jobs:
         uses: paambaati/codeclimate-action@v2.3.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          NEST_STORAGE_GCS_KEY: "credentials.json"
         with:
           coverageCommand: npm test
           debug: true
