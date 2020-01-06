@@ -14,11 +14,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - uses: anchan828/save-to-file@v1
+      - uses: anchan828/save-to-file@v2
         with:
           text: ${{ secrets.GCP_SA_KEY }}
           file: "~/credentials.json"
           encoding: "base64"
+      - name: Set NEST_STORAGE_GCS_KEY env
+        run: echo ::set-env name=NEST_STORAGE_GCS_KEY::"$HOME/credentials.json"
       - uses: actions/cache@v1
         with:
           path: ~/.npm
@@ -34,7 +36,6 @@ jobs:
         uses: paambaati/codeclimate-action@v2.3.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-          NEST_STORAGE_GCS_KEY: "~/credentials.json"
         with:
           coverageCommand: npm test
           debug: true
