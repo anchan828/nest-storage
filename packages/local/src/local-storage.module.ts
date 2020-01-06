@@ -1,8 +1,9 @@
 import { StorageCoreModule } from "@anchan828/nest-storage-common";
-import { DynamicModule, Module } from "@nestjs/common";
+import { DynamicModule, Global, Module } from "@nestjs/common";
 import { LocalStorageModuleAsyncOptions, LocalStorageModuleOptions } from "./local-storage.interface";
 import { LocalStorageService } from "./local-storage.service";
 
+@Global()
 @Module({})
 export class LocalStorageModule {
   public static register(options: LocalStorageModuleOptions): DynamicModule {
