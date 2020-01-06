@@ -1,9 +1,8 @@
 export {
-  DeleteOptions,
-  DownloadOptions,
+  GoogleCloudStorageDeleteOptions,
+  GoogleCloudStorageDownloadOptions,
   GoogleCloudStorageModuleAsyncOptions,
   GoogleCloudStorageModuleOptions,
-  UploadOptions,
+  GoogleCloudStorageUploadOptions,
 } from "./gcs-storage.interface";
-export { GoogleCloudStorageModule } from "./gcs-storage.module";
-export { GoogleCloudStorageService } from "./gcs-storage.service";
+export { GoogleCloudStorage } from "./gcs.storage";

@@ -1,7 +1,13 @@
 import { Type } from "@nestjs/common";
 import { ModuleMetadata } from "@nestjs/common/interfaces";
+import { CommonStorageService } from "./service";
 
-export abstract class StorageService {
+export abstract class AbstractStorage {
+  constructor(
+    protected readonly moduleOptions: StorageModuleOptions,
+    protected readonly service: CommonStorageService,
+  ) {}
+
   public abstract async upload(dataPath: string, filename: string, options?: StorageOptions): Promise<string>;
 
   public abstract async download(filename: string, options?: StorageOptions): Promise<string>;
@@ -11,11 +17,13 @@ export abstract class StorageService {
 
 export interface StorageOptions {
   bucket?: string;
-  prefix?: string;
 }
 
 export interface StorageModuleOptions {
   bucket?: string;
+  cacheDir?: string;
+
+  storage?: Type<AbstractStorage>;
 }
 
 export interface StorageModuleAsyncOptions<T extends StorageModuleOptions = StorageModuleOptions>

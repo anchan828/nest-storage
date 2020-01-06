@@ -4,7 +4,7 @@ import { StorageModuleOptions } from "./interfaces";
 import { BUCKET_NOT_DEFINED_MESSAGE } from "./messages";
 import { CommonStorageService } from "./service";
 describe("CommonStorageService", () => {
-  const getCommonService = (moduleOptions: StorageModuleOptions) =>
+  const getCommonService = (moduleOptions: StorageModuleOptions): Promise<CommonStorageService> =>
     Test.createTestingModule({
       providers: [CommonStorageService, { provide: STORAGE_MODULE_OPTIONS, useValue: moduleOptions }],
     })
@@ -34,15 +34,13 @@ describe("CommonStorageService", () => {
     });
   });
 
-  describe("getBucket", () => {
-    it("should return empty string", async () => {
-      const service = await getCommonService({});
-      expect(service.getPrefix()).toBe("");
-    });
+  describe("getCacheDir", () => {
+    it("should get cache dir path", async () => {
+      let service = await getCommonService({});
+      expect(service.getCacheDir()).toEqual(expect.any(String));
 
-    it("should return strings", async () => {
-      const service = await getCommonService({});
-      expect(service.getPrefix({ prefix: "test" })).toBe("test");
+      service = await getCommonService({ cacheDir: "test" });
+      expect(service.getCacheDir()).toBe("test");
     });
   });
 });
