@@ -22,7 +22,7 @@ export interface StorageModuleAsyncOptions<T extends StorageModuleOptions = Stor
   extends Pick<ModuleMetadata, "imports"> {
   useClass?: Type<StorageModuleOptionsFactory<T>>;
   useExisting?: Type<StorageModuleOptionsFactory<T>>;
-  useFactory?: (...args: unknown[]) => Promise<T> | T;
+  useFactory?: (...args: any[]) => Promise<T> | T;
   inject?: Array<Type<StorageModuleOptionsFactory<T>> | string | any>;
 }
 
