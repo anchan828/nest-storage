@@ -1,6 +1,7 @@
 import { CommonStorageService, StorageModuleOptions, STORAGE_MODULE_OPTIONS } from "@anchan828/nest-storage-common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { dirSync } from "tmp";
+import { LocalStorage } from "./local.storage";
 import { StorageModule } from "./storage.module";
 import { StorageService } from "./storage.service";
 
@@ -17,7 +18,12 @@ describe("LocalStorageModule", () => {
 
   it("should compile register", async () => {
     const app = await Test.createTestingModule({
-      imports: [StorageModule.register({ cacheDir: dirSync().name })],
+      imports: [
+        StorageModule.register({
+          cacheDir: dirSync().name,
+          storage: LocalStorage,
+        }),
+      ],
     }).compile();
     shouldGetProviders(app);
   });
@@ -27,7 +33,10 @@ describe("LocalStorageModule", () => {
       imports: [
         StorageModule.registerAsync({
           useFactory: () => {
-            return { cacheDir: dirSync().name };
+            return {
+              cacheDir: dirSync().name,
+              storage: LocalStorage,
+            };
           },
         }),
       ],
