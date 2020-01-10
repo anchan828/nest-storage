@@ -6,9 +6,10 @@ import {
   StorageOptions,
 } from "@anchan828/nest-storage-common";
 import { Injectable } from "@nestjs/common";
-import { copyFileSync, existsSync, mkdirSync, unlinkSync } from "fs";
+import { copyFile, existsSync, mkdirSync, unlinkSync } from "fs";
 import { dirname, join } from "path";
-
+import { promisify } from "util";
+const copyFileAsync = promisify(copyFile);
 @Injectable()
 export class LocalStorage extends AbstractStorage {
   constructor(
@@ -26,7 +27,7 @@ export class LocalStorage extends AbstractStorage {
     if (!existsSync(destDirname)) {
       mkdirSync(destDirname, { recursive: true });
     }
-    copyFileSync(dataPath, dest);
+    await copyFileAsync(dataPath, dest);
     return filename;
   }
 
