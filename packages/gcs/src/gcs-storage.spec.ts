@@ -1,5 +1,5 @@
 import { Test } from "@nestjs/testing";
-import { join } from "path";
+import { basename, join } from "path";
 import { dirSync, fileSync } from "tmp";
 import { StorageModule, StorageService } from "../../storage";
 import { GoogleCloudStorageModuleOptions, GoogleCloudStorageUploadOptions } from "./gcs-storage.interface";
@@ -7,6 +7,7 @@ import { GoogleCloudStorage } from "./gcs.storage";
 describe("GoogleCloudStorage", () => {
   let service: StorageService;
   let cacheDir: string;
+
   beforeEach(async () => {
     cacheDir = dirSync().name;
     const app = await Test.createTestingModule({
@@ -72,8 +73,10 @@ describe("GoogleCloudStorage", () => {
     });
 
     it("should delete file", async () => {
-      await expect(service.upload(fileSync().name, "path/to/delete-test.txt")).resolves.toBe("path/to/delete-test.txt");
-      await expect(service.delete("path/to/delete-test.txt")).resolves.toBeUndefined();
+      const srcFilename = fileSync().name;
+      const destFilename = `path/to/${basename(srcFilename)}.txt`;
+      await expect(service.upload(srcFilename, destFilename)).resolves.toBe(destFilename);
+      await expect(service.delete(destFilename)).resolves.toBeUndefined();
     });
   });
 });
