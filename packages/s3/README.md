@@ -8,8 +8,6 @@ npm i @anchan828/nest-storage @anchan828/nest-storage-s3
 
 ## Usage
 
-## Usage
-
 ```ts
 StorageModule.register<S3StorageModuleOptions>({
   bucket: "bucket",
