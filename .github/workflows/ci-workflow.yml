@@ -36,6 +36,8 @@ jobs:
         uses: paambaati/codeclimate-action@v2.3.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          NEST_STORAGE_S3_KEY: ${{ secrets.NEST_STORAGE_S3_KEY }}
+          NEST_STORAGE_S3_SECRET_KEY: ${{ secrets.NEST_STORAGE_S3_SECRET_KEY }}
         with:
           coverageCommand: npm test
           debug: true
