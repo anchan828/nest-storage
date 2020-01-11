@@ -41,3 +41,4 @@ StorageModule.register({
 | Provider             | Pakcage                                                                                  |
 | :------------------- | :--------------------------------------------------------------------------------------- |
 | Google Cloud Storage | [@anchan828/nest-storage-gcs](https://www.npmjs.com/package/@anchan828/nest-storage-gcs) |
+| Amazon S3            | [@anchan828/nest-storage-s3](https://www.npmjs.com/package/@anchan828/nest-storage-s3)   |

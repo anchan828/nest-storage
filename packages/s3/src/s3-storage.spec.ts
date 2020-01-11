@@ -2,9 +2,9 @@ import { Test } from "@nestjs/testing";
 import { basename, join } from "path";
 import { dirSync, fileSync } from "tmp";
 import { StorageModule, StorageService } from "../../storage";
-import { GoogleCloudStorageModuleOptions, GoogleCloudStorageUploadOptions } from "./gcs-storage.interface";
-import { GoogleCloudStorage } from "./gcs.storage";
-describe("GoogleCloudStorage", () => {
+import { S3StorageModuleOptions, S3StorageUploadOptions } from "./s3-storage.interface";
+import { S3Storage } from "./s3.storage";
+describe("S3Storage", () => {
   let service: StorageService;
   let cacheDir: string;
 
@@ -12,11 +12,12 @@ describe("GoogleCloudStorage", () => {
     cacheDir = dirSync().name;
     const app = await Test.createTestingModule({
       imports: [
-        StorageModule.register<GoogleCloudStorageModuleOptions>({
+        StorageModule.register<S3StorageModuleOptions>({
+          accessKeyId: process.env.NEST_STORAGE_S3_KEY,
           bucket: "nestjs-storage",
           cacheDir,
-          keyFilename: process.env.NEST_STORAGE_GCS_KEY,
-          storage: GoogleCloudStorage,
+          secretAccessKey: process.env.NEST_STORAGE_S3_SECRET_KEY,
+          storage: S3Storage,
         }),
       ],
     }).compile();
@@ -24,7 +25,7 @@ describe("GoogleCloudStorage", () => {
   });
 
   it("should be defined", () => {
-    expect(GoogleCloudStorage).toBeDefined();
+    expect(S3Storage).toBeDefined();
     expect(service).toBeDefined();
   });
 
@@ -33,10 +34,10 @@ describe("GoogleCloudStorage", () => {
       expect(service.upload).toBeDefined();
     });
 
-    it("should upload to gcs", async () => {
+    it("should upload to s3", async () => {
       await expect(service.upload(fileSync().name, "path/to/test.txt")).resolves.toBe("path/to/test.txt");
       await expect(
-        service.upload<GoogleCloudStorageUploadOptions>(fileSync().name, "path/to/test.txt", { gzip: true }),
+        service.upload<S3StorageUploadOptions>(fileSync().name, "path/to/test.txt", { Expires: new Date("2020-2-1") }),
       ).resolves.toBe("path/to/test.txt");
     });
   });
@@ -52,9 +53,7 @@ describe("GoogleCloudStorage", () => {
     });
 
     it("should error if file not found", async () => {
-      await expect(service.download("path/to/test2.txt")).rejects.toThrowError(
-        "No such object: nestjs-storage/path/to/test2.txt",
-      );
+      await expect(service.download("path/to/test2.txt")).rejects.toThrowError("The specified key does not exist.");
     });
 
     it("should get file from cache", async () => {
