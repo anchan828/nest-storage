@@ -23,14 +23,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anchan828/nest-lerna-template.git"
+    "url": "git+https://github.com/anchan828/nest-storage.git"
   },
   "author": "anchan828 <anchan828@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/anchan828/nest-lerna-template/issues"
+    "url": "https://github.com/anchan828/nest-storage/issues"
   },
-  "homepage": "https://github.com/anchan828/nest-lerna-template",
+  "homepage": "https://github.com/anchan828/nest-storage",
   "devDependencies": {
     "@commitlint/cli": "8.3.4",
     "@commitlint/config-conventional": "8.3.4",

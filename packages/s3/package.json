@@ -1,7 +1,7 @@
 {
   "author": "anchan828 <anchan828@gmail.com>",
   "bugs": {
-    "url": "https://github.com/anchan828/nest-lerna-template/issues"
+    "url": "https://github.com/anchan828/nest-storage/issues"
   },
   "description": "> TODO: description",
   "directories": {
@@ -10,13 +10,13 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/anchan828/nest-lerna-template/tree/master/packages/s3#readme",
+  "homepage": "https://github.com/anchan828/nest-storage/tree/master/packages/s3#readme",
   "license": "MIT",
   "main": "./dist/index.js",
   "name": "@anchan828/nest-storage-s3",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anchan828/nest-lerna-template.git"
+    "url": "git+https://github.com/anchan828/nest-storage.git"
   },
   "scripts": {
     "build": "node ../../node_modules/typescript/bin/tsc -p tsconfig.build.json",
