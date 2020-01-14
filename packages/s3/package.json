@@ -34,7 +34,7 @@
   "version": "0.0.8",
   "dependencies": {
     "@anchan828/nest-storage-common": "^0.0.8",
-    "aws-sdk": "2.602.0"
+    "aws-sdk": "2.603.0"
   },
   "devDependencies": {
     "@types/tmp": "0.1.0",
