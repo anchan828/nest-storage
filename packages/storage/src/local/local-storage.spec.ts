@@ -1,9 +1,10 @@
+import { ParsedSignedUrl } from "@anchan828/nest-storage-common";
 import { Test } from "@nestjs/testing";
 import { existsSync } from "fs";
 import { join } from "path";
 import { dirSync, fileSync } from "tmp";
-import { StorageModule } from "./storage.module";
-import { StorageService } from "./storage.service";
+import { StorageModule } from "../storage.module";
+import { StorageService } from "../storage.service";
 describe("LocalStorage", () => {
   let service: StorageService;
   beforeEach(async () => {
@@ -70,6 +71,50 @@ describe("LocalStorage", () => {
       await service.delete("test.txt");
 
       expect(existsSync(getDest(filename))).toBeFalsy();
+    });
+  });
+
+  describe("getSignedUrl", () => {
+    it("should be defined", () => {
+      expect(service.getSignedUrl).toBeDefined();
+    });
+    it("should get signed url", async () => {
+      await expect(service.getSignedUrl("hoge.txt", { action: "delete" })).resolves.toEqual(expect.any(String));
+      await expect(service.getSignedUrl("hoge.txt", { action: "download" })).resolves.toEqual(expect.any(String));
+      await expect(service.getSignedUrl("hoge.txt", { action: "upload" })).resolves.toEqual(expect.any(String));
+    });
+  });
+
+  describe("parseSignedUrl", () => {
+    it("should be defined", () => {
+      expect(service.getSignedUrl).toBeDefined();
+    });
+    it("should get signed url", async () => {
+      await expect(service.getSignedUrl("hoge.txt", { action: "delete" })).resolves.toEqual(expect.any(String));
+      await expect(service.getSignedUrl("hoge.txt", { action: "download" })).resolves.toEqual(expect.any(String));
+      await expect(service.getSignedUrl("hoge.txt", { action: "upload" })).resolves.toEqual(expect.any(String));
+    });
+  });
+
+  describe("parseSignedUrl", () => {
+    it("should be defined", () => {
+      expect(service.parseSignedUrl).toBeDefined();
+    });
+
+    it("should throw error", () => {
+      expect(() => {
+        service.parseSignedUrl("http://localhost:3000/_digfe/bucket");
+      }).toThrowError(
+        "Invalid pathname '/_digfe/bucket'. pathname should be '/_signed_url/bucket/path/to/filename.txt'",
+      );
+    });
+
+    it("should parse signed url", async () => {
+      const url = await service.getSignedUrl("path/to/hoge.txt", { action: "upload" });
+      expect(service.parseSignedUrl(`http://localhost:3000/${url}`)).toEqual({
+        bucket: "bucket",
+        filename: "path/to/hoge.txt",
+      } as ParsedSignedUrl);
     });
   });
 });

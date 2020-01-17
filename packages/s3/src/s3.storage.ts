@@ -1,14 +1,19 @@
-import { AbstractStorage, CommonStorageService } from "@anchan828/nest-storage-common";
+import {
+  AbstractStorage,
+  CommonStorageService,
+  ParsedSignedUrl,
+  SignedUrlActionType,
+  SignedUrlOptions,
+  StorageOptions,
+  STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
+} from "@anchan828/nest-storage-common";
+import * as s3UriParser from "amazon-s3-uri";
 import { S3 } from "aws-sdk";
 import { createReadStream, createWriteStream, existsSync, mkdirSync } from "fs";
 import { dirname, join } from "path";
 import { Readable } from "stream";
-import {
-  S3StorageDeleteOptions,
-  S3StorageDownloadOptions,
-  S3StorageModuleOptions,
-  S3StorageUploadOptions,
-} from "./s3-storage.interface";
+import { S3StorageModuleOptions } from "./s3-storage.interface";
+
 export class S3Storage extends AbstractStorage {
   constructor(
     protected readonly moduleOptions: S3StorageModuleOptions,
@@ -17,21 +22,20 @@ export class S3Storage extends AbstractStorage {
     super(moduleOptions, service);
   }
 
-  public async upload(dataPath: string, filename: string, options?: S3StorageUploadOptions): Promise<string> {
+  public async upload(dataPath: string, filename: string, options?: StorageOptions): Promise<string> {
     const bucket = this.getBuket();
-    const bucketName = this.service.getBucket(options);
-    if (!options?.Key) {
-      options = Object.assign({}, options, { Key: filename });
-    }
-
-    options.Bucket = bucketName;
-    options.Body = createReadStream(dataPath);
-    const res = await bucket.upload(options as S3.PutObjectRequest).promise();
+    const res = await bucket
+      .upload({
+        Body: createReadStream(dataPath),
+        Bucket: this.service.getBucket(options),
+        Key: filename,
+      })
+      .promise();
 
     return res.Key;
   }
 
-  public async download(filename: string, options: S3StorageDownloadOptions = {}): Promise<string> {
+  public async download(filename: string, options?: StorageOptions): Promise<string> {
     const cacheDir = this.service.getCacheDir();
 
     const destination = join(cacheDir, filename);
@@ -44,33 +48,57 @@ export class S3Storage extends AbstractStorage {
       }
 
       const bucket = this.getBuket();
-      const bucketName = this.service.getBucket(options);
 
-      if (!options.Key) {
-        options = Object.assign({}, options, { Key: filename });
-      }
-      options.Bucket = bucketName;
-      const readstream = bucket.getObject(options as S3.GetObjectRequest).createReadStream();
+      const readstream = bucket
+        .getObject({ Bucket: this.service.getBucket(options), Key: filename })
+        .createReadStream();
       await this.writeFileStream(readstream, destination);
     }
     return destination;
   }
 
-  public async delete(filename: string, options: S3StorageDeleteOptions = {}): Promise<void> {
+  public async delete(filename: string, options?: StorageOptions): Promise<void> {
+    const bucket = this.getBuket();
+    await bucket.deleteObject({ Bucket: this.service.getBucket(options), Key: filename }).promise();
+  }
+
+  public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
     const bucket = this.getBuket();
     const bucketName = this.service.getBucket(options);
+    const { action, expires } = options;
 
-    if (!options.Key) {
-      options = Object.assign({}, options, { Key: filename });
-    }
+    return bucket.getSignedUrlPromise(this.getOperation(action), {
+      Bucket: bucketName,
+      Expires: this.getExpires(expires),
+      Key: filename,
+    });
+  }
 
-    options.Bucket = bucketName;
-
-    await bucket.deleteObject(options as S3.DeleteObjectRequest).promise();
+  public parseSignedUrl(url: string): ParsedSignedUrl {
+    const urlObject = s3UriParser(url);
+    return {
+      bucket: urlObject.bucket,
+      filename: urlObject.key,
+    } as ParsedSignedUrl;
   }
 
   private getBuket(): S3 {
-    return new S3(this.moduleOptions);
+    return new S3({ ...this.moduleOptions, signatureVersion: "v4" });
+  }
+
+  private getOperation(action: SignedUrlActionType): string {
+    switch (action) {
+      case "upload":
+        return "putObject";
+      case "download":
+        return "getObject";
+      case "delete":
+        return "deleteObject";
+    }
+  }
+
+  private getExpires(expires?: number): number {
+    return (expires ? expires : STORAGE_DEFAULT_SIGNED_URL_EXPIRES) / 1000;
   }
 
   private writeFileStream(readstream: Readable, destination: string): Promise<void> {
