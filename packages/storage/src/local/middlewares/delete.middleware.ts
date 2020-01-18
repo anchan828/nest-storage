@@ -1,9 +1,24 @@
-import { Injectable, NestMiddleware } from "@nestjs/common";
-import { Request, Response } from "express";
+import { SignedUrlActionType, StorageModuleOptions, STORAGE_MODULE_OPTIONS } from "@anchan828/nest-storage-common";
+import { BadRequestException, Inject, Injectable } from "@nestjs/common";
+import { StorageService } from "../../storage.service";
+import { StorageBaseMiddleware } from "./base.middleware";
 @Injectable()
-export class StorageDeleteMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: Function) {
-    console.log("Request StorageDeleteMiddleware...");
-    next();
+export class StorageDeleteMiddleware extends StorageBaseMiddleware {
+  constructor(
+    @Inject(STORAGE_MODULE_OPTIONS)
+    readonly moduleOptions: StorageModuleOptions,
+    private readonly service: StorageService,
+  ) {
+    super(moduleOptions);
+  }
+
+  getAction(): SignedUrlActionType {
+    return "delete";
+  }
+
+  async handler(filename: string): Promise<void> {
+    await this.service.delete(filename).catch(e => {
+      throw new BadRequestException(e.message);
+    });
   }
 }

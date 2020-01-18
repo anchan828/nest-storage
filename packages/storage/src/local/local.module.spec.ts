@@ -1,82 +1,25 @@
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
-import * as request from "supertest";
 import { StorageModule } from "../storage.module";
-import { StorageService } from "../storage.service";
+import { LocalStorage } from "./local.storage";
 describe("LocalStorageModule", () => {
   let app: INestApplication;
-  let service: StorageService;
-  beforeEach(async () => {
+
+  it("should set middlewares", async () => {
     const module = await Test.createTestingModule({
       imports: [StorageModule.register({ bucket: "bucket" })],
     }).compile();
-    service = module.get<StorageService>(StorageService);
     app = await module.createNestApplication();
     await app.init();
-  });
-
-  afterEach(async () => {
     await app.close();
   });
-  it("should throw action error", async () => {
-    const url = await service.getSignedUrl("test.txt", { action: "download" });
-    await request(app.getHttpServer())
-      .put(url)
-      .attach("file", Buffer.from("test"), "test.txt")
-      .expect(400, {
-        error: "Bad Request",
-        message: "Invalid action 'download'. action should be 'upload'",
-        statusCode: 400,
-      });
-  });
 
-  it("should throw bucket error", async () => {
-    const url = await service.getSignedUrl("test.txt", { action: "upload" });
-
-    await request(app.getHttpServer())
-      .put(url.replace("/bucket/", "/invalid/"))
-      .attach("file", Buffer.from("test"), "test.txt")
-      .expect(400, {
-        error: "Bad Request",
-        message: "Invalid bucket 'invalid'",
-        statusCode: 400,
-      });
-  });
-
-  it("should throw filename error", async () => {
-    const url = await service.getSignedUrl("test.txt", { action: "upload" });
-    await request(app.getHttpServer())
-      .put(url.replace("test.txt", "invalid.txt"))
-      .attach("file", Buffer.from("test"), "test.txt")
-      .expect(400, {
-        error: "Bad Request",
-        message: "Invalid filename 'invalid.txt'",
-        statusCode: 400,
-      });
-  });
-
-  it("should throw file error", async () => {
-    const url = await service.getSignedUrl("test.txt", { action: "upload" });
-    await request(app.getHttpServer())
-      .put(url)
-      .expect(400, {
-        error: "Bad Request",
-        message: "The file was not uploaded",
-        statusCode: 400,
-      });
-  });
-  it("should upload file", async () => {
-    let url = await service.getSignedUrl("test.txt", { action: "upload" });
-    await request(app.getHttpServer())
-      .put(url)
-      .attach("file", Buffer.from("test"), "test.txt")
-      .expect(204);
-
-    url = await service.getSignedUrl("path/to/test.txt", { action: "upload" });
-
-    await request(app.getHttpServer())
-      .put(url)
-      .attach("file", Buffer.from("test"), "test.txt")
-      .expect(204);
+  it("should set middlewares", async () => {
+    const module = await Test.createTestingModule({
+      imports: [StorageModule.register({ bucket: "bucket", storage: LocalStorage })],
+    }).compile();
+    app = await module.createNestApplication();
+    await app.init();
+    await app.close();
   });
 });

@@ -51,7 +51,6 @@ export class LocalStorage extends AbstractStorage {
     const cacheDir = this.service.getCacheDir();
     const bucket = this.service.getBucket(options);
     const dest = join(cacheDir, bucket, filename);
-
     if (!existsSync(dest)) {
       throw new Error(FILE_NOT_FOUND(bucket, filename));
     }

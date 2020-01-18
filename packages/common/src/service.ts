@@ -1,6 +1,7 @@
 import { Inject } from "@nestjs/common";
-import { mkdtempSync } from "fs";
+import { existsSync, mkdirSync } from "fs";
 import { tmpdir } from "os";
+import { join } from "path";
 import { STORAGE_MODULE_OPTIONS } from "./constants";
 import { StorageModuleOptions, StorageOptions } from "./interfaces";
 import { BUCKET_NOT_DEFINED_MESSAGE } from "./messages";
@@ -20,6 +21,10 @@ export class CommonStorageService {
   }
 
   public getCacheDir(): string {
-    return this.moduleOptions.cacheDir || mkdtempSync(tmpdir() + "/");
+    const cacheDir = this.moduleOptions.cacheDir || join(tmpdir(), ",nest-storage");
+    if (!existsSync(cacheDir)) {
+      mkdirSync(cacheDir, { recursive: true });
+    }
+    return cacheDir;
   }
 }

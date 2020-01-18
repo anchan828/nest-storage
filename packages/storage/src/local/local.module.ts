@@ -3,6 +3,7 @@ import { Inject, MiddlewareConsumer, Module, NestModule, RequestMethod } from "@
 import * as multer from "multer";
 import { join } from "path";
 import { SIGNED_URL_CONTROLLER_PATH } from "./constants";
+import { LocalStorage } from "./local.storage";
 import { StorageDeleteMiddleware, StorageDownloadMiddleware, StorageUploadMiddleware } from "./middlewares";
 
 @Module({
@@ -15,11 +16,13 @@ export class LocalStorageModule implements NestModule {
   ) {}
 
   public configure(consumer: MiddlewareConsumer): void {
-    const prefix = this.moduleOptions.signedUrlController?.path || SIGNED_URL_CONTROLLER_PATH;
-    const path = `${prefix}/:bucket/*`;
-    const upload = multer({ dest: join(this.service.getCacheDir(), ".multer") }).any();
-    consumer.apply(StorageDownloadMiddleware).forRoutes({ method: RequestMethod.GET, path });
-    consumer.apply(upload, StorageUploadMiddleware).forRoutes({ method: RequestMethod.PUT, path });
-    consumer.apply(StorageDeleteMiddleware).forRoutes({ method: RequestMethod.DELETE, path });
+    if (!this.moduleOptions.storage || this.moduleOptions.storage instanceof LocalStorage) {
+      const prefix = this.moduleOptions.signedUrlController?.path || SIGNED_URL_CONTROLLER_PATH;
+      const path = `${prefix}/:bucket/*`;
+      const upload = multer({ dest: join(this.service.getCacheDir(), ".multer") }).any();
+      consumer.apply(StorageDownloadMiddleware).forRoutes({ method: RequestMethod.GET, path });
+      consumer.apply(upload, StorageUploadMiddleware).forRoutes({ method: RequestMethod.PUT, path });
+      consumer.apply(StorageDeleteMiddleware).forRoutes({ method: RequestMethod.DELETE, path });
+    }
   }
 }
