@@ -1,8 +1,10 @@
-import { DynamicModule, Module } from "@nestjs/common";
+import { DynamicModule, Global, Module } from "@nestjs/common";
 import { STORAGE_MODULE_OPTIONS } from "./constants";
 import { StorageModuleAsyncOptions, StorageModuleOptions } from "./interfaces";
 import { createAsyncProviders } from "./providers";
 import { CommonStorageService } from "./service";
+
+@Global()
 @Module({})
 export class StorageCoreModule {
   public static register(options: StorageModuleOptions): DynamicModule {

@@ -1,4 +1,4 @@
-import { AbstractStorage } from "@anchan828/nest-storage-common";
+import { AbstractStorage, ParsedSignedUrl, SignedUrlOptions } from "@anchan828/nest-storage-common";
 import { Test } from "@nestjs/testing";
 import { dirSync } from "tmp";
 import { StorageModule } from "./storage.module";
@@ -18,6 +18,16 @@ describe("StorageService", () => {
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
       async delete(filename: string): Promise<void> {}
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
+        return filename;
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      parseSignedUrl(url: string): ParsedSignedUrl {
+        return {} as ParsedSignedUrl;
+      }
     }
     const app = await Test.createTestingModule({
       imports: [StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name, storage: CustomStorage })],

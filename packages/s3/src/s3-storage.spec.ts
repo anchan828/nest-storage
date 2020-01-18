@@ -1,8 +1,10 @@
 import { Test } from "@nestjs/testing";
+import axios from "axios";
+import { createReadStream, statSync, writeFileSync } from "fs";
 import { basename, join } from "path";
-import { dirSync, fileSync } from "tmp";
+import { dirSync, fileSync, tmpNameSync } from "tmp";
 import { StorageModule, StorageService } from "../../storage";
-import { S3StorageModuleOptions, S3StorageUploadOptions } from "./s3-storage.interface";
+import { S3StorageModuleOptions } from "./s3-storage.interface";
 import { S3Storage } from "./s3.storage";
 describe("S3Storage", () => {
   let service: StorageService;
@@ -16,6 +18,7 @@ describe("S3Storage", () => {
           accessKeyId: process.env.NEST_STORAGE_S3_KEY,
           bucket: "nestjs-storage",
           cacheDir,
+          region: "ap-northeast-1",
           secretAccessKey: process.env.NEST_STORAGE_S3_SECRET_KEY,
           storage: S3Storage,
         }),
@@ -36,9 +39,6 @@ describe("S3Storage", () => {
 
     it("should upload to s3", async () => {
       await expect(service.upload(fileSync().name, "path/to/test.txt")).resolves.toBe("path/to/test.txt");
-      await expect(
-        service.upload<S3StorageUploadOptions>(fileSync().name, "path/to/test.txt", { Expires: new Date("2020-2-1") }),
-      ).resolves.toBe("path/to/test.txt");
     });
   });
 
@@ -75,6 +75,62 @@ describe("S3Storage", () => {
       const destFilename = `path/to/${basename(srcFilename)}.txt`;
       await expect(service.upload(srcFilename, destFilename)).resolves.toBe(destFilename);
       await expect(service.delete(destFilename)).resolves.toBeUndefined();
+    });
+  });
+
+  describe("getSignedUrl", () => {
+    it("should be defined", () => {
+      expect(service.getSignedUrl).toBeDefined();
+    });
+
+    it("should get signed url", async () => {
+      await expect(service.getSignedUrl("hoge.txt", { action: "upload", expires: 90000 })).resolves.toEqual(
+        expect.any(String),
+      );
+      await expect(service.getSignedUrl("hoge.txt", { action: "download" })).resolves.toEqual(expect.any(String));
+      await expect(service.getSignedUrl("hoge.txt", { action: "delete" })).resolves.toEqual(expect.any(String));
+    });
+
+    it("should upload file with signed url", async () => {
+      const filename = "path/to/signed-test.txt";
+      const contentType = "text/plain";
+
+      const url = await service.getSignedUrl(filename, { action: "upload" });
+      await expect(
+        axios.put(url, Buffer.from("test"), { headers: { "Content-Type": contentType } }).then(res => res.status),
+      ).resolves.toBe(200);
+    });
+    it("should upload file with signed url and readstream", async () => {
+      const filename = "path/to/signed-test-with-stream.txt";
+      const contentType = "text/plain";
+
+      const url = await service.getSignedUrl(filename, { action: "upload" });
+      const tmpFileName = tmpNameSync();
+      writeFileSync(tmpFileName, "stream text", "utf8");
+
+      await expect(
+        axios
+          .put(url, createReadStream(tmpFileName), {
+            headers: { "Content-Length": statSync(tmpFileName).size, "Content-Type": contentType },
+          })
+          .then(res => res.status),
+      ).resolves.toBe(200);
+    });
+  });
+
+  describe("parseSignedUrl", () => {
+    it("should be defined", () => {
+      expect(service.parseSignedUrl).toBeDefined();
+    });
+    it("should throw error if invalid host", () => {
+      expect(service.parseSignedUrl("https://s3.amazonaws.com/nestjs-storage/path/to/hoge.txt")).toStrictEqual({
+        bucket: "nestjs-storage",
+        filename: "path/to/hoge.txt",
+      });
+      expect(service.parseSignedUrl("https://nestjs-storage.s3.ap-northeast-1.amazonaws.com/hoge.txt")).toStrictEqual({
+        bucket: "nestjs-storage",
+        filename: "hoge.txt",
+      });
     });
   });
 });

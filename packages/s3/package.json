@@ -34,10 +34,12 @@
   "version": "0.0.8",
   "dependencies": {
     "@anchan828/nest-storage-common": "^0.0.8",
+    "amazon-s3-uri": "0.0.3",
     "aws-sdk": "2.606.0"
   },
   "devDependencies": {
     "@types/tmp": "0.1.0",
+    "axios": "^0.19.1",
     "tmp": "0.1.0"
   }
 }

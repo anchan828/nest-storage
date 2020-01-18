@@ -1,7 +1,7 @@
 import { StorageCoreModule, StorageModuleAsyncOptions, StorageModuleOptions } from "@anchan828/nest-storage-common";
 import { DynamicModule, Global, Module } from "@nestjs/common";
+import { LocalStorageModule } from "./local";
 import { StorageService } from "./storage.service";
-
 @Global()
 @Module({})
 export class StorageModule {
@@ -9,7 +9,7 @@ export class StorageModule {
     const providers = [StorageService];
     return {
       exports: providers,
-      imports: [StorageCoreModule.register(options)],
+      imports: [StorageCoreModule.register(options), LocalStorageModule],
       module: StorageModule,
       providers,
     };
@@ -21,7 +21,7 @@ export class StorageModule {
     const providers = [StorageService];
     return {
       exports: providers,
-      imports: [StorageCoreModule.registerAsync(options)],
+      imports: [StorageCoreModule.registerAsync(options), LocalStorageModule],
       module: StorageModule,
       providers,
     };

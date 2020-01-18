@@ -1,7 +1,7 @@
 import { CommonStorageService, StorageModuleOptions, STORAGE_MODULE_OPTIONS } from "@anchan828/nest-storage-common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { dirSync } from "tmp";
-import { LocalStorage } from "./local.storage";
+import { LocalStorage } from "./local";
 import { StorageModule } from "./storage.module";
 import { StorageService } from "./storage.service";
 
@@ -21,6 +21,22 @@ describe("LocalStorageModule", () => {
       imports: [
         StorageModule.register({
           cacheDir: dirSync().name,
+          storage: LocalStorage,
+        }),
+      ],
+    }).compile();
+    shouldGetProviders(app);
+  });
+
+  it("should compile register with signedUrlController", async () => {
+    const app = await Test.createTestingModule({
+      imports: [
+        StorageModule.register({
+          cacheDir: dirSync().name,
+          signedUrlController: {
+            path: "changed",
+            token: "change token",
+          },
           storage: LocalStorage,
         }),
       ],
