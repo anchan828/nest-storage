@@ -19,9 +19,9 @@ export class StorageDownloadMiddleware extends StorageBaseMiddleware {
     return "download";
   }
 
-  async handler(filename: string, req: Request, res: Response): Promise<void> {
+  async handler(bucket: string, filename: string, req: Request, res: Response): Promise<void> {
     await this.service
-      .download(filename)
+      .download(filename, { bucket })
       .then(path => {
         res.download(path, basename(filename));
       })

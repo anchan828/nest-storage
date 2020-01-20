@@ -18,7 +18,7 @@ export class StorageUploadMiddleware extends StorageBaseMiddleware {
     return "upload";
   }
 
-  async handler(filename: string, req: Request, res: Response): Promise<void> {
+  async handler(bucket: string, filename: string, req: Request, res: Response): Promise<void> {
     if (!isArray(req.files) || req.files.length === 0) {
       // file not uploaded
       throw new BadRequestException("The file was not uploaded");
@@ -26,7 +26,7 @@ export class StorageUploadMiddleware extends StorageBaseMiddleware {
 
     const file = req.files[0];
     await this.service
-      .upload(file.path, filename)
+      .upload(file.path, filename, { bucket })
       .then(() => {
         res.status(204).end();
       })

@@ -16,8 +16,8 @@ export class StorageDeleteMiddleware extends StorageBaseMiddleware {
     return "delete";
   }
 
-  async handler(filename: string): Promise<void> {
-    await this.service.delete(filename).catch(e => {
+  async handler(bucket: string, filename: string): Promise<void> {
+    await this.service.delete(filename, { bucket }).catch(e => {
       throw new BadRequestException(e.message);
     });
   }

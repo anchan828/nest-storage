@@ -8,7 +8,7 @@ export abstract class StorageBaseMiddleware implements NestMiddleware<Request, R
 
   abstract getAction(): SignedUrlActionType;
 
-  abstract async handler(filename: string, req?: Request, res?: Response): Promise<void>;
+  abstract async handler(bucket: string, filename: string, req?: Request, res?: Response): Promise<void>;
 
   public async use(req: Request, res: Response): Promise<void> {
     const { "0": filename, bucket } = req.params as { "0": string; bucket: string };
@@ -31,7 +31,7 @@ export abstract class StorageBaseMiddleware implements NestMiddleware<Request, R
       throw new BadRequestException(`Invalid filename '${filename}'`);
     }
 
-    await this.handler(filename, req, res);
+    await this.handler(bucket, filename, req, res);
 
     if (!res.finished) {
       res.status(200).end();
