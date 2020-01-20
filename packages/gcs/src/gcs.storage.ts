@@ -8,8 +8,7 @@ import {
   STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
 } from "@anchan828/nest-storage-common";
 import { Bucket, Storage } from "@google-cloud/storage";
-import { existsSync, mkdirSync } from "fs";
-import { dirname, join } from "path";
+import { existsSync, unlinkSync } from "fs";
 import { parse as parseUrl } from "url";
 import { GoogleCloudStorageModuleOptions } from "./gcs-storage.interface";
 export class GoogleCloudStorage extends AbstractStorage {
@@ -24,22 +23,15 @@ export class GoogleCloudStorage extends AbstractStorage {
     const bucket = this.getBuket(options);
 
     const [file] = await bucket.upload(dataPath, { destination: filename, gzip: true });
+    await this.copyFileAsync(dataPath, this.getDestinationCachePath(filename, options));
     return file.name;
   }
 
   public async download(filename: string, options?: StorageOptions): Promise<string> {
-    const cacheDir = this.service.getCacheDir();
-
-    const bucket = this.getBuket(options);
-    const destination = join(cacheDir, filename);
+    const destination = this.getDestinationCachePath(filename, options);
 
     if (!existsSync(destination)) {
-      const destDirname = dirname(destination);
-
-      if (!existsSync(destDirname)) {
-        mkdirSync(destDirname, { recursive: true });
-      }
-
+      const bucket = this.getBuket(options);
       await bucket.file(filename).download({ destination });
     }
     return destination;
@@ -48,6 +40,7 @@ export class GoogleCloudStorage extends AbstractStorage {
   public async delete(filename: string, options?: StorageOptions): Promise<void> {
     const bucket = this.getBuket(options);
     await bucket.file(filename).delete();
+    unlinkSync(this.getDestinationCachePath(filename, options));
   }
 
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {

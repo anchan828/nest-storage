@@ -8,13 +8,12 @@ import {
   StorageOptions,
   STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
 } from "@anchan828/nest-storage-common";
-import { copyFile, existsSync, mkdirSync, unlinkSync } from "fs";
+import { existsSync, unlinkSync } from "fs";
 import * as jwt from "jsonwebtoken";
-import { dirname, join } from "path";
+import { join } from "path";
 import { parse } from "url";
-import { promisify } from "util";
 import { SIGNED_URL_CONTROLLER_PATH, SIGNED_URL_CONTROLLER_TOKEN } from "./constants";
-const copyFileAsync = promisify(copyFile);
+
 export class LocalStorage extends AbstractStorage {
   constructor(
     protected readonly moduleOptions: StorageModuleOptions,
@@ -24,27 +23,19 @@ export class LocalStorage extends AbstractStorage {
   }
 
   public async upload(dataPath: string, filename: string, options?: StorageOptions): Promise<string> {
-    const cacheDir = this.service.getCacheDir();
-    const bucket = this.service.getBucket(options);
-    const dest = join(cacheDir, bucket, filename);
-    const destDirname = dirname(dest);
-    if (!existsSync(destDirname)) {
-      mkdirSync(destDirname, { recursive: true });
-    }
-    await copyFileAsync(dataPath, dest);
+    await this.copyFileAsync(dataPath, this.getDestinationCachePath(filename, options));
     return filename;
   }
 
   public async download(filename: string, options?: StorageOptions): Promise<string> {
-    const cacheDir = this.service.getCacheDir();
-    const bucket = this.service.getBucket(options);
-    const dest = join(cacheDir, bucket, filename);
+    const destination = this.getDestinationCachePath(filename, options);
 
-    if (!existsSync(dest)) {
+    if (!existsSync(destination)) {
+      const bucket = this.service.getBucket(options);
       throw new Error(FILE_NOT_FOUND(bucket, filename));
     }
 
-    return dest;
+    return destination;
   }
 
   public async delete(filename: string, options?: StorageOptions): Promise<void> {

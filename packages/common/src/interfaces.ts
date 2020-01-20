@@ -1,24 +1,6 @@
 import { Type } from "@nestjs/common";
 import { ModuleMetadata } from "@nestjs/common/interfaces";
-import { CommonStorageService } from "./service";
-
-export abstract class AbstractStorage {
-  constructor(
-    protected readonly moduleOptions: StorageModuleOptions,
-    protected readonly service: CommonStorageService,
-  ) {}
-
-  public abstract async upload(dataPath: string, filename: string, options?: StorageOptions): Promise<string>;
-
-  public abstract async download(filename: string, options?: StorageOptions): Promise<string>;
-
-  public abstract async delete(filename: string, options?: StorageOptions): Promise<void>;
-
-  public abstract async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string>;
-
-  public abstract parseSignedUrl(url: string): ParsedSignedUrl;
-}
-
+import { AbstractStorage } from "./base.storage";
 export interface StorageOptions {
   bucket?: string;
 }

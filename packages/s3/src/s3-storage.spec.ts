@@ -9,14 +9,14 @@ import { S3Storage } from "./s3.storage";
 describe("S3Storage", () => {
   let service: StorageService;
   let cacheDir: string;
-
+  const bucket = "nestjs-storage";
   beforeEach(async () => {
     cacheDir = dirSync().name;
     const app = await Test.createTestingModule({
       imports: [
         StorageModule.register<S3StorageModuleOptions>({
           accessKeyId: process.env.NEST_STORAGE_S3_KEY,
-          bucket: "nestjs-storage",
+          bucket,
           cacheDir,
           region: "ap-northeast-1",
           secretAccessKey: process.env.NEST_STORAGE_S3_SECRET_KEY,
@@ -49,7 +49,7 @@ describe("S3Storage", () => {
 
     it("should download file", async () => {
       await expect(service.upload(fileSync().name, "path/to/test.txt")).resolves.toBe("path/to/test.txt");
-      await expect(service.download("path/to/test.txt")).resolves.toBe(join(cacheDir, "path/to/test.txt"));
+      await expect(service.download("path/to/test.txt")).resolves.toBe(join(cacheDir, bucket, "path/to/test.txt"));
     });
 
     it("should error if file not found", async () => {
@@ -58,10 +58,10 @@ describe("S3Storage", () => {
 
     it("should get file from cache", async () => {
       await expect(service.upload(fileSync().name, "path/to/test.txt")).resolves.toBe("path/to/test.txt");
-      await expect(service.download("path/to/test.txt")).resolves.toBe(join(cacheDir, "path/to/test.txt"));
+      await expect(service.download("path/to/test.txt")).resolves.toBe(join(cacheDir, bucket, "path/to/test.txt"));
 
       // cache
-      await expect(service.download("path/to/test.txt")).resolves.toBe(join(cacheDir, "path/to/test.txt"));
+      await expect(service.download("path/to/test.txt")).resolves.toBe(join(cacheDir, bucket, "path/to/test.txt"));
     });
   });
 

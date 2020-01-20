@@ -9,8 +9,7 @@ import {
 } from "@anchan828/nest-storage-common";
 import * as s3UriParser from "amazon-s3-uri";
 import { S3 } from "aws-sdk";
-import { createReadStream, createWriteStream, existsSync, mkdirSync } from "fs";
-import { dirname, join } from "path";
+import { createReadStream, createWriteStream, existsSync, unlinkSync } from "fs";
 import { Readable } from "stream";
 import { S3StorageModuleOptions } from "./s3-storage.interface";
 
@@ -31,27 +30,17 @@ export class S3Storage extends AbstractStorage {
         Key: filename,
       })
       .promise();
-
+    await this.copyFileAsync(dataPath, this.getDestinationCachePath(filename, options));
     return res.Key;
   }
 
   public async download(filename: string, options?: StorageOptions): Promise<string> {
-    const cacheDir = this.service.getCacheDir();
-
-    const destination = join(cacheDir, filename);
+    const destination = this.getDestinationCachePath(filename, options);
 
     if (!existsSync(destination)) {
-      const destDirname = dirname(destination);
-
-      if (!existsSync(destDirname)) {
-        mkdirSync(destDirname, { recursive: true });
-      }
-
+      const bucketName = this.service.getBucket(options);
       const bucket = this.getBuket();
-
-      const readstream = bucket
-        .getObject({ Bucket: this.service.getBucket(options), Key: filename })
-        .createReadStream();
+      const readstream = bucket.getObject({ Bucket: bucketName, Key: filename }).createReadStream();
       await this.writeFileStream(readstream, destination);
     }
     return destination;
@@ -60,6 +49,7 @@ export class S3Storage extends AbstractStorage {
   public async delete(filename: string, options?: StorageOptions): Promise<void> {
     const bucket = this.getBuket();
     await bucket.deleteObject({ Bucket: this.service.getBucket(options), Key: filename }).promise();
+    unlinkSync(this.getDestinationCachePath(filename, options));
   }
 
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {

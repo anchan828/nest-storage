@@ -1,3 +1,4 @@
+export { AbstractStorage } from "./base.storage";
 export * from "./constants";
 export { StorageCoreModule } from "./core.module";
 export * from "./interfaces";
