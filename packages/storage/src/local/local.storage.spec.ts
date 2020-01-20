@@ -96,7 +96,7 @@ describe("LocalStorage", () => {
       }).compile();
       service = app.get<StorageService>(StorageService);
       await expect(service.getSignedUrl("hoge.txt", { action: "upload" })).resolves.toEqual(
-        expect.stringContaining("http:/localhost:3000/changedPath/bucket/hoge.txt"),
+        expect.stringContaining("http://localhost:3000/changedPath/bucket/hoge.txt"),
       );
     });
   });
