@@ -83,6 +83,22 @@ describe("LocalStorage", () => {
       await expect(service.getSignedUrl("hoge.txt", { action: "download" })).resolves.toEqual(expect.any(String));
       await expect(service.getSignedUrl("hoge.txt", { action: "upload" })).resolves.toEqual(expect.any(String));
     });
+
+    it("should set signedUrlController property", async () => {
+      const app = await Test.createTestingModule({
+        imports: [
+          StorageModule.register({
+            bucket: "bucket",
+            cacheDir: dirSync().name,
+            signedUrlController: { endpoint: "http://localhost:3000", path: "changedPath", token: "changedToken" },
+          }),
+        ],
+      }).compile();
+      service = app.get<StorageService>(StorageService);
+      await expect(service.getSignedUrl("hoge.txt", { action: "upload" })).resolves.toEqual(
+        expect.stringContaining("http:/localhost:3000/changedPath/bucket/hoge.txt"),
+      );
+    });
   });
 
   describe("parseSignedUrl", () => {

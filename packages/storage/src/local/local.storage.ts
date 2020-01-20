@@ -64,10 +64,11 @@ export class LocalStorage extends AbstractStorage {
       options.expires = STORAGE_DEFAULT_SIGNED_URL_EXPIRES;
     }
 
+    const endpoint = this.moduleOptions.signedUrlController?.endpoint;
     const controllerPath = this.moduleOptions.signedUrlController?.path || SIGNED_URL_CONTROLLER_PATH;
     const token = this.moduleOptions.signedUrlController?.token || SIGNED_URL_CONTROLLER_TOKEN;
     const signature = jwt.sign({ ...options, bucket, filename }, token, { expiresIn: options.expires });
-    return `${controllerPath}/${bucket}/${filename}?signature=${signature}`;
+    return `${join(endpoint || "", controllerPath, bucket, filename)}?signature=${signature}`;
   }
 
   public parseSignedUrl(url: string): ParsedSignedUrl {

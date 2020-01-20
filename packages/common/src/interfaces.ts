@@ -39,6 +39,7 @@ export interface StorageModuleOptions {
 }
 
 export interface SignedUrlController {
+  endpoint?: string;
   path?: string;
   token?: string;
 }
