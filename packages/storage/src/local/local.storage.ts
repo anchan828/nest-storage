@@ -15,6 +15,8 @@ import { parse } from "url";
 import { SIGNED_URL_CONTROLLER_PATH, SIGNED_URL_CONTROLLER_TOKEN } from "./constants";
 
 export class LocalStorage extends AbstractStorage {
+  public provider = "local";
+
   constructor(
     protected readonly moduleOptions: StorageModuleOptions,
     protected readonly service: CommonStorageService,

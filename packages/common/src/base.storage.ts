@@ -32,6 +32,8 @@ export abstract class AbstractStorage {
     await copyFileAsync(srcPath, destPath);
   }
 
+  public abstract provider: string;
+
   public abstract async upload(dataPath: string, filename: string, options?: StorageOptions): Promise<string>;
 
   public abstract async download(filename: string, options?: StorageOptions): Promise<string>;

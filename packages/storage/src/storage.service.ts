@@ -7,7 +7,7 @@ import {
   StorageOptions,
   STORAGE_MODULE_OPTIONS,
 } from "@anchan828/nest-storage-common";
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Type } from "@nestjs/common";
 import { LocalStorage } from "./local/local.storage";
 
 @Injectable()
@@ -19,10 +19,11 @@ export class StorageService {
     private readonly service: CommonStorageService,
   ) {
     if (!options.storage) {
-      this.storage = new LocalStorage(options, service);
+      this.options.storage = new LocalStorage(options, service);
     } else {
-      this.storage = new options.storage(options, service);
+      this.options.storage = new (options.storage as Type<AbstractStorage>)(options, service) as AbstractStorage;
     }
+    this.storage = this.options.storage;
   }
 
   public async upload(dataPath: string, filename: string, options: StorageOptions = {}): Promise<string> {

@@ -14,6 +14,8 @@ import { Readable } from "stream";
 import { S3StorageModuleOptions } from "./s3-storage.interface";
 
 export class S3Storage extends AbstractStorage {
+  public provider = "s3";
+
   constructor(
     protected readonly moduleOptions: S3StorageModuleOptions,
     protected readonly service: CommonStorageService,

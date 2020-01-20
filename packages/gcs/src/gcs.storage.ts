@@ -12,6 +12,8 @@ import { existsSync, unlinkSync } from "fs";
 import { parse as parseUrl } from "url";
 import { GoogleCloudStorageModuleOptions } from "./gcs-storage.interface";
 export class GoogleCloudStorage extends AbstractStorage {
+  public provider = "gcs";
+
   constructor(
     protected readonly moduleOptions: GoogleCloudStorageModuleOptions,
     protected readonly service: CommonStorageService,

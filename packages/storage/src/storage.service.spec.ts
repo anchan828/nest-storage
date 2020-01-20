@@ -7,6 +7,8 @@ import { StorageService } from "./storage.service";
 describe("StorageService", () => {
   it("should create custom storage provider", async () => {
     class CustomStorage extends AbstractStorage {
+      public provider = "custom";
+
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       async upload(dataPath: string, filename: string): Promise<string> {
         return filename;

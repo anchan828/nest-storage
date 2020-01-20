@@ -9,7 +9,7 @@ export interface StorageModuleOptions {
   bucket?: string;
   cacheDir?: string;
 
-  storage?: Type<AbstractStorage>;
+  storage?: Type<AbstractStorage> | AbstractStorage;
 
   /**
    * Set property if you upload file using signed url. LocalStorage provider only.
