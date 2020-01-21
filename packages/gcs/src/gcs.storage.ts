@@ -24,7 +24,7 @@ export class GoogleCloudStorage extends AbstractStorage {
   public async upload(dataPath: string, filename: string, options?: StorageOptions): Promise<string> {
     const bucket = this.getBuket(options);
 
-    const [file] = await bucket.upload(dataPath, { destination: filename, gzip: true });
+    const [file] = await bucket.upload(dataPath, { destination: filename, gzip: true, resumable: false });
     await this.copyFileAsync(dataPath, this.getDestinationCachePath(filename, options));
     return file.name;
   }
