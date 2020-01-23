@@ -5,7 +5,7 @@ import {
   STORAGE_MODULE_OPTIONS,
 } from "@anchan828/nest-storage-common";
 import { Inject, MiddlewareConsumer, Module, NestModule, RequestMethod } from "@nestjs/common";
-import * as cros from "cors";
+import * as cors from "cors";
 import * as multer from "multer";
 import { join } from "path";
 import { SIGNED_URL_CONTROLLER_PATH } from "./constants";
@@ -26,9 +26,9 @@ export class LocalStorageModule implements NestModule {
       const prefix = this.moduleOptions.signedUrlController?.path || SIGNED_URL_CONTROLLER_PATH;
       const path = `${prefix}/:bucket/*`;
       const upload = multer({ dest: join(this.service.getCacheDir(), ".multer") }).any();
-      consumer.apply(cros(), StorageDownloadMiddleware).forRoutes({ method: RequestMethod.GET, path });
-      consumer.apply(cros(), upload, StorageUploadMiddleware).forRoutes({ method: RequestMethod.PUT, path });
-      consumer.apply(cros(), StorageDeleteMiddleware).forRoutes({ method: RequestMethod.DELETE, path });
+      consumer.apply(cors(), StorageDownloadMiddleware).forRoutes({ method: RequestMethod.GET, path });
+      consumer.apply(cors(), upload, StorageUploadMiddleware).forRoutes({ method: RequestMethod.PUT, path });
+      consumer.apply(cors(), StorageDeleteMiddleware).forRoutes({ method: RequestMethod.DELETE, path });
     }
   }
 }
