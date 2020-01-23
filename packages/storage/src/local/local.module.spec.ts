@@ -9,7 +9,7 @@ describe("LocalStorageModule", () => {
     const module = await Test.createTestingModule({
       imports: [StorageModule.register({ bucket: "bucket" })],
     }).compile();
-    app = await module.createNestApplication();
+    app = await module.createNestApplication(undefined, { bodyParser: false });
     await app.init();
     await app.close();
   });
@@ -18,7 +18,7 @@ describe("LocalStorageModule", () => {
     const module = await Test.createTestingModule({
       imports: [StorageModule.register({ bucket: "bucket", storage: LocalStorage })],
     }).compile();
-    app = await module.createNestApplication();
+    app = await module.createNestApplication(undefined, { bodyParser: false });
     await app.init();
     await app.close();
   });

@@ -11,7 +11,7 @@ describe("StorageBaseMiddleware", () => {
       imports: [StorageModule.register({ bucket: "bucket" })],
     }).compile();
     service = module.get<StorageService>(StorageService);
-    app = await module.createNestApplication();
+    app = await module.createNestApplication(undefined, { bodyParser: false });
     await app.init();
   });
 

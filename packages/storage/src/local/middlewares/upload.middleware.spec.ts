@@ -13,7 +13,7 @@ describe("StorageUploadMiddleware", () => {
     const module = await Test.createTestingModule({
       imports: [StorageModule.register({ bucket: "bucket" })],
     }).compile();
-    app = module.createNestApplication();
+    app = module.createNestApplication(undefined, { bodyParser: false });
     await app.init();
     service = await app.resolve<StorageService>(StorageService);
   });
@@ -71,5 +71,35 @@ describe("StorageUploadMiddleware", () => {
       stream.on("end", () => req.end(done));
       stream.pipe<any>(req, { end: false });
     });
+  });
+
+  it("should throw error if body parser enabled and upload json", async () => {
+    await app.close();
+    const module = await Test.createTestingModule({
+      imports: [StorageModule.register({ bucket: "bucket" })],
+    }).compile();
+    app = module.createNestApplication();
+    await app.init();
+    service = await app.resolve<StorageService>(StorageService);
+
+    const url = await service.getSignedUrl("test.json", { action: "upload" });
+    await request(app.getHttpServer())
+      .put(url)
+      .set("Content-Type", "application/json")
+      .send({ test: "json" })
+      .expect(400, {
+        error: "Bad Request",
+        message:
+          "Could not upload json file. Is body-parser enabled? It should be disable: 'NestFactory.create(AppModule, { bodyParser: false })'",
+        statusCode: 400,
+      });
+  });
+  it("should upload json file", async () => {
+    const url = await service.getSignedUrl("test.json", { action: "upload" });
+    await request(app.getHttpServer())
+      .put(url)
+      .set("Content-Type", "application/json")
+      .send({ test: "json" })
+      .expect(204);
   });
 });
