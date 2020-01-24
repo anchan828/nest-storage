@@ -75,7 +75,7 @@ export class S3Storage extends AbstractStorage {
   }
 
   private getBuket(): S3 {
-    return new S3({ ...this.moduleOptions, signatureVersion: "v4" });
+    return new S3({ ...this.moduleOptions, maxRetries: 5, signatureVersion: "v4" });
   }
 
   private getOperation(action: SignedUrlActionType): string {
