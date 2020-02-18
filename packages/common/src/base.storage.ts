@@ -40,6 +40,8 @@ export abstract class AbstractStorage {
 
   public abstract async delete(filename: string, options?: StorageOptions): Promise<void>;
 
+  public abstract async exists(filename: string, options?: StorageOptions): Promise<boolean>;
+
   public abstract async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string>;
 
   public abstract parseSignedUrl(url: string): ParsedSignedUrl;

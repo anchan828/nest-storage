@@ -38,6 +38,10 @@ export class StorageService {
     return this.storage.delete(filename, options);
   }
 
+  public async exists(filename: string, options: StorageOptions = {}): Promise<boolean> {
+    return this.storage.exists(filename, options);
+  }
+
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
     return this.storage.getSignedUrl(filename, options);
   }
