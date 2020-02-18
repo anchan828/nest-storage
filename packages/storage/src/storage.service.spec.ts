@@ -22,6 +22,11 @@ describe("StorageService", () => {
       async delete(filename: string): Promise<void> {}
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      async exists(filename: string): Promise<boolean> {
+        return false;
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
         return filename;
       }

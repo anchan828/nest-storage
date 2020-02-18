@@ -51,6 +51,13 @@ export class LocalStorage extends AbstractStorage {
     unlinkSync(dest);
   }
 
+  public async exists(filename: string, options?: StorageOptions): Promise<boolean> {
+    const cacheDir = this.service.getCacheDir();
+    const bucket = this.service.getBucket(options);
+    const dest = join(cacheDir, bucket, filename);
+    return existsSync(dest);
+  }
+
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
     const bucket = this.service.getBucket(options);
     if (!options.expires) {

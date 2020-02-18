@@ -54,6 +54,16 @@ export class S3Storage extends AbstractStorage {
     unlinkSync(this.getDestinationCachePath(filename, options));
   }
 
+  public async exists(filename: string, options?: StorageOptions): Promise<boolean> {
+    const bucket = this.getBuket();
+    try {
+      await bucket.headObject({ Bucket: this.service.getBucket(options), Key: filename }).promise();
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
     const bucket = this.getBuket();
     const bucketName = this.service.getBucket(options);

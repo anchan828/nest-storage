@@ -45,6 +45,14 @@ export class GoogleCloudStorage extends AbstractStorage {
     unlinkSync(this.getDestinationCachePath(filename, options));
   }
 
+  public async exists(filename: string, options?: StorageOptions): Promise<boolean> {
+    const bucket = this.getBuket(options);
+    return bucket
+      .file(filename)
+      .exists()
+      .then(res => res[0]);
+  }
+
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
     const bucket = this.getBuket(options);
     const { action, contentType } = options;

@@ -78,6 +78,21 @@ describe("S3Storage", () => {
     });
   });
 
+  describe("exists", () => {
+    it("should be defined", () => {
+      expect(service.exists).toBeDefined();
+    });
+
+    it("should return false", async () => {
+      await expect(service.exists("not-exists.txt")).resolves.toBeFalsy();
+    });
+
+    it("should delete file", async () => {
+      await service.upload(fileSync().name, "test.txt");
+      await expect(service.exists("test.txt")).resolves.toBeTruthy();
+    });
+  });
+
   describe("getSignedUrl", () => {
     it("should be defined", () => {
       expect(service.getSignedUrl).toBeDefined();
