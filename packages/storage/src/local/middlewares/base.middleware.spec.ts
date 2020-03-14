@@ -24,8 +24,8 @@ describe("StorageBaseMiddleware", () => {
       .put(url)
       .attach("file", Buffer.from("test"), "test.txt")
       .expect(400, {
-        error: "Bad Request",
-        message: "Invalid action 'download'. action should be 'upload'",
+        error: "Invalid action 'download'. action should be 'upload'",
+        message: "Bad Request",
         statusCode: 400,
       });
   });
@@ -37,8 +37,8 @@ describe("StorageBaseMiddleware", () => {
       .put(url.replace("/bucket/", "/invalid/"))
       .attach("file", Buffer.from("test"), "test.txt")
       .expect(400, {
-        error: "Bad Request",
-        message: "Invalid bucket 'invalid'",
+        error: "Invalid bucket 'invalid'",
+        message: "Bad Request",
         statusCode: 400,
       });
   });
@@ -49,8 +49,8 @@ describe("StorageBaseMiddleware", () => {
       .put(url.replace("test.txt", "invalid.txt"))
       .attach("file", Buffer.from("test"), "test.txt")
       .expect(400, {
-        error: "Bad Request",
-        message: "Invalid filename 'invalid.txt'",
+        error: "Invalid filename 'invalid.txt'",
+        message: "Bad Request",
         statusCode: 400,
       });
   });
