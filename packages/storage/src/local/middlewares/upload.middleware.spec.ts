@@ -28,8 +28,8 @@ describe("StorageUploadMiddleware", () => {
     await request(app.getHttpServer())
       .put(url)
       .expect(400, {
-        error: "Bad Request",
-        message: "The file was not uploaded",
+        error: "The file was not uploaded",
+        message: "Bad Request",
         statusCode: 400,
       });
   });
@@ -39,8 +39,8 @@ describe("StorageUploadMiddleware", () => {
     await request(app.getHttpServer())
       .put(url)
       .expect(400, {
-        error: "Bad Request",
-        message: "The file was not uploaded",
+        error: "The file was not uploaded",
+        message: "Bad Request",
         statusCode: 400,
       });
   });
@@ -88,9 +88,9 @@ describe("StorageUploadMiddleware", () => {
       .set("Content-Type", "application/json")
       .send({ test: "json" })
       .expect(400, {
-        error: "Bad Request",
-        message:
+        error:
           "Could not upload json file. Is body-parser enabled? It should be disable: 'NestFactory.create(AppModule, { bodyParser: false })'",
+        message: "Bad Request",
         statusCode: 400,
       });
   });
