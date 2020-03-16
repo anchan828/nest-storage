@@ -24,8 +24,8 @@ describe("StorageDownloadMiddleware", () => {
     await request(app.getHttpServer())
       .get(url)
       .expect(400, {
-        error: `File not found: {"bucket":"bucket","filename":"download-not-found-test.txt"}`,
-        message: "Bad Request",
+        error: "Bad Request",
+        message: `File not found: {"bucket":"bucket","filename":"download-not-found-test.txt"}`,
         statusCode: 400,
       });
   });
