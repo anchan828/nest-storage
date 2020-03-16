@@ -24,8 +24,8 @@ describe("StorageDeleteMiddleware", () => {
     await request(app.getHttpServer())
       .delete(url)
       .expect(400, {
-        error: `File not found: {"bucket":"bucket","filename":"del-not-found-test.txt"}`,
-        message: "Bad Request",
+        error: "Bad Request",
+        message: `File not found: {"bucket":"bucket","filename":"del-not-found-test.txt"}`,
         statusCode: 400,
       });
   });
