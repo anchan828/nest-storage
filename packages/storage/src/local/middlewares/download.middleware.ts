@@ -20,13 +20,19 @@ export class StorageDownloadMiddleware extends StorageBaseMiddleware {
   }
 
   async handler(bucket: string, filename: string, req: Request, res: Response): Promise<void> {
-    await this.service
-      .download(filename, { bucket })
-      .then(path => {
-        res.download(path, basename(filename));
-      })
-      .catch(e => {
-        throw new BadRequestException(e.message);
-      });
+    return new Promise<void>(async (resolve, rejects) => {
+      try {
+        const path = await this.service.download(filename, { bucket });
+        res.download(path, basename(filename), (err?: Error) => {
+          if (err) {
+            rejects(new BadRequestException(err.message));
+          }
+
+          resolve();
+        });
+      } catch (e) {
+        rejects(new BadRequestException(e.message));
+      }
+    });
   }
 }
