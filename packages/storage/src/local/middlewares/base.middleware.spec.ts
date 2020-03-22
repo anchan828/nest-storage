@@ -20,14 +20,11 @@ describe("StorageBaseMiddleware", () => {
   });
   it("should throw action error", async () => {
     const url = await service.getSignedUrl("test.txt", { action: "download" });
-    await request(app.getHttpServer())
-      .put(url)
-      .attach("file", Buffer.from("test"), "test.txt")
-      .expect(400, {
-        error: "Bad Request",
-        message: "Invalid action 'download'. action should be 'upload'",
-        statusCode: 400,
-      });
+    await request(app.getHttpServer()).put(url).attach("file", Buffer.from("test"), "test.txt").expect(400, {
+      error: "Bad Request",
+      message: "Invalid action 'download'. action should be 'upload'",
+      statusCode: 400,
+    });
   });
 
   it("should throw bucket error", async () => {

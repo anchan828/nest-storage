@@ -112,7 +112,7 @@ describe("S3Storage", () => {
 
       const url = await service.getSignedUrl(filename, { action: "upload" });
       await expect(
-        axios.put(url, Buffer.from("test"), { headers: { "Content-Type": contentType } }).then(res => res.status),
+        axios.put(url, Buffer.from("test"), { headers: { "Content-Type": contentType } }).then((res) => res.status),
       ).resolves.toBe(200);
     });
     it("should upload file with signed url and readstream", async () => {
@@ -128,7 +128,7 @@ describe("S3Storage", () => {
           .put(url, createReadStream(tmpFileName), {
             headers: { "Content-Length": statSync(tmpFileName).size, "Content-Type": contentType },
           })
-          .then(res => res.status),
+          .then((res) => res.status),
       ).resolves.toBe(200);
     });
   });

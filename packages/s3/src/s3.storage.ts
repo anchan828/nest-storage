@@ -106,9 +106,9 @@ export class S3Storage extends AbstractStorage {
   private writeFileStream(readstream: Readable, destination: string): Promise<void> {
     return new Promise((resolve, reject) => {
       readstream
-        .on("error", error => reject(error))
+        .on("error", (error) => reject(error))
         .pipe(createWriteStream(destination))
-        .on("error", error => reject(error))
+        .on("error", (error) => reject(error))
         .on("close", () => resolve());
     });
   }
