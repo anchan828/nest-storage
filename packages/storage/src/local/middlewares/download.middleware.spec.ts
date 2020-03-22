@@ -21,26 +21,19 @@ describe("StorageDownloadMiddleware", () => {
 
   it("should throw error if file not found", async () => {
     const url = await service.getSignedUrl("download-not-found-test.txt", { action: "download" });
-    await request(app.getHttpServer())
-      .get(url)
-      .expect(400, {
-        error: "Bad Request",
-        message: `File not found: {"bucket":"bucket","filename":"download-not-found-test.txt"}`,
-        statusCode: 400,
-      });
+    await request(app.getHttpServer()).get(url).expect(400, {
+      error: "Bad Request",
+      message: `File not found: {"bucket":"bucket","filename":"download-not-found-test.txt"}`,
+      statusCode: 400,
+    });
   });
 
   it("should download file", async () => {
     let url = await service.getSignedUrl("path/to/download-test.txt", { action: "upload" });
-    await request(app.getHttpServer())
-      .put(url)
-      .attach("file", Buffer.from("test"), "test.txt")
-      .expect(204);
+    await request(app.getHttpServer()).put(url).attach("file", Buffer.from("test"), "test.txt").expect(204);
 
     url = await service.getSignedUrl("path/to/download-test.txt", { action: "download" });
 
-    await request(app.getHttpServer())
-      .get(url)
-      .expect(200);
+    await request(app.getHttpServer()).get(url).expect(200);
   });
 });

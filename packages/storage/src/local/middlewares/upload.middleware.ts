@@ -31,7 +31,7 @@ export class StorageUploadMiddleware extends StorageBaseMiddleware {
     await this.service
       .upload(dataPath, filename, { bucket })
       .then(() => res.status(204).end())
-      .catch(e => {
+      .catch((e) => {
         throw new BadRequestException(e.message);
       });
   }

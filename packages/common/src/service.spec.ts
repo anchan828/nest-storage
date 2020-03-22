@@ -9,7 +9,7 @@ describe("CommonStorageService", () => {
       providers: [CommonStorageService, { provide: STORAGE_MODULE_OPTIONS, useValue: moduleOptions }],
     })
       .compile()
-      .then(app => app.get<CommonStorageService>(CommonStorageService));
+      .then((app) => app.get<CommonStorageService>(CommonStorageService));
 
   it("should be defined", async () => {
     expect(CommonStorageService).toBeDefined();

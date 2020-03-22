@@ -106,7 +106,7 @@ describe("GoogleCloudStorage", () => {
               "Content-Type": contentType,
             },
           })
-          .then(res => res.status),
+          .then((res) => res.status),
       ).resolves.toBe(200);
     });
 
@@ -126,7 +126,7 @@ describe("GoogleCloudStorage", () => {
               "Content-Type": contentType,
             },
           })
-          .then(res => res.status),
+          .then((res) => res.status),
       ).resolves.toBe(200);
     });
   });

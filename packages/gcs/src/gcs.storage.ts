@@ -50,7 +50,7 @@ export class GoogleCloudStorage extends AbstractStorage {
     return bucket
       .file(filename)
       .exists()
-      .then(res => res[0]);
+      .then((res) => res[0]);
   }
 
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
