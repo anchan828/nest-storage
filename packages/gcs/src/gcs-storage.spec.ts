@@ -96,9 +96,8 @@ describe("GoogleCloudStorage", () => {
     it("should upload file with signed url", async () => {
       const filename = "path/to/signed-test.txt";
       const contentType = "text/plain";
-      const expires = Date.now() + 1000 * 60 * 10;
 
-      const url = await service.getSignedUrl(filename, { action: "upload", contentType, expires });
+      const url = await service.getSignedUrl(filename, { action: "upload", contentType });
       await expect(
         axios
           .put(url, Buffer.from("test"), {
@@ -113,7 +112,7 @@ describe("GoogleCloudStorage", () => {
     it("should upload file with signed url and readstream", async () => {
       const filename = "path/to/signed-test-with-stream.txt";
       const contentType = "text/plain";
-      const expires = Date.now() + 1000 * 60 * 10;
+      const expires = 1000 * 60 * 10;
 
       const url = await service.getSignedUrl(filename, { action: "upload", contentType, expires });
       const tmpFileName = tmpNameSync();

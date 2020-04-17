@@ -61,6 +61,7 @@ export class GoogleCloudStorage extends AbstractStorage {
       action: this.getAction(action),
       contentType,
       expires: Date.now() + expires,
+      version: "v4",
     });
     return url;
   }
