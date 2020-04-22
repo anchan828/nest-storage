@@ -21,7 +21,7 @@ export class CommonStorageService {
   }
 
   public getCacheDir(): string {
-    const cacheDir = this.moduleOptions.cacheDir || join(tmpdir(), ",nest-storage");
+    const cacheDir = this.moduleOptions.cacheDir || join(tmpdir(), "nest-storage");
     if (!existsSync(cacheDir)) {
       mkdirSync(cacheDir, { recursive: true });
     }
