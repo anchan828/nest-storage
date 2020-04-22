@@ -155,7 +155,7 @@ describe("LocalStorage", () => {
       expect(service.compress).toBeDefined();
     });
 
-    it("should get zip file", async () => {
+    it("should create compressed files", async () => {
       const file1 = await service.upload(fileSync().name, "test1.txt");
       const file2 = await service.upload(fileSync().name, "dir/test2.txt");
       const file3 = await service.upload(fileSync().name, "dir/to/test3.txt");
