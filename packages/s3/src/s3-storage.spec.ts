@@ -1,9 +1,9 @@
 import { Test } from "@nestjs/testing";
 import axios from "axios";
-import { createReadStream, statSync, writeFileSync } from "fs";
+import { createReadStream, existsSync, statSync, writeFileSync } from "fs";
 import { basename, join } from "path";
 import { dirSync, fileSync, tmpNameSync } from "tmp";
-import { StorageModule, StorageService } from "../../storage";
+import { CompressFileEntry, StorageModule, StorageService } from "../../storage";
 import { S3StorageModuleOptions } from "./s3-storage.interface";
 import { S3Storage } from "./s3.storage";
 describe("S3Storage", () => {
@@ -146,6 +146,26 @@ describe("S3Storage", () => {
         bucket: "nestjs-storage",
         filename: "hoge.txt",
       });
+    });
+  });
+
+  describe("compress", () => {
+    it("should be defined", () => {
+      expect(service.compress).toBeDefined();
+    });
+
+    it("should get zip file", async () => {
+      const file1 = await service.upload(fileSync().name, "test1.txt");
+      const file2 = await service.upload(fileSync().name, "dir/test2.txt");
+      const file3 = await service.upload(fileSync().name, "dir/to/test3.txt");
+      const file4 = await service.upload(fileSync().name, "test4.txt");
+      const file4Entry = { filename: file4, relativePath: "dir/test5.txt" } as CompressFileEntry;
+      const zip = await service.compress([file1, file2, file3, file4Entry]);
+      const tar = await service.compress([file1, file2, file3, file4Entry], { compressType: "tar" });
+      const tgz = await service.compress([file1, file2, file3, file4Entry], { compressType: "tgz" });
+      expect(existsSync(zip)).toBeTruthy();
+      expect(existsSync(tar)).toBeTruthy();
+      expect(existsSync(tgz)).toBeTruthy();
     });
   });
 });
