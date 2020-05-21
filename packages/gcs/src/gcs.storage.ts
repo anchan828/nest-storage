@@ -79,10 +79,10 @@ export class GoogleCloudStorage extends AbstractStorage {
 
   public parseSignedUrl(url: string): ParsedSignedUrl {
     const urlObject = parseUrl(url);
-    const endopint = new Storage({ ...this.moduleOptions, autoRetry: true, maxRetries: 5 }).apiEndpoint;
+    const endopint = parseUrl(new Storage({ ...this.moduleOptions, autoRetry: true, maxRetries: 5 }).apiEndpoint);
 
-    if (urlObject.host !== endopint) {
-      throw new Error(`Invalid endopint '${urlObject.host}'. endpoint should be ${endopint}`);
+    if (urlObject.host !== endopint.host) {
+      throw new Error(`Invalid endopint '${urlObject.host}'. endpoint should be ${endopint.host}`);
     }
 
     if (!urlObject.pathname || this.countString("/", urlObject.pathname) < 2) {
