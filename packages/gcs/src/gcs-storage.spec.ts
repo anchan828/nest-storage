@@ -157,15 +157,15 @@ describe("GoogleCloudStorage", () => {
     it("should throw error if invalid pathname", () => {
       expect(() => {
         service.parseSignedUrl("https://storage.googleapis.com/");
-      }).toThrowError("Invalid pathname '/'. pathname should be '/bucket/path/to/filename.txt'");
+      }).toThrowError("Invalid endopint 'storage.googleapis.com'. endpoint should be https://storage.googleapis.com");
 
       expect(() => {
         service.parseSignedUrl("https://storage.googleapis.com");
-      }).toThrowError("Invalid pathname '/'. pathname should be '/bucket/path/to/filename.txt'");
+      }).toThrowError("Invalid endopint 'storage.googleapis.com'. endpoint should be https://storage.googleapis.com");
 
       expect(() => {
         service.parseSignedUrl("https://storage.googleapis.com/test");
-      }).toThrowError("Invalid pathname '/test'. pathname should be '/bucket/path/to/filename.txt'");
+      }).toThrowError("Invalid endopint 'storage.googleapis.com'. endpoint should be https://storage.googleapis.com");
 
       expect(() => {
         service.parseSignedUrl("https://storage.googleapis.com/test/");
