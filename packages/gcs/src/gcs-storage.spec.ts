@@ -151,7 +151,7 @@ describe("GoogleCloudStorage", () => {
     it("should throw error if invalid host", () => {
       expect(() => {
         service.parseSignedUrl("https://invalid.googleapis.com/nestjs-storage/path/to/hoge.txt");
-      }).toThrowError("Invalid endopint 'invalid.googleapis.com'. endpoint should be storage.googleapis.com");
+      }).toThrowError("Invalid endopint 'invalid.googleapis.com'. endpoint should be https://storage.googleapis.com");
     });
 
     it("should throw error if invalid pathname", () => {
