@@ -21,7 +21,7 @@ export class StorageUploadMiddleware extends StorageBaseMiddleware {
   }
 
   async handler(bucket: string, filename: string, req: Request, res: Response): Promise<void> {
-    if (req.body && extname(filename) === ".json") {
+    if (req.body && Object.keys(req.body).length !== 0 && extname(filename) === ".json") {
       throw new BadRequestException(
         "Could not upload json file. Is body-parser enabled? It should be disable: 'NestFactory.create(AppModule, { bodyParser: false })'",
       );
