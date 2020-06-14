@@ -31,9 +31,9 @@
     "watch": "node ../../node_modules/typescript/bin/tsc -w"
   },
   "types": "./dist/index.d.ts",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "dependencies": {
-    "@anchan828/nest-storage-common": "^0.1.10",
+    "@anchan828/nest-storage-common": "^0.1.11",
     "@google-cloud/storage": "5.1.0"
   },
   "devDependencies": {
