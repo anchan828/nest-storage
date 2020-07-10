@@ -34,7 +34,7 @@
   "version": "0.1.14",
   "dependencies": {
     "@anchan828/nest-storage-common": "^0.1.14",
-    "@google-cloud/storage": "5.1.1"
+    "@google-cloud/storage": "5.1.2"
   },
   "devDependencies": {
     "@types/tmp": "0.2.0",
