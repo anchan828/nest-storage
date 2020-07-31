@@ -42,7 +42,7 @@
     "tmp": "0.2.1"
   },
   "devDependencies": {
-    "@types/cors": "2.8.6",
+    "@types/cors": "2.8.7",
     "@types/express": "4.17.7",
     "@types/jsonwebtoken": "8.5.0",
     "@types/multer": "1.4.3",
