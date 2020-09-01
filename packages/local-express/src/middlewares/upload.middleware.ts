@@ -1,17 +1,21 @@
-import { SignedUrlActionType, StorageModuleOptions, STORAGE_MODULE_OPTIONS } from "@anchan828/nest-storage-common";
+import {
+  LocalStorageProviderModuleOptions,
+  SignedUrlActionType,
+  STORAGE_PROVIDER,
+  STORAGE_PROVIDER_MODULE_OPTIONS,
+} from "@anchan828/nest-storage-common";
 import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { Request, Response } from "express";
 import { createWriteStream, statSync } from "fs";
 import { extname } from "path";
 import { tmpNameSync } from "tmp";
-import { StorageService } from "../../storage.service";
+import { LocalStorage } from "../local.storage";
 import { StorageBaseMiddleware } from "./base.middleware";
 @Injectable()
 export class StorageUploadMiddleware extends StorageBaseMiddleware {
   constructor(
-    @Inject(STORAGE_MODULE_OPTIONS)
-    readonly moduleOptions: StorageModuleOptions,
-    private readonly service: StorageService,
+    @Inject(STORAGE_PROVIDER_MODULE_OPTIONS) readonly moduleOptions: LocalStorageProviderModuleOptions,
+    @Inject(STORAGE_PROVIDER) private readonly storage: LocalStorage,
   ) {
     super(moduleOptions);
   }
@@ -28,7 +32,7 @@ export class StorageUploadMiddleware extends StorageBaseMiddleware {
     }
 
     const dataPath = await this.getDataPath(req, filename);
-    await this.service
+    await this.storage
       .upload(dataPath, filename, { bucket })
       .then(() => res.status(204).end())
       .catch((e) => {

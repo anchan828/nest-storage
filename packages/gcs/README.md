@@ -9,12 +9,13 @@ npm i @anchan828/nest-storage @anchan828/nest-storage-gcs
 ## Usage
 
 ```ts
-StorageModule.register<GoogleCloudStorageModuleOptions>({
-  bucket: "bucket",
-  cacheDir: "path/to/cacheDir",
-  keyFilename: "path/to/keyfile.json",
-  storage: GoogleCloudStorage,
-});
+StorageModule.register(
+  {
+    bucket: "bucket",
+    cacheDir: "path/to/cacheDir",
+  },
+  GoogleCloudStorageProviderModule.register({ keyFilename: "path/to/keyfile.json" }),
+);
 ```
 
 ```ts

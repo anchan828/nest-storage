@@ -2,23 +2,26 @@ import {
   AbstractStorage,
   CommonStorageService,
   FILE_NOT_FOUND,
+  LocalStorageProviderModuleOptions,
   ParsedSignedUrl,
   SignedUrlOptions,
-  StorageModuleOptions,
   StorageOptions,
   STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
+  STORAGE_PROVIDER_MODULE_OPTIONS,
 } from "@anchan828/nest-storage-common";
+import { Inject, Injectable } from "@nestjs/common";
 import { existsSync, unlinkSync } from "fs";
 import * as jwt from "jsonwebtoken";
 import { join } from "path";
 import { parse } from "url";
 import { SIGNED_URL_CONTROLLER_PATH, SIGNED_URL_CONTROLLER_TOKEN } from "./constants";
 
+@Injectable()
 export class LocalStorage extends AbstractStorage {
   public provider = "local";
 
   constructor(
-    protected readonly moduleOptions: StorageModuleOptions,
+    @Inject(STORAGE_PROVIDER_MODULE_OPTIONS) protected readonly moduleOptions: LocalStorageProviderModuleOptions,
     protected readonly service: CommonStorageService,
   ) {
     super(moduleOptions, service);

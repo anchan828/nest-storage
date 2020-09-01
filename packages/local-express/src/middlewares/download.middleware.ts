@@ -1,16 +1,20 @@
-import { SignedUrlActionType, StorageModuleOptions, STORAGE_MODULE_OPTIONS } from "@anchan828/nest-storage-common";
+import {
+  LocalStorageProviderModuleOptions,
+  SignedUrlActionType,
+  STORAGE_PROVIDER,
+  STORAGE_PROVIDER_MODULE_OPTIONS,
+} from "@anchan828/nest-storage-common";
 import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { Request, Response } from "express";
 import { basename } from "path";
-import { StorageService } from "../../storage.service";
+import { LocalStorage } from "../local.storage";
 import { StorageBaseMiddleware } from "./base.middleware";
 
 @Injectable()
 export class StorageDownloadMiddleware extends StorageBaseMiddleware {
   constructor(
-    @Inject(STORAGE_MODULE_OPTIONS)
-    readonly moduleOptions: StorageModuleOptions,
-    private readonly service: StorageService,
+    @Inject(STORAGE_PROVIDER_MODULE_OPTIONS) readonly moduleOptions: LocalStorageProviderModuleOptions,
+    @Inject(STORAGE_PROVIDER) private readonly storage: LocalStorage,
   ) {
     super(moduleOptions);
   }
@@ -22,7 +26,7 @@ export class StorageDownloadMiddleware extends StorageBaseMiddleware {
   async handler(bucket: string, filename: string, req: Request, res: Response): Promise<void> {
     return new Promise<void>(async (resolve, rejects) => {
       try {
-        const path = await this.service.download(filename, { bucket });
+        const path = await this.storage.download(filename, { bucket });
         res.download(path, basename(filename), (err?: Error) => {
           if (err) {
             rejects(new BadRequestException(err.message));

@@ -26,6 +26,18 @@
     },
     {
       "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}/packages/local-express",
+      "internalConsoleOptions": "neverOpen",
+      "name": "local-express test debug",
+      "port": 9229,
+      "request": "launch",
+      "runtimeArgs": ["run", "test:debug"],
+      "runtimeExecutable": "npm",
+      "sourceMaps": true,
+      "type": "node"
+    },
+    {
+      "console": "integratedTerminal",
       "cwd": "${workspaceRoot}/packages/s3",
       "internalConsoleOptions": "neverOpen",
       "name": "s3 test debug",

@@ -3,16 +3,19 @@
 ## Install
 
 ```shell
-npm i @anchan828/nest-storage
+npm i @anchan828/nest-storage @anchan828/nest-storage-local-express
 ```
 
 ## Usage
 
 ```ts
-StorageModule.register({
-  bucket: "bucket",
-  cacheDir: "path/to/cacheDir",
-});
+StorageModule.register(
+  {
+    bucket: "bucket",
+    cacheDir: "path/to/cacheDir",
+  },
+  LocalStorageProviderModule.register(),
+);
 ```
 
 ```ts
@@ -28,20 +31,13 @@ export class Service {
 
 ## Storage providers
 
-You can set custom storage provider. Default is LocalStorage
+You can set some storage providers.
 
-```ts
-StorageModule.register({
-  bucket: "bucket",
-  cacheDir: "path/to/cacheDir",
-  storage: LocalStorage,
-});
-```
-
-| Provider             | Pakcage                                                                                  |
-| :------------------- | :--------------------------------------------------------------------------------------- |
-| Google Cloud Storage | [@anchan828/nest-storage-gcs](https://www.npmjs.com/package/@anchan828/nest-storage-gcs) |
-| Amazon S3            | [@anchan828/nest-storage-s3](https://www.npmjs.com/package/@anchan828/nest-storage-s3)   |
+| Provider             | Pakcage                                                                                                      |
+| :------------------- | :----------------------------------------------------------------------------------------------------------- |
+| Local (express)      | [@anchan828/nest-storage-local-express](https://www.npmjs.com/package/@anchan828/nest-storage-local-express) |
+| Google Cloud Storage | [@anchan828/nest-storage-gcs](https://www.npmjs.com/package/@anchan828/nest-storage-gcs)                     |
+| Amazon S3            | [@anchan828/nest-storage-s3](https://www.npmjs.com/package/@anchan828/nest-storage-s3)                       |
 
 ## Signed URL
 

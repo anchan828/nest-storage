@@ -1,14 +1,16 @@
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import * as request from "supertest";
-import { StorageModule } from "../../storage.module";
-import { StorageService } from "../../storage.service";
+import { StorageModule } from "../../../storage/src/storage.module";
+import { StorageService } from "../../../storage/src/storage.service";
+import { LocalStorageProviderModule } from "../local.module";
+
 describe("StorageDownloadMiddleware", () => {
   let app: INestApplication;
   let service: StorageService;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [StorageModule.register({ bucket: "bucket" })],
+      imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageProviderModule.register())],
     }).compile();
     service = module.get<StorageService>(StorageService);
     app = await module.createNestApplication(undefined, { bodyParser: false });

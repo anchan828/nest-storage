@@ -3,14 +3,17 @@ import { Test } from "@nestjs/testing";
 import { existsSync } from "fs";
 import { join } from "path";
 import { dirSync, fileSync } from "tmp";
-import { CompressFileEntry } from "../interfaces";
-import { StorageModule } from "../storage.module";
-import { StorageService } from "../storage.service";
+import { CompressFileEntry } from "../../storage/src/interfaces";
+import { StorageModule } from "../../storage/src/storage.module";
+import { StorageService } from "../../storage/src/storage.service";
+import { LocalStorageProviderModule } from "./local.module";
 describe("LocalStorage", () => {
   let service: StorageService;
   beforeEach(async () => {
     const app = await Test.createTestingModule({
-      imports: [StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name })],
+      imports: [
+        StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name }, LocalStorageProviderModule.register()),
+      ],
     }).compile();
     service = app.get<StorageService>(StorageService);
   });
@@ -21,7 +24,11 @@ describe("LocalStorage", () => {
   });
 
   const getDest = (filename: string): string => {
-    return join(service["options"].cacheDir || "", service["options"].bucket || "", filename);
+    return join(
+      service["storage"]["service"]["moduleOptions"].cacheDir || "",
+      service["storage"]["service"]["moduleOptions"].bucket || "",
+      filename,
+    );
   };
 
   describe("upload", () => {
@@ -103,11 +110,15 @@ describe("LocalStorage", () => {
     it("should set signedUrlController property", async () => {
       const app = await Test.createTestingModule({
         imports: [
-          StorageModule.register({
-            bucket: "bucket",
-            cacheDir: dirSync().name,
-            signedUrlController: { endpoint: "http://localhost:3000", path: "changedPath", token: "changedToken" },
-          }),
+          StorageModule.register(
+            {
+              bucket: "bucket",
+              cacheDir: dirSync().name,
+            },
+            LocalStorageProviderModule.register({
+              signedUrlController: { endpoint: "http://localhost:3000", path: "changedPath", token: "changedToken" },
+            }),
+          ),
         ],
       }).compile();
       service = app.get<StorageService>(StorageService);

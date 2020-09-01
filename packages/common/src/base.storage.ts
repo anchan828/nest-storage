@@ -1,12 +1,12 @@
 import { copyFile, existsSync, mkdirSync } from "fs";
 import { dirname, join } from "path";
 import { promisify } from "util";
-import { ParsedSignedUrl, SignedUrlOptions, StorageModuleOptions, StorageOptions } from "./interfaces";
+import { ParsedSignedUrl, SignedUrlOptions, StorageOptions, StorageProviderModuleOptions } from "./interfaces";
 import { CommonStorageService } from "./service";
 const copyFileAsync = promisify(copyFile);
 export abstract class AbstractStorage {
   constructor(
-    protected readonly moduleOptions: StorageModuleOptions,
+    protected readonly moduleOptions: StorageProviderModuleOptions,
     protected readonly service: CommonStorageService,
   ) {}
 
