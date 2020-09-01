@@ -9,16 +9,21 @@ describe("LocalStorageModule", () => {
     const module = await Test.createTestingModule({
       imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageModule.register())],
     }).compile();
-    app = await module.createNestApplication(undefined, { bodyParser: false });
+    app = module.createNestApplication(undefined, { bodyParser: false });
     await app.init();
     await app.close();
   });
 
   it("should set middlewares", async () => {
     const module = await Test.createTestingModule({
-      imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageModule.register())],
+      imports: [
+        StorageModule.registerAsync(
+          { useFactory: () => ({ bucket: "bucket" }) },
+          LocalStorageModule.registerAsync({ useFactory: () => ({}) }),
+        ),
+      ],
     }).compile();
-    app = await module.createNestApplication(undefined, { bodyParser: false });
+    app = module.createNestApplication(undefined, { bodyParser: false });
     await app.init();
     await app.close();
   });

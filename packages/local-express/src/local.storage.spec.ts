@@ -22,7 +22,11 @@ describe("LocalStorage", () => {
   });
 
   const getDest = (filename: string): string => {
-    return join(service["options"].cacheDir || "", service["options"].bucket || "", filename);
+    return join(
+      service["storage"]["service"]["moduleOptions"].cacheDir || "",
+      service["storage"]["service"]["moduleOptions"].bucket || "",
+      filename,
+    );
   };
 
   describe("upload", () => {

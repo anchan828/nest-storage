@@ -4,7 +4,7 @@ import axios from "axios";
 import { createReadStream, existsSync, writeFileSync } from "fs";
 import { basename, join } from "path";
 import { dirSync, fileSync, tmpNameSync } from "tmp";
-import { CompressFileEntry, StorageModule, StorageService } from "../../storage";
+import { StorageModule, StorageService } from "../../storage";
 import { GoogleCloudStorageProviderModule } from "./gcs.module";
 import { GoogleCloudStorage } from "./gcs.storage";
 
@@ -193,7 +193,7 @@ describe("GoogleCloudStorage", () => {
       const file2 = await service.upload(fileSync().name, "dir/test2.txt");
       const file3 = await service.upload(fileSync().name, "dir/to/test3.txt");
       const file4 = await service.upload(fileSync().name, "test4.txt");
-      const file4Entry = { filename: file4, relativePath: "dir/test5.txt" } as CompressFileEntry;
+      const file4Entry = { filename: file4, relativePath: "dir/test5.txt" };
       const zip = await service.compress([file1, file2, file3, file4Entry]);
       const tar = await service.compress([file1, file2, file3, file4Entry], { compressType: "tar" });
       const tgz = await service.compress([file1, file2, file3, file4Entry], { compressType: "tgz" });
