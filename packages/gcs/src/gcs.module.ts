@@ -1,10 +1,10 @@
 import { StorageProviderCoreModule, STORAGE_PROVIDER } from "@anchan828/nest-storage-common";
 import { ClassProvider, DynamicModule, Module } from "@nestjs/common";
 import {
-  GoogleCloudStorage,
   GoogleCloudStorageProviderModuleAsyncOptions,
   GoogleCloudStorageProviderModuleOptions,
-} from ".";
+} from "./gcs-storage.interface";
+import { GoogleCloudStorage } from "./gcs.storage";
 
 const storageProvider = { provide: STORAGE_PROVIDER, useClass: GoogleCloudStorage } as ClassProvider;
 
