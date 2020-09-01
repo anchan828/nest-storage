@@ -1,6 +1,6 @@
 import { Test } from "@nestjs/testing";
 import { STORAGE_MODULE_OPTIONS } from "./constants";
-import { StorageModuleOptions } from "./interfaces";
+import type { StorageModuleOptions } from "./interfaces";
 import { BUCKET_NOT_DEFINED_MESSAGE } from "./messages";
 import { CommonStorageService } from "./service";
 describe("CommonStorageService", () => {

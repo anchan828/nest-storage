@@ -3,7 +3,7 @@ import { existsSync, mkdirSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
 import { STORAGE_MODULE_OPTIONS } from "./constants";
-import { StorageModuleOptions, StorageOptions } from "./interfaces";
+import type { StorageModuleOptions, StorageOptions } from "./interfaces";
 import { BUCKET_NOT_DEFINED_MESSAGE } from "./messages";
 export class CommonStorageService {
   constructor(@Inject(STORAGE_MODULE_OPTIONS) private readonly moduleOptions: StorageModuleOptions) {}

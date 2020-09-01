@@ -1,5 +1,7 @@
-import { StorageCoreModule, StorageModuleAsyncOptions, StorageModuleOptions } from "@anchan828/nest-storage-common";
-import { DynamicModule, Global, Module } from "@nestjs/common";
+import type { StorageModuleAsyncOptions, StorageModuleOptions } from "@anchan828/nest-storage-common";
+import { StorageCoreModule } from "@anchan828/nest-storage-common";
+import type { DynamicModule } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { StorageService } from "./storage.service";
 @Global()
 @Module({})

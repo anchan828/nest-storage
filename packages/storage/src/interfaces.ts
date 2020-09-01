@@ -1,4 +1,4 @@
-import { StorageOptions } from "@anchan828/nest-storage-common";
+import type { StorageOptions } from "@anchan828/nest-storage-common";
 
 export type CompressType = "zip" | "tar" | "tgz";
 

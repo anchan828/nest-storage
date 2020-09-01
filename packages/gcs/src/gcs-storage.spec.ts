@@ -1,4 +1,4 @@
-import { ParsedSignedUrl } from "@anchan828/nest-storage-common";
+import type { ParsedSignedUrl } from "@anchan828/nest-storage-common";
 import { Test } from "@nestjs/testing";
 import axios from "axios";
 import { createReadStream, existsSync, writeFileSync } from "fs";

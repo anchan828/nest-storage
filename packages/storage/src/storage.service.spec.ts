@@ -1,6 +1,9 @@
-import { AbstractStorage, ParsedSignedUrl, SignedUrlOptions, STORAGE_PROVIDER } from "@anchan828/nest-storage-common";
-import { DynamicModule, Injectable, Module } from "@nestjs/common";
-import { Test, TestingModule } from "@nestjs/testing";
+import type { ParsedSignedUrl, SignedUrlOptions } from "@anchan828/nest-storage-common";
+import { AbstractStorage, STORAGE_PROVIDER } from "@anchan828/nest-storage-common";
+import type { DynamicModule } from "@nestjs/common";
+import { Injectable, Module } from "@nestjs/common";
+import type { TestingModule } from "@nestjs/testing";
+import { Test } from "@nestjs/testing";
 import { existsSync } from "fs";
 import { dirSync, fileSync } from "tmp";
 import { StorageModule } from "./storage.module";

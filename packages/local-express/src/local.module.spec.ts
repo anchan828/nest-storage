@@ -1,4 +1,4 @@
-import { INestApplication } from "@nestjs/common";
+import type { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { StorageModule } from "../../storage/src/storage.module";
 import { LocalStorageProviderModule } from "./local.module";

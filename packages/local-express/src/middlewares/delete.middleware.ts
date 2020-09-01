@@ -1,11 +1,7 @@
-import {
-  LocalStorageProviderModuleOptions,
-  SignedUrlActionType,
-  STORAGE_PROVIDER,
-  STORAGE_PROVIDER_MODULE_OPTIONS,
-} from "@anchan828/nest-storage-common";
+import type { LocalStorageProviderModuleOptions, SignedUrlActionType } from "@anchan828/nest-storage-common";
+import { STORAGE_PROVIDER, STORAGE_PROVIDER_MODULE_OPTIONS } from "@anchan828/nest-storage-common";
 import { BadRequestException, Inject, Injectable } from "@nestjs/common";
-import { LocalStorage } from "../local.storage";
+import type { LocalStorage } from "../local.storage";
 import { StorageBaseMiddleware } from "./base.middleware";
 @Injectable()
 export class StorageDeleteMiddleware extends StorageBaseMiddleware {

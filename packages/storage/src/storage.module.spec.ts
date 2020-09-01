@@ -1,5 +1,7 @@
-import { CommonStorageService, StorageModuleOptions, STORAGE_MODULE_OPTIONS } from "@anchan828/nest-storage-common";
-import { Test, TestingModule } from "@nestjs/testing";
+import type { StorageModuleOptions } from "@anchan828/nest-storage-common";
+import { CommonStorageService, STORAGE_MODULE_OPTIONS } from "@anchan828/nest-storage-common";
+import type { TestingModule } from "@nestjs/testing";
+import { Test } from "@nestjs/testing";
 import { dirSync } from "tmp";
 import { LocalStorageProviderModule } from "../../local-express/src";
 import { StorageModule } from "./storage.module";

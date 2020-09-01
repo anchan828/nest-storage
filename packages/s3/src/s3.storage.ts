@@ -1,10 +1,12 @@
-import {
-  AbstractStorage,
+import type {
   CommonStorageService,
   ParsedSignedUrl,
   SignedUrlActionType,
   SignedUrlOptions,
   StorageOptions,
+} from "@anchan828/nest-storage-common";
+import {
+  AbstractStorage,
   STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
   STORAGE_PROVIDER_MODULE_OPTIONS,
 } from "@anchan828/nest-storage-common";
@@ -12,8 +14,8 @@ import { Inject, Injectable } from "@nestjs/common";
 import * as s3UriParser from "amazon-s3-uri";
 import { S3 } from "aws-sdk";
 import { createReadStream, createWriteStream, existsSync, unlinkSync } from "fs";
-import { Readable } from "stream";
-import { S3StorageProviderModuleOptions } from "./s3-storage.interface";
+import type { Readable } from "stream";
+import type { S3StorageProviderModuleOptions } from "./s3-storage.interface";
 
 @Injectable()
 export class S3Storage extends AbstractStorage {

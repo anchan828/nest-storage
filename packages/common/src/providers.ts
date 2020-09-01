@@ -1,6 +1,6 @@
-import { Provider, Type } from "@nestjs/common";
-import { ClassProvider, FactoryProvider } from "@nestjs/common/interfaces";
-import { AsyncOptions, StorageModuleOptions, StorageModuleOptionsFactory } from "./interfaces";
+import type { Provider, Type } from "@nestjs/common";
+import type { ClassProvider, FactoryProvider } from "@nestjs/common/interfaces";
+import type { AsyncOptions, StorageModuleOptions, StorageModuleOptionsFactory } from "./interfaces";
 
 export function createAsyncOptionsProvider(provide: string, options: AsyncOptions): FactoryProvider {
   if (options.useFactory) {

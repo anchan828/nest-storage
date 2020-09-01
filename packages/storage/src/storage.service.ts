@@ -1,16 +1,16 @@
-import {
+import type {
   AbstractStorage,
   ParsedSignedUrl,
   SignedUrlOptions,
   StorageOptions,
-  STORAGE_PROVIDER,
 } from "@anchan828/nest-storage-common";
+import { STORAGE_PROVIDER } from "@anchan828/nest-storage-common";
 import { Inject, Injectable } from "@nestjs/common";
 import * as compressing from "compressing";
 import { createWriteStream } from "fs";
 import * as pMap from "p-map";
 import { tmpNameSync } from "tmp";
-import { CompressFileEntry, CompressOptions, CompressType } from "./interfaces";
+import type { CompressFileEntry, CompressOptions, CompressType } from "./interfaces";
 @Injectable()
 export class StorageService {
   constructor(@Inject(STORAGE_PROVIDER) private readonly storage: AbstractStorage) {}

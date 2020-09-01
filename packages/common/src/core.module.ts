@@ -1,6 +1,7 @@
-import { DynamicModule, Global, Module } from "@nestjs/common";
+import type { DynamicModule } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { STORAGE_MODULE_OPTIONS, STORAGE_PROVIDER_MODULE_OPTIONS } from "./constants";
-import {
+import type {
   StorageModuleAsyncOptions,
   StorageModuleOptions,
   StorageProviderModuleAsyncOptions,

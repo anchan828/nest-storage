@@ -21,5 +21,6 @@ module.exports = {
     "@typescript-eslint/no-useless-constructor": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "lines-between-class-members": ["error", "always"],
+    "@typescript-eslint/consistent-type-imports": "error",
   },
 };

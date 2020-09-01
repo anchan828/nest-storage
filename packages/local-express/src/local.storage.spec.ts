@@ -1,9 +1,9 @@
-import { ParsedSignedUrl } from "@anchan828/nest-storage-common";
+import type { ParsedSignedUrl } from "@anchan828/nest-storage-common";
 import { Test } from "@nestjs/testing";
 import { existsSync } from "fs";
 import { join } from "path";
 import { dirSync, fileSync } from "tmp";
-import { CompressFileEntry } from "../../storage/src/interfaces";
+import type { CompressFileEntry } from "../../storage/src/interfaces";
 import { StorageModule } from "../../storage/src/storage.module";
 import { StorageService } from "../../storage/src/storage.service";
 import { LocalStorageProviderModule } from "./local.module";

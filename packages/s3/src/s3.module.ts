@@ -1,7 +1,8 @@
 import { STORAGE_PROVIDER } from "@anchan828/nest-storage-common";
 import { StorageProviderCoreModule } from "@anchan828/nest-storage-common";
-import { ClassProvider, DynamicModule, Module } from "@nestjs/common";
-import { S3StorageProviderModuleAsyncOptions, S3StorageProviderModuleOptions } from "./s3-storage.interface";
+import type { ClassProvider, DynamicModule } from "@nestjs/common";
+import { Module } from "@nestjs/common";
+import type { S3StorageProviderModuleAsyncOptions, S3StorageProviderModuleOptions } from "./s3-storage.interface";
 import { S3Storage } from "./s3.storage";
 
 const storageProvider = { provide: STORAGE_PROVIDER, useClass: S3Storage } as ClassProvider;

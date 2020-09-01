@@ -1,18 +1,21 @@
-import {
-  AbstractStorage,
+import type {
   CommonStorageService,
   ParsedSignedUrl,
   SignedUrlActionType,
   SignedUrlOptions,
   StorageOptions,
+} from "@anchan828/nest-storage-common";
+import {
+  AbstractStorage,
   STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
   STORAGE_PROVIDER_MODULE_OPTIONS,
 } from "@anchan828/nest-storage-common";
-import { Bucket, Storage } from "@google-cloud/storage";
+import type { Bucket } from "@google-cloud/storage";
+import { Storage } from "@google-cloud/storage";
 import { Inject } from "@nestjs/common";
 import { existsSync, unlinkSync } from "fs";
 import { parse as parseUrl } from "url";
-import { GoogleCloudStorageProviderModuleOptions } from "./gcs-storage.interface";
+import type { GoogleCloudStorageProviderModuleOptions } from "./gcs-storage.interface";
 export class GoogleCloudStorage extends AbstractStorage {
   public provider = "gcs";
 

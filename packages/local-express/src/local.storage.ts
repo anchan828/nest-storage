@@ -1,11 +1,13 @@
-import {
-  AbstractStorage,
+import type {
   CommonStorageService,
-  FILE_NOT_FOUND,
   LocalStorageProviderModuleOptions,
   ParsedSignedUrl,
   SignedUrlOptions,
   StorageOptions,
+} from "@anchan828/nest-storage-common";
+import {
+  AbstractStorage,
+  FILE_NOT_FOUND,
   STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
   STORAGE_PROVIDER_MODULE_OPTIONS,
 } from "@anchan828/nest-storage-common";

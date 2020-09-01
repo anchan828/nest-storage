@@ -1,20 +1,15 @@
-import {
+import type {
   CommonStorageService,
   LocalStorageProviderModuleOptions,
-  StorageProviderCoreModule,
   StorageProviderModuleAsyncOptions,
+} from "@anchan828/nest-storage-common";
+import {
+  StorageProviderCoreModule,
   STORAGE_PROVIDER,
   STORAGE_PROVIDER_MODULE_OPTIONS,
 } from "@anchan828/nest-storage-common";
-import {
-  ClassProvider,
-  DynamicModule,
-  Inject,
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from "@nestjs/common";
+import type { ClassProvider, DynamicModule, MiddlewareConsumer, NestModule } from "@nestjs/common";
+import { Inject, Module, RequestMethod } from "@nestjs/common";
 import * as cors from "cors";
 import * as multer from "multer";
 import { join } from "path";
