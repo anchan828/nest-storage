@@ -1,11 +1,11 @@
 import { CommonStorageService, StorageModuleOptions, STORAGE_MODULE_OPTIONS } from "@anchan828/nest-storage-common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { dirSync } from "tmp";
-import { LocalStorageModule } from "../../local-express/src";
+import { LocalStorageProviderModule } from "../../local-express/src";
 import { StorageModule } from "./storage.module";
 import { StorageService } from "./storage.service";
 
-describe("LocalStorageModule", () => {
+describe("LocalStorageProviderModule", () => {
   const shouldGetProviders = (app: TestingModule): void => {
     expect(app.get<StorageModuleOptions>(STORAGE_MODULE_OPTIONS)).toBeDefined();
     expect(app.get<CommonStorageService>(CommonStorageService)).toBeDefined();
@@ -23,7 +23,7 @@ describe("LocalStorageModule", () => {
           {
             cacheDir: dirSync().name,
           },
-          LocalStorageModule.register(),
+          LocalStorageProviderModule.register(),
         ),
       ],
     }).compile();
@@ -37,7 +37,7 @@ describe("LocalStorageModule", () => {
           {
             cacheDir: dirSync().name,
           },
-          LocalStorageModule.register({
+          LocalStorageProviderModule.register({
             signedUrlController: {
               path: "changed",
               token: "change token",
@@ -60,7 +60,7 @@ describe("LocalStorageModule", () => {
               };
             },
           },
-          LocalStorageModule.registerAsync({
+          LocalStorageProviderModule.registerAsync({
             useFactory: () => {
               return {
                 signedUrlController: {

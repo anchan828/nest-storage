@@ -6,12 +6,14 @@ import { dirSync, fileSync } from "tmp";
 import { CompressFileEntry } from "../../storage/src/interfaces";
 import { StorageModule } from "../../storage/src/storage.module";
 import { StorageService } from "../../storage/src/storage.service";
-import { LocalStorageModule } from "./local.module";
+import { LocalStorageProviderModule } from "./local.module";
 describe("LocalStorage", () => {
   let service: StorageService;
   beforeEach(async () => {
     const app = await Test.createTestingModule({
-      imports: [StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name }, LocalStorageModule.register())],
+      imports: [
+        StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name }, LocalStorageProviderModule.register()),
+      ],
     }).compile();
     service = app.get<StorageService>(StorageService);
   });
@@ -113,7 +115,7 @@ describe("LocalStorage", () => {
               bucket: "bucket",
               cacheDir: dirSync().name,
             },
-            LocalStorageModule.register({
+            LocalStorageProviderModule.register({
               signedUrlController: { endpoint: "http://localhost:3000", path: "changedPath", token: "changedToken" },
             }),
           ),

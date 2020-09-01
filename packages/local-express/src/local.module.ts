@@ -25,12 +25,12 @@ import { StorageDeleteMiddleware, StorageDownloadMiddleware, StorageUploadMiddle
 const storageProvider = { provide: STORAGE_PROVIDER, useClass: LocalStorage } as ClassProvider;
 
 @Module({})
-export class LocalStorageModule implements NestModule {
+export class LocalStorageProviderModule implements NestModule {
   public static register(options: LocalStorageProviderModuleOptions = {}): DynamicModule {
     return {
       exports: [storageProvider],
       imports: [StorageProviderCoreModule.register(options)],
-      module: LocalStorageModule,
+      module: LocalStorageProviderModule,
       providers: [storageProvider, StorageUploadMiddleware, StorageUploadMiddleware, StorageDeleteMiddleware],
     };
   }
@@ -41,7 +41,7 @@ export class LocalStorageModule implements NestModule {
     return {
       exports: [storageProvider],
       imports: [StorageProviderCoreModule.registerAsync(options)],
-      module: LocalStorageModule,
+      module: LocalStorageProviderModule,
       providers: [storageProvider, StorageUploadMiddleware, StorageUploadMiddleware, StorageDeleteMiddleware],
     };
   }

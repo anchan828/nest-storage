@@ -1,13 +1,13 @@
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { StorageModule } from "../../storage/src/storage.module";
-import { LocalStorageModule } from "./local.module";
-describe("LocalStorageModule", () => {
+import { LocalStorageProviderModule } from "./local.module";
+describe("LocalStorageProviderModule", () => {
   let app: INestApplication;
 
   it("should set middlewares", async () => {
     const module = await Test.createTestingModule({
-      imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageModule.register())],
+      imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageProviderModule.register())],
     }).compile();
     app = module.createNestApplication(undefined, { bodyParser: false });
     await app.init();
@@ -19,7 +19,7 @@ describe("LocalStorageModule", () => {
       imports: [
         StorageModule.registerAsync(
           { useFactory: () => ({ bucket: "bucket" }) },
-          LocalStorageModule.registerAsync({ useFactory: () => ({}) }),
+          LocalStorageProviderModule.registerAsync({ useFactory: () => ({}) }),
         ),
       ],
     }).compile();

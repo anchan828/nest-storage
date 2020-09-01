@@ -5,14 +5,14 @@ import * as request from "supertest";
 import { tmpNameSync } from "tmp";
 import { StorageModule } from "../../../storage/src/storage.module";
 import { StorageService } from "../../../storage/src/storage.service";
-import { LocalStorageModule } from "../local.module";
+import { LocalStorageProviderModule } from "../local.module";
 
 describe("StorageUploadMiddleware", () => {
   let app: INestApplication;
   let service: StorageService;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageModule.register())],
+      imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageProviderModule.register())],
     }).compile();
     app = module.createNestApplication(undefined, { bodyParser: false });
     await app.init();
@@ -65,7 +65,7 @@ describe("StorageUploadMiddleware", () => {
   it("should throw error if body parser enabled and upload json", async () => {
     await app.close();
     const module = await Test.createTestingModule({
-      imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageModule.register())],
+      imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageProviderModule.register())],
     }).compile();
     app = module.createNestApplication();
     await app.init();

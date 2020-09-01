@@ -1,1 +1,1 @@
-export { LocalStorageModule } from "./local.module";
+export { LocalStorageProviderModule } from "./local.module";

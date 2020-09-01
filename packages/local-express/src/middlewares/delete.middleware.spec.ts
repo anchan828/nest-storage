@@ -3,13 +3,13 @@ import { Test } from "@nestjs/testing";
 import * as request from "supertest";
 import { StorageModule } from "../../../storage/src/storage.module";
 import { StorageService } from "../../../storage/src/storage.service";
-import { LocalStorageModule } from "../local.module";
+import { LocalStorageProviderModule } from "../local.module";
 describe("StorageDeleteMiddleware", () => {
   let app: INestApplication;
   let service: StorageService;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageModule.register())],
+      imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageProviderModule.register())],
     }).compile();
     service = module.get<StorageService>(StorageService);
     app = await module.createNestApplication(undefined, { bodyParser: false });
