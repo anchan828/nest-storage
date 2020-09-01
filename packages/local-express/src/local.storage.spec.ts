@@ -3,14 +3,15 @@ import { Test } from "@nestjs/testing";
 import { existsSync } from "fs";
 import { join } from "path";
 import { dirSync, fileSync } from "tmp";
-import { CompressFileEntry } from "../interfaces";
-import { StorageModule } from "../storage.module";
-import { StorageService } from "../storage.service";
+import { CompressFileEntry } from "../../storage/src/interfaces";
+import { StorageModule } from "../../storage/src/storage.module";
+import { StorageService } from "../../storage/src/storage.service";
+import { LocalStorageModule } from "./local.module";
 describe("LocalStorage", () => {
   let service: StorageService;
   beforeEach(async () => {
     const app = await Test.createTestingModule({
-      imports: [StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name })],
+      imports: [StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name }, LocalStorageModule.register())],
     }).compile();
     service = app.get<StorageService>(StorageService);
   });
@@ -103,11 +104,15 @@ describe("LocalStorage", () => {
     it("should set signedUrlController property", async () => {
       const app = await Test.createTestingModule({
         imports: [
-          StorageModule.register({
-            bucket: "bucket",
-            cacheDir: dirSync().name,
-            signedUrlController: { endpoint: "http://localhost:3000", path: "changedPath", token: "changedToken" },
-          }),
+          StorageModule.register(
+            {
+              bucket: "bucket",
+              cacheDir: dirSync().name,
+            },
+            LocalStorageModule.register({
+              signedUrlController: { endpoint: "http://localhost:3000", path: "changedPath", token: "changedToken" },
+            }),
+          ),
         ],
       }).compile();
       service = app.get<StorageService>(StorageService);

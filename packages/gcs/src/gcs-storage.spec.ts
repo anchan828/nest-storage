@@ -5,7 +5,7 @@ import { createReadStream, existsSync, writeFileSync } from "fs";
 import { basename, join } from "path";
 import { dirSync, fileSync, tmpNameSync } from "tmp";
 import { CompressFileEntry, StorageModule, StorageService } from "../../storage";
-import { GoogleCloudStorageModuleOptions } from "./gcs-storage.interface";
+import { GoogleCloudStorageProviderModule } from "./gcs.module";
 import { GoogleCloudStorage } from "./gcs.storage";
 
 describe("GoogleCloudStorage", () => {
@@ -16,12 +16,15 @@ describe("GoogleCloudStorage", () => {
     cacheDir = dirSync().name;
     const app = await Test.createTestingModule({
       imports: [
-        StorageModule.register<GoogleCloudStorageModuleOptions>({
-          bucket,
-          cacheDir,
-          keyFilename: process.env.NEST_STORAGE_GCS_KEY,
-          storage: GoogleCloudStorage,
-        }),
+        StorageModule.register(
+          {
+            bucket,
+            cacheDir,
+          },
+          GoogleCloudStorageProviderModule.register({
+            keyFilename: process.env.NEST_STORAGE_GCS_KEY,
+          }),
+        ),
       ],
     }).compile();
     service = app.get<StorageService>(StorageService);

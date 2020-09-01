@@ -1,28 +1,27 @@
 import { Provider, Type } from "@nestjs/common";
 import { ClassProvider, FactoryProvider } from "@nestjs/common/interfaces";
-import { STORAGE_MODULE_OPTIONS } from "./constants";
-import { StorageModuleAsyncOptions, StorageModuleOptions, StorageModuleOptionsFactory } from "./interfaces";
+import { AsyncOptions, StorageModuleOptions, StorageModuleOptionsFactory } from "./interfaces";
 
-export function createAsyncOptionsProvider(options: StorageModuleAsyncOptions): FactoryProvider {
+export function createAsyncOptionsProvider(provide: string, options: AsyncOptions): FactoryProvider {
   if (options.useFactory) {
     return {
       inject: options.inject || [],
-      provide: STORAGE_MODULE_OPTIONS,
+      provide: provide,
       useFactory: options.useFactory,
     };
   }
   return {
     inject: [options.useClass || options.useExisting].filter(
-      (x): x is Type<StorageModuleOptionsFactory> => x !== undefined,
+      (x): x is Type<StorageModuleOptionsFactory<any>> => x !== undefined,
     ),
-    provide: STORAGE_MODULE_OPTIONS,
-    useFactory: async (optionsFactory: StorageModuleOptionsFactory): Promise<StorageModuleOptions> =>
+    provide: provide,
+    useFactory: async (optionsFactory: StorageModuleOptionsFactory<any>): Promise<StorageModuleOptions> =>
       await optionsFactory.createStorageModuleOptions(),
   };
 }
 
-export function createAsyncProviders(options: StorageModuleAsyncOptions): Provider[] {
-  const asyncOptionsProvider = createAsyncOptionsProvider(options);
+export function createAsyncProviders(provide: string, options: AsyncOptions): Provider[] {
+  const asyncOptionsProvider = createAsyncOptionsProvider(provide, options);
   if (options.useExisting || options.useFactory) {
     return [asyncOptionsProvider];
   }

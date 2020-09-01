@@ -1,10 +1,16 @@
-import { SignedUrlActionType, StorageModuleOptions, STORAGE_MODULE_OPTIONS } from "@anchan828/nest-storage-common";
+import {
+  LocalStorageProviderModuleOptions,
+  SignedUrlActionType,
+  STORAGE_PROVIDER_MODULE_OPTIONS,
+} from "@anchan828/nest-storage-common";
 import { BadRequestException, Inject, NestMiddleware } from "@nestjs/common";
 import { Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
 import { SIGNED_URL_CONTROLLER_TOKEN } from "../constants";
 export abstract class StorageBaseMiddleware implements NestMiddleware<Request, Response> {
-  constructor(@Inject(STORAGE_MODULE_OPTIONS) protected readonly moduleOptions: StorageModuleOptions) {}
+  constructor(
+    @Inject(STORAGE_PROVIDER_MODULE_OPTIONS) protected readonly moduleOptions: LocalStorageProviderModuleOptions,
+  ) {}
 
   abstract getAction(): SignedUrlActionType;
 

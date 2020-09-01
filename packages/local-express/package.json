@@ -1,0 +1,52 @@
+{
+  "author": "anchan828 <anchan828@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/anchan828/nest-storage/issues"
+  },
+  "description": "> TODO: description",
+  "directories": {
+    "dist": "dist"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/anchan828/nest-storage/tree/master/packages/local-express#readme",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "name": "@anchan828/local-express",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anchan828/nest-storage.git"
+  },
+  "scripts": {
+    "build": "node ../../node_modules/typescript/bin/tsc -p tsconfig.build.json",
+    "build:watch": "node ../../node_modules/typescript/bin/tsc --watch",
+    "copy:license": "cp ../../LICENSE ./",
+    "lint": "node ../../node_modules/eslint/bin/eslint --ignore-path ../../.eslintignore '**/*.ts' '**/*.spec.ts'",
+    "lint:fix": "npm run lint -- --fix",
+    "prepublishOnly": "rm -rf dist && npm run build && rm -f dist/*.tsbuildinfo && npm run copy:license",
+    "test": "node ../../node_modules/jest/bin/jest --coverage --logHeapUsage --runInBand",
+    "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand --logHeapUsage",
+    "test:watch": "node ../../node_modules/jest/bin/jest --watch",
+    "watch": "node ../../node_modules/typescript/bin/tsc -w"
+  },
+  "types": "./dist/index.d.ts",
+  "version": "0.1.22",
+  "dependencies": {
+    "@anchan828/nest-storage-common": "^0.1.22",
+    "cors": "^2.8.5",
+    "jsonwebtoken": "8.5.1",
+    "multer": "1.4.2",
+    "p-map": "4.0.0",
+    "tmp": "0.2.1"
+  },
+  "devDependencies": {
+    "@types/cors": "2.8.7",
+    "@types/express": "4.17.7",
+    "@types/jsonwebtoken": "8.5.0",
+    "@types/multer": "1.4.4",
+    "@types/supertest": "2.0.10",
+    "@types/tmp": "0.2.0",
+    "supertest": "4.0.2"
+  }
+}

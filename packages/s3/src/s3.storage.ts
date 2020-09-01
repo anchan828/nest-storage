@@ -6,18 +6,22 @@ import {
   SignedUrlOptions,
   StorageOptions,
   STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
+  STORAGE_PROVIDER_MODULE_OPTIONS,
 } from "@anchan828/nest-storage-common";
+import { Inject, Injectable } from "@nestjs/common";
 import * as s3UriParser from "amazon-s3-uri";
 import { S3 } from "aws-sdk";
 import { createReadStream, createWriteStream, existsSync, unlinkSync } from "fs";
 import { Readable } from "stream";
-import { S3StorageModuleOptions } from "./s3-storage.interface";
+import { S3StorageProviderModuleOptions } from "./s3-storage.interface";
 
+@Injectable()
 export class S3Storage extends AbstractStorage {
   public provider = "s3";
 
   constructor(
-    protected readonly moduleOptions: S3StorageModuleOptions,
+    @Inject(STORAGE_PROVIDER_MODULE_OPTIONS)
+    protected readonly moduleOptions: S3StorageProviderModuleOptions,
     protected readonly service: CommonStorageService,
   ) {
     super(moduleOptions, service);

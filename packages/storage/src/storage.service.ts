@@ -6,29 +6,22 @@ import {
   StorageModuleOptions,
   StorageOptions,
   STORAGE_MODULE_OPTIONS,
+  STORAGE_PROVIDER,
 } from "@anchan828/nest-storage-common";
-import { Inject, Injectable, Type } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import * as compressing from "compressing";
 import { createWriteStream } from "fs";
 import * as pMap from "p-map";
 import { tmpNameSync } from "tmp";
 import { CompressFileEntry, CompressOptions, CompressType } from "./interfaces";
-import { LocalStorage } from "./local/local.storage";
 @Injectable()
 export class StorageService {
-  private readonly storage: AbstractStorage;
-
   constructor(
     @Inject(STORAGE_MODULE_OPTIONS) private readonly options: StorageModuleOptions,
     private readonly service: CommonStorageService,
-  ) {
-    if (!options.storage) {
-      this.options.storage = new LocalStorage(options, service);
-    } else {
-      this.options.storage = new (options.storage as Type<AbstractStorage>)(options, service) as AbstractStorage;
-    }
-    this.storage = this.options.storage;
-  }
+
+    @Inject(STORAGE_PROVIDER) private readonly storage: AbstractStorage,
+  ) {}
 
   public async upload(dataPath: string, filename: string, options: StorageOptions = {}): Promise<string> {
     return this.storage.upload(dataPath, filename, options);

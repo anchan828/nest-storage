@@ -1,4 +1,5 @@
-import { AbstractStorage, ParsedSignedUrl, SignedUrlOptions } from "@anchan828/nest-storage-common";
+import { AbstractStorage, ParsedSignedUrl, SignedUrlOptions, STORAGE_PROVIDER } from "@anchan828/nest-storage-common";
+import { DynamicModule, Injectable, Module } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { dirSync } from "tmp";
 import { StorageModule } from "./storage.module";
@@ -6,6 +7,7 @@ import { StorageService } from "./storage.service";
 
 describe("StorageService", () => {
   it("should create custom storage provider", async () => {
+    @Injectable()
     class CustomStorage extends AbstractStorage {
       public provider = "custom";
 
@@ -36,8 +38,22 @@ describe("StorageService", () => {
         return {} as ParsedSignedUrl;
       }
     }
+
+    @Module({})
+    class CustomStorageProviderModule {
+      public static register(): DynamicModule {
+        return {
+          exports: [{ provide: STORAGE_PROVIDER, useClass: CustomStorage }],
+          module: CustomStorageProviderModule,
+          providers: [{ provide: STORAGE_PROVIDER, useClass: CustomStorage }],
+        };
+      }
+    }
+
     const app = await Test.createTestingModule({
-      imports: [StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name, storage: CustomStorage })],
+      imports: [
+        StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name }, CustomStorageProviderModule.register()),
+      ],
     }).compile();
     const service = app.get<StorageService>(StorageService);
     expect(service["storage"]).toBeInstanceOf(CustomStorage);

@@ -4,7 +4,7 @@ import { createReadStream, existsSync, statSync, writeFileSync } from "fs";
 import { basename, join } from "path";
 import { dirSync, fileSync, tmpNameSync } from "tmp";
 import { CompressFileEntry, StorageModule, StorageService } from "../../storage";
-import { S3StorageModuleOptions } from "./s3-storage.interface";
+import { S3ProviderModule } from "./s3.module";
 import { S3Storage } from "./s3.storage";
 describe("S3Storage", () => {
   let service: StorageService;
@@ -14,14 +14,17 @@ describe("S3Storage", () => {
     cacheDir = dirSync().name;
     const app = await Test.createTestingModule({
       imports: [
-        StorageModule.register<S3StorageModuleOptions>({
-          accessKeyId: process.env.NEST_STORAGE_S3_KEY,
-          bucket,
-          cacheDir,
-          region: "ap-northeast-1",
-          secretAccessKey: process.env.NEST_STORAGE_S3_SECRET_KEY,
-          storage: S3Storage,
-        }),
+        StorageModule.register(
+          {
+            bucket,
+            cacheDir,
+          },
+          S3ProviderModule.register({
+            accessKeyId: process.env.NEST_STORAGE_S3_KEY,
+            region: "ap-northeast-1",
+            secretAccessKey: process.env.NEST_STORAGE_S3_SECRET_KEY,
+          }),
+        ),
       ],
     }).compile();
     service = app.get<StorageService>(StorageService);
