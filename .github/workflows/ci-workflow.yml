@@ -21,7 +21,7 @@ jobs:
           encoding: "base64"
       - name: Set NEST_STORAGE_GCS_KEY env
         run: echo ::set-env name=NEST_STORAGE_GCS_KEY::"$HOME/credentials.json"
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}

@@ -1,17 +1,19 @@
+import {
+  AbstractStorage,
+  CommonStorageUtils,
+  STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
+  STORAGE_MODULE_OPTIONS,
+  STORAGE_PROVIDER_MODULE_OPTIONS,
+} from "@anchan828/nest-storage-common";
 import type {
-  CommonStorageService,
   ParsedSignedUrl,
   SignedUrlActionType,
   SignedUrlOptions,
+  StorageModuleOptions,
   StorageOptions,
 } from "@anchan828/nest-storage-common";
-import {
-  AbstractStorage,
-  STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
-  STORAGE_PROVIDER_MODULE_OPTIONS,
-} from "@anchan828/nest-storage-common";
-import type { Bucket } from "@google-cloud/storage";
 import { Storage } from "@google-cloud/storage";
+import type { Bucket } from "@google-cloud/storage";
 import { Inject } from "@nestjs/common";
 import { existsSync, unlinkSync } from "fs";
 import { parse as parseUrl } from "url";
@@ -20,11 +22,11 @@ export class GoogleCloudStorage extends AbstractStorage {
   public provider = "gcs";
 
   constructor(
+    @Inject(STORAGE_MODULE_OPTIONS) protected readonly storageOptions: StorageModuleOptions,
     @Inject(STORAGE_PROVIDER_MODULE_OPTIONS)
-    protected readonly moduleOptions: GoogleCloudStorageProviderModuleOptions,
-    protected readonly service: CommonStorageService,
+    protected readonly providerOptions: GoogleCloudStorageProviderModuleOptions,
   ) {
-    super(moduleOptions, service);
+    super(storageOptions);
   }
 
   public async upload(dataPath: string, filename: string, options?: StorageOptions): Promise<string> {
@@ -85,7 +87,7 @@ export class GoogleCloudStorage extends AbstractStorage {
 
   public parseSignedUrl(url: string): ParsedSignedUrl {
     const urlObject = parseUrl(url);
-    const endopint = parseUrl(new Storage({ ...this.moduleOptions, autoRetry: true, maxRetries: 5 }).apiEndpoint);
+    const endopint = parseUrl(new Storage({ ...this.providerOptions, autoRetry: true, maxRetries: 5 }).apiEndpoint);
 
     if (urlObject.host !== endopint.host) {
       throw new Error(`Invalid endopint '${urlObject.host}'. endpoint should be ${endopint.host}`);
@@ -107,8 +109,8 @@ export class GoogleCloudStorage extends AbstractStorage {
   }
 
   private getBuket(options: StorageOptions = {}): Bucket {
-    const storage = new Storage(this.moduleOptions);
-    const bucketName = this.service.getBucket(options);
+    const storage = new Storage(this.providerOptions);
+    const bucketName = CommonStorageUtils.getBucket(this.storageOptions, options);
     return storage.bucket(bucketName);
   }
 

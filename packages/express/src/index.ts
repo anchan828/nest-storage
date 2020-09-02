@@ -1,2 +1,2 @@
-export { LocalStorageProviderModuleOptions } from "@anchan828/nest-storage-common";
+export { LocalStorageProviderModuleOptions, SignedUrlController } from "./interfaces";
 export { LocalStorageProviderModule } from "./local.module";

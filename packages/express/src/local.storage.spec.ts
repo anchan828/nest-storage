@@ -25,8 +25,8 @@ describe("LocalStorage", () => {
 
   const getDest = (filename: string): string => {
     return join(
-      service["storage"]["service"]["moduleOptions"].cacheDir || "",
-      service["storage"]["service"]["moduleOptions"].bucket || "",
+      service["storage"]["storageOptions"].cacheDir || "",
+      service["storage"]["storageOptions"].bucket || "",
       filename,
     );
   };
