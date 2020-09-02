@@ -9,23 +9,7 @@ export interface StorageModuleOptions {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface StorageProviderModuleOptions {}
-
-export interface LocalStorageProviderModuleOptions extends StorageProviderModuleOptions {
-  /**
-   * Set property if you upload file using signed url. LocalStorage provider only.
-   *
-   * @type {SignedUrlController}
-   * @memberof StorageModuleOptions
-   */
-  signedUrlController?: SignedUrlController;
-}
-
-export interface SignedUrlController {
-  endpoint?: string;
-  path?: string;
-  token?: string;
-}
+export interface StorageProviderModuleOptions extends StorageOptions {}
 
 export interface AsyncOptions extends Pick<ModuleMetadata, "imports"> {
   useClass?: Type<any>;

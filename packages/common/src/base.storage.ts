@@ -1,19 +1,16 @@
 import { copyFile, existsSync, mkdirSync } from "fs";
 import { dirname, join } from "path";
 import { promisify } from "util";
-import type { ParsedSignedUrl, SignedUrlOptions, StorageOptions, StorageProviderModuleOptions } from "./interfaces";
-import type { CommonStorageService } from "./service";
+import type { ParsedSignedUrl, SignedUrlOptions, StorageModuleOptions, StorageOptions } from "./interfaces";
+import { CommonStorageUtils } from "./utils";
 const copyFileAsync = promisify(copyFile);
 export abstract class AbstractStorage {
-  constructor(
-    protected readonly moduleOptions: StorageProviderModuleOptions,
-    protected readonly service: CommonStorageService,
-  ) {}
+  constructor(protected readonly storageOptions: StorageModuleOptions) {}
 
   protected getDestinationCachePath(filename: string, options?: StorageOptions): string {
-    const cacheDir = this.service.getCacheDir();
+    const cacheDir = CommonStorageUtils.getCacheDir(this.storageOptions);
 
-    const bucket = this.service.getBucket(options);
+    const bucket = CommonStorageUtils.getBucket(this.storageOptions, options);
 
     const destination = join(cacheDir, bucket, filename);
 
