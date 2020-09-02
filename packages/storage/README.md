@@ -3,7 +3,7 @@
 ## Install
 
 ```shell
-npm i @anchan828/nest-storage @anchan828/nest-storage-local-express
+npm i @anchan828/nest-storage @anchan828/nest-storage-express
 ```
 
 ## Usage
@@ -33,11 +33,11 @@ export class Service {
 
 You can set some storage providers.
 
-| Provider             | Pakcage                                                                                                      |
-| :------------------- | :----------------------------------------------------------------------------------------------------------- |
-| Local (express)      | [@anchan828/nest-storage-local-express](https://www.npmjs.com/package/@anchan828/nest-storage-local-express) |
-| Google Cloud Storage | [@anchan828/nest-storage-gcs](https://www.npmjs.com/package/@anchan828/nest-storage-gcs)                     |
-| Amazon S3            | [@anchan828/nest-storage-s3](https://www.npmjs.com/package/@anchan828/nest-storage-s3)                       |
+| Provider             | Pakcage                                                                                          |
+| :------------------- | :----------------------------------------------------------------------------------------------- |
+| Local (express)      | [@anchan828/nest-storage-express](https://www.npmjs.com/package/@anchan828/nest-storage-express) |
+| Google Cloud Storage | [@anchan828/nest-storage-gcs](https://www.npmjs.com/package/@anchan828/nest-storage-gcs)         |
+| Amazon S3            | [@anchan828/nest-storage-s3](https://www.npmjs.com/package/@anchan828/nest-storage-s3)           |
 
 ## Signed URL
 

@@ -10,10 +10,10 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/anchan828/nest-storage/tree/master/packages/local-express#readme",
+  "homepage": "https://github.com/anchan828/nest-storage/tree/master/packages/express#readme",
   "license": "MIT",
   "main": "./dist/index.js",
-  "name": "@anchan828/local-express",
+  "name": "@anchan828/nest-storage-express",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anchan828/nest-storage.git"
