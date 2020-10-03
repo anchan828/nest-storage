@@ -70,7 +70,11 @@ export class StorageService {
     const signedUrl = await this.storage.getSignedUrl(filename, options);
 
     if (options.cache?.setCache) {
-      await options.cache.setCache(cacheKey, signedUrl, options.expires ?? STORAGE_DEFAULT_SIGNED_URL_EXPIRES);
+      await options.cache.setCache(
+        cacheKey,
+        signedUrl,
+        Math.floor((options.expires ?? STORAGE_DEFAULT_SIGNED_URL_EXPIRES) / 1000),
+      );
     }
 
     return signedUrl;
