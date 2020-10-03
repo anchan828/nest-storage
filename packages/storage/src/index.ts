@@ -1,5 +1,7 @@
 export {
   AbstractStorage,
+  SignedUrlActionType,
+  SignedUrlOptions,
   StorageModuleAsyncOptions,
   StorageModuleOptions,
   StorageModuleOptionsFactory,
