@@ -90,4 +90,43 @@ describe("StorageService", () => {
     dest = await service.compress([fileSync().name, fileSync().name, fileSync().name], { compressType: "tgz" });
     expect(existsSync(dest)).toBeTruthy();
   });
+
+  describe("getSignedUrl", () => {
+    it("no cache", async () => {
+      await expect(service.getSignedUrl("filename", { action: "download" })).resolves.toEqual("filename");
+    });
+
+    it("use cache", async () => {
+      const cache = new Map<string, string>();
+      await expect(
+        service.getSignedUrl("filename", {
+          action: "download",
+          cache: {
+            getCache: async (key: string) => {
+              return cache.get(key);
+            },
+            setCache: async (key: string, value: string) => {
+              cache.set(key, value);
+            },
+          },
+        }),
+      ).resolves.toEqual("filename");
+
+      await expect(
+        service.getSignedUrl("filename", {
+          action: "download",
+          cache: {
+            getCache: async (key: string) => {
+              return cache.get(key);
+            },
+            setCache: async (key: string, value: string) => {
+              cache.set(key, value);
+            },
+          },
+        }),
+      ).resolves.toEqual("filename");
+
+      expect([...cache.entries()]).toEqual([["__signed-url-caches:filename", "filename"]]);
+    });
+  });
 });
