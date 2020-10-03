@@ -31,9 +31,9 @@
     "watch": "node ../../node_modules/typescript/bin/tsc -w"
   },
   "types": "./dist/index.d.ts",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "dependencies": {
-    "@anchan828/nest-storage-common": "^0.2.8",
+    "@anchan828/nest-storage-common": "^0.2.10",
     "amazon-s3-uri": "0.0.3",
     "aws-sdk": "2.766.0"
   },
