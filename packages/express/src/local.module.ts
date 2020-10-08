@@ -1,12 +1,12 @@
+import type { StorageProviderModuleAsyncOptions } from "@anchan828/nest-storage-common";
 import {
   CommonStorageUtils,
   StorageProviderCoreModule,
   STORAGE_PROVIDER,
   STORAGE_PROVIDER_MODULE_OPTIONS,
 } from "@anchan828/nest-storage-common";
-import type { StorageProviderModuleAsyncOptions } from "@anchan828/nest-storage-common";
-import { Inject, Module, RequestMethod } from "@nestjs/common";
 import type { ClassProvider, DynamicModule, MiddlewareConsumer, NestModule } from "@nestjs/common";
+import { Inject, Module, RequestMethod } from "@nestjs/common";
 import * as cors from "cors";
 import * as multer from "multer";
 import { join } from "path";
@@ -47,8 +47,14 @@ export class LocalStorageProviderModule implements NestModule {
     const prefix = this.providerOptions.signedUrlController?.path || SIGNED_URL_CONTROLLER_PATH;
     const path = `${prefix}/:bucket/*`;
     const upload = multer({ dest: join(CommonStorageUtils.getCacheDir({}), ".multer") }).any();
-    consumer.apply(cors(), StorageDownloadMiddleware).forRoutes({ method: RequestMethod.GET, path });
-    consumer.apply(cors(), upload, StorageUploadMiddleware).forRoutes({ method: RequestMethod.PUT, path });
-    consumer.apply(cors(), StorageDeleteMiddleware).forRoutes({ method: RequestMethod.DELETE, path });
+    consumer
+      .apply(cors({ credentials: true, origin: true }), StorageDownloadMiddleware)
+      .forRoutes({ method: RequestMethod.GET, path });
+    consumer
+      .apply(cors({ credentials: true, origin: true }), upload, StorageUploadMiddleware)
+      .forRoutes({ method: RequestMethod.PUT, path });
+    consumer
+      .apply(cors({ credentials: true, origin: true }), StorageDeleteMiddleware)
+      .forRoutes({ method: RequestMethod.DELETE, path });
   }
 }
