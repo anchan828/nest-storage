@@ -41,6 +41,6 @@
   "devDependencies": {
     "@types/supertest": "2.0.10",
     "@types/tmp": "0.2.0",
-    "supertest": "5.0.0"
+    "supertest": "6.0.0"
   }
 }
