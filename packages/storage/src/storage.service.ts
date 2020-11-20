@@ -42,7 +42,7 @@ export class StorageService {
 
     stream.pipe(createWriteStream(dest));
 
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       stream.on("end", () => resolve());
       stream.on("error", (error) => reject(error));
     });
