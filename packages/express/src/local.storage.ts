@@ -1,3 +1,9 @@
+import type {
+  ParsedSignedUrl,
+  SignedUrlOptions,
+  StorageModuleOptions,
+  StorageOptions,
+} from "@anchan828/nest-storage-common";
 import {
   AbstractStorage,
   CommonStorageUtils,
@@ -5,12 +11,6 @@ import {
   STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
   STORAGE_MODULE_OPTIONS,
   STORAGE_PROVIDER_MODULE_OPTIONS,
-} from "@anchan828/nest-storage-common";
-import type {
-  ParsedSignedUrl,
-  SignedUrlOptions,
-  StorageModuleOptions,
-  StorageOptions,
 } from "@anchan828/nest-storage-common";
 import { Inject, Injectable } from "@nestjs/common";
 import { existsSync, unlinkSync } from "fs";
@@ -74,7 +74,7 @@ export class LocalStorage extends AbstractStorage {
     const endpoint = this.providerOptions.signedUrlController?.endpoint;
     const controllerPath = this.providerOptions.signedUrlController?.path || SIGNED_URL_CONTROLLER_PATH;
     const token = this.providerOptions.signedUrlController?.token || SIGNED_URL_CONTROLLER_TOKEN;
-    const signature = jwt.sign({ ...options, bucket, filename }, token, { expiresIn: options.expires });
+    const signature = jwt.sign({ action: options.action, bucket, filename }, token, { expiresIn: options.expires });
 
     return [endpoint, controllerPath, bucket, filename].filter((x) => x).join("/") + `?signature=${signature}`;
   }
