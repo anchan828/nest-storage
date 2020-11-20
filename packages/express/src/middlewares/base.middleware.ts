@@ -13,7 +13,7 @@ export abstract class StorageBaseMiddleware implements NestMiddleware<Request, R
 
   abstract getAction(): SignedUrlActionType;
 
-  abstract async handler(bucket: string, filename: string, req?: Request, res?: Response): Promise<void>;
+  abstract handler(bucket: string, filename: string, req?: Request, res?: Response): Promise<void>;
 
   public async use(req: Request, res: Response): Promise<void> {
     const { "0": filename, bucket } = req.params as { "0": string; bucket: string };
