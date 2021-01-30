@@ -1,9 +1,6 @@
 {
   "extends": ["config:base"],
   "automerge": true,
-  "constraints": {
-    "npm": "7"
-  },
   "major": {
     "automerge": false
   },
