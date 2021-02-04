@@ -24,7 +24,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-node
+          key: ${{ runner.os }}-node-${{ matrix.node }}
       - name: Install npm packages
         run: npm i
       - name: Lint
