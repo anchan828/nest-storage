@@ -26,11 +26,9 @@ export class StorageService {
    * Download files and compress to zip/tar/tgz
    */
   public async compress(entries: (string | CompressFileEntry)[], options?: CompressOptions): Promise<any> {
-    if (!options?.compressType) {
-      options = Object.assign({}, options, { compressType: "zip" });
-    }
-    const stream = this.getCompressStream(options.compressType);
-    const dest = tmpNameSync({ postfix: this.getCompressFileExtension(options.compressType) });
+    const compressType = options?.compressType || "zip";
+    const stream = this.getCompressStream(compressType);
+    const dest = tmpNameSync({ postfix: this.getCompressFileExtension(compressType) });
 
     for (const entry of entries) {
       const filename = typeof entry === "string" ? entry : entry.filename;
