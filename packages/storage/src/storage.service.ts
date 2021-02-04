@@ -10,6 +10,7 @@ import * as compressing from "compressing";
 import { createWriteStream } from "fs";
 import { tmpNameSync } from "tmp";
 import type { CompressFileEntry, CompressOptions, CompressType } from "./interfaces";
+import { waitUntil } from "./wait-until";
 @Injectable()
 export class StorageService {
   constructor(@Inject(STORAGE_PROVIDER) private readonly storage: AbstractStorage) {}
@@ -37,12 +38,16 @@ export class StorageService {
       stream.addEntry(dataPath, { relativePath: relativePath.replace(/^\//g, "") });
     }
 
-    stream.pipe(createWriteStream(dest));
+    const writeStream = createWriteStream(dest);
+    stream.pipe(writeStream);
 
     await new Promise<void>((resolve, reject) => {
       stream.on("close", () => resolve());
       stream.on("error", (error) => reject(error));
     });
+
+    await waitUntil(() => stream.destroyed);
+    await waitUntil(() => writeStream.destroyed);
 
     return dest;
   }
