@@ -40,7 +40,7 @@ export class LocalStorage extends AbstractStorage {
     const destination = this.getDestinationCachePath(filename, options);
 
     if (!existsSync(destination)) {
-      const bucket = CommonStorageUtils.getBucket(this.storageOptions, options);
+      const bucket = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
       throw new Error(FILE_NOT_FOUND(bucket, filename));
     }
 
@@ -49,7 +49,7 @@ export class LocalStorage extends AbstractStorage {
 
   public async delete(filename: string, options?: StorageOptions): Promise<void> {
     const cacheDir = CommonStorageUtils.getCacheDir(this.storageOptions);
-    const bucket = CommonStorageUtils.getBucket(this.storageOptions, options);
+    const bucket = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
     const dest = join(cacheDir, bucket, filename);
     if (!existsSync(dest)) {
       throw new Error(FILE_NOT_FOUND(bucket, filename));
@@ -60,13 +60,13 @@ export class LocalStorage extends AbstractStorage {
 
   public async exists(filename: string, options?: StorageOptions): Promise<boolean> {
     const cacheDir = CommonStorageUtils.getCacheDir(this.storageOptions);
-    const bucket = CommonStorageUtils.getBucket(this.storageOptions, options);
+    const bucket = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
     const dest = join(cacheDir, bucket, filename);
     return existsSync(dest);
   }
 
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
-    const bucket = CommonStorageUtils.getBucket(this.storageOptions, options);
+    const bucket = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
     if (!options.expires) {
       options.expires = STORAGE_DEFAULT_SIGNED_URL_EXPIRES;
     }
