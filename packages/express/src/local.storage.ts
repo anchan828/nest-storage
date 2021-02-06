@@ -40,8 +40,8 @@ export class LocalStorage extends AbstractStorage {
     const destination = this.getDestinationCachePath(filename, options);
 
     if (!existsSync(destination)) {
-      const bucket = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
-      throw new Error(FILE_NOT_FOUND(bucket, filename));
+      const { bucket, name } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
+      throw new Error(FILE_NOT_FOUND(bucket, name));
     }
 
     return destination;
@@ -49,10 +49,10 @@ export class LocalStorage extends AbstractStorage {
 
   public async delete(filename: string, options?: StorageOptions): Promise<void> {
     const cacheDir = CommonStorageUtils.getCacheDir(this.storageOptions);
-    const bucket = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
-    const dest = join(cacheDir, bucket, filename);
+    const { bucket, name } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
+    const dest = join(cacheDir, bucket, name);
     if (!existsSync(dest)) {
-      throw new Error(FILE_NOT_FOUND(bucket, filename));
+      throw new Error(FILE_NOT_FOUND(bucket, name));
     }
 
     unlinkSync(dest);
@@ -60,13 +60,13 @@ export class LocalStorage extends AbstractStorage {
 
   public async exists(filename: string, options?: StorageOptions): Promise<boolean> {
     const cacheDir = CommonStorageUtils.getCacheDir(this.storageOptions);
-    const bucket = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
-    const dest = join(cacheDir, bucket, filename);
+    const { bucket, name } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
+    const dest = join(cacheDir, bucket, name);
     return existsSync(dest);
   }
 
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
-    const bucket = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
+    const { bucket, name } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
     if (!options.expires) {
       options.expires = STORAGE_DEFAULT_SIGNED_URL_EXPIRES;
     }
@@ -74,9 +74,9 @@ export class LocalStorage extends AbstractStorage {
     const endpoint = this.providerOptions.signedUrlController?.endpoint;
     const controllerPath = this.providerOptions.signedUrlController?.path || SIGNED_URL_CONTROLLER_PATH;
     const token = this.providerOptions.signedUrlController?.token || SIGNED_URL_CONTROLLER_TOKEN;
-    const signature = jwt.sign({ action: options.action, bucket, filename }, token, { expiresIn: options.expires });
+    const signature = jwt.sign({ action: options.action, bucket, name }, token, { expiresIn: options.expires });
 
-    return [endpoint, controllerPath, bucket, filename].filter((x) => x).join("/") + `?signature=${signature}`;
+    return [endpoint, controllerPath, bucket, name].filter((x) => x).join("/") + `?signature=${signature}`;
   }
 
   public parseSignedUrl(url: string): ParsedSignedUrl {

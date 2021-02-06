@@ -32,11 +32,16 @@ export class S3Storage extends AbstractStorage {
 
   public async upload(dataPath: string, filename: string, options?: StorageOptions): Promise<string> {
     const bucket = this.getBuket();
+    const { bucket: Bucket, name: Key } = CommonStorageUtils.parseBuketAndFilename(
+      filename,
+      this.storageOptions,
+      options,
+    );
     const res = await bucket
       .upload({
         Body: createReadStream(dataPath),
-        Bucket: CommonStorageUtils.getBucket(filename, this.storageOptions, options),
-        Key: filename,
+        Bucket,
+        Key,
       })
       .promise();
     await this.copyFileAsync(dataPath, this.getDestinationCachePath(filename, options));
@@ -47,9 +52,13 @@ export class S3Storage extends AbstractStorage {
     const destination = this.getDestinationCachePath(filename, options);
 
     if (!existsSync(destination)) {
-      const bucketName = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
+      const { bucket: Bucket, name: Key } = CommonStorageUtils.parseBuketAndFilename(
+        filename,
+        this.storageOptions,
+        options,
+      );
       const bucket = this.getBuket();
-      const readstream = bucket.getObject({ Bucket: bucketName, Key: filename }).createReadStream();
+      const readstream = bucket.getObject({ Bucket, Key }).createReadStream();
       await this.writeFileStream(readstream, destination);
     }
     return destination;
@@ -57,18 +66,24 @@ export class S3Storage extends AbstractStorage {
 
   public async delete(filename: string, options?: StorageOptions): Promise<void> {
     const bucket = this.getBuket();
-    await bucket
-      .deleteObject({ Bucket: CommonStorageUtils.getBucket(filename, this.storageOptions, options), Key: filename })
-      .promise();
+    const { bucket: Bucket, name: Key } = CommonStorageUtils.parseBuketAndFilename(
+      filename,
+      this.storageOptions,
+      options,
+    );
+    await bucket.deleteObject({ Bucket, Key }).promise();
     unlinkSync(this.getDestinationCachePath(filename, options));
   }
 
   public async exists(filename: string, options?: StorageOptions): Promise<boolean> {
     const bucket = this.getBuket();
     try {
-      await bucket
-        .headObject({ Bucket: CommonStorageUtils.getBucket(filename, this.storageOptions, options), Key: filename })
-        .promise();
+      const { bucket: Bucket, name: Key } = CommonStorageUtils.parseBuketAndFilename(
+        filename,
+        this.storageOptions,
+        options,
+      );
+      await bucket.headObject({ Bucket, Key }).promise();
       return true;
     } catch {
       return false;
@@ -77,13 +92,17 @@ export class S3Storage extends AbstractStorage {
 
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
     const bucket = this.getBuket();
-    const bucketName = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
+    const { bucket: Bucket, name: Key } = CommonStorageUtils.parseBuketAndFilename(
+      filename,
+      this.storageOptions,
+      options,
+    );
     const { action, expires } = options;
 
     return bucket.getSignedUrlPromise(this.getOperation(action), {
-      Bucket: bucketName,
+      Bucket,
       Expires: this.getExpires(expires),
-      Key: filename,
+      Key,
     });
   }
 

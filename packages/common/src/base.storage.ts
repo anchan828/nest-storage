@@ -10,9 +10,9 @@ export abstract class AbstractStorage {
   protected getDestinationCachePath(filename: string, options?: StorageOptions): string {
     const cacheDir = CommonStorageUtils.getCacheDir(this.storageOptions);
 
-    const bucket = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
+    const { bucket, name } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
 
-    const destination = join(cacheDir, bucket, filename);
+    const destination = join(cacheDir, bucket, name);
 
     if (!existsSync(destination)) {
       const destDirname = dirname(destination);

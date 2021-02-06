@@ -109,8 +109,8 @@ export class GoogleCloudStorage extends AbstractStorage {
 
   private getBuket(filename: string, options: StorageOptions = {}): Bucket {
     const storage = new Storage(this.providerOptions);
-    const bucketName = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
-    return storage.bucket(bucketName);
+    const { bucket } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
+    return storage.bucket(bucket);
   }
 
   private countString(target: string, str: string): number {
