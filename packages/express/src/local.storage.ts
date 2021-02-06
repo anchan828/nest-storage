@@ -16,7 +16,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { existsSync, unlinkSync } from "fs";
 import * as jwt from "jsonwebtoken";
 import { join } from "path";
-import { parse } from "url";
+import { URL } from "url";
 import { SIGNED_URL_CONTROLLER_PATH, SIGNED_URL_CONTROLLER_TOKEN } from "./constants";
 import type { LocalStorageProviderModuleOptions } from "./interfaces";
 
@@ -80,7 +80,7 @@ export class LocalStorage extends AbstractStorage {
   }
 
   public parseSignedUrl(url: string): ParsedSignedUrl {
-    const urlObject = parse(url);
+    const urlObject = new URL(url);
     const controllerPath = this.providerOptions.signedUrlController?.path || SIGNED_URL_CONTROLLER_PATH;
 
     if (!urlObject.pathname || this.countString("/", urlObject.pathname) < 3) {

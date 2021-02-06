@@ -16,7 +16,7 @@ import type { Bucket } from "@google-cloud/storage";
 import { Storage } from "@google-cloud/storage";
 import { Inject } from "@nestjs/common";
 import { existsSync, unlinkSync } from "fs";
-import { parse as parseUrl } from "url";
+import { URL } from "url";
 import type { GoogleCloudStorageProviderModuleOptions } from "./gcs-storage.interface";
 export class GoogleCloudStorage extends AbstractStorage {
   public provider = "gcs";
@@ -85,8 +85,8 @@ export class GoogleCloudStorage extends AbstractStorage {
   }
 
   public parseSignedUrl(url: string): ParsedSignedUrl {
-    const urlObject = parseUrl(url);
-    const endopint = parseUrl(new Storage({ ...this.providerOptions, autoRetry: true, maxRetries: 5 }).apiEndpoint);
+    const urlObject = new URL(url);
+    const endopint = new URL(new Storage({ ...this.providerOptions, autoRetry: true, maxRetries: 5 }).apiEndpoint);
 
     if (urlObject.host !== endopint.host) {
       throw new Error(`Invalid endopint '${urlObject.host}'. endpoint should be ${endopint.host}`);
