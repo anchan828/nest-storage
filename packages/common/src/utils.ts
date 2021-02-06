@@ -4,13 +4,19 @@ import { join } from "path";
 import type { StorageModuleOptions, StorageOptions } from "./interfaces";
 import { BUCKET_NOT_DEFINED_MESSAGE } from "./messages";
 export class CommonStorageUtils {
-  public static getBucket(storageOptions: StorageModuleOptions, options?: StorageOptions): string {
+  public static getBucket(filename: string, storageOptions: StorageModuleOptions, options?: StorageOptions): string {
     if (options?.bucket) {
       return options.bucket;
     }
 
     if (storageOptions.bucket) {
       return storageOptions.bucket;
+    }
+
+    const [bucket, ...names] = filename.split("/");
+
+    if (bucket && names.length !== 0) {
+      return bucket;
     }
 
     throw new Error(BUCKET_NOT_DEFINED_MESSAGE);

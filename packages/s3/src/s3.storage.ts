@@ -1,16 +1,16 @@
-import {
-  AbstractStorage,
-  CommonStorageUtils,
-  STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
-  STORAGE_MODULE_OPTIONS,
-  STORAGE_PROVIDER_MODULE_OPTIONS,
-} from "@anchan828/nest-storage-common";
 import type {
   ParsedSignedUrl,
   SignedUrlActionType,
   SignedUrlOptions,
   StorageModuleOptions,
   StorageOptions,
+} from "@anchan828/nest-storage-common";
+import {
+  AbstractStorage,
+  CommonStorageUtils,
+  STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
+  STORAGE_MODULE_OPTIONS,
+  STORAGE_PROVIDER_MODULE_OPTIONS,
 } from "@anchan828/nest-storage-common";
 import { Inject, Injectable } from "@nestjs/common";
 import * as s3UriParser from "amazon-s3-uri";
@@ -35,7 +35,7 @@ export class S3Storage extends AbstractStorage {
     const res = await bucket
       .upload({
         Body: createReadStream(dataPath),
-        Bucket: CommonStorageUtils.getBucket(this.storageOptions, options),
+        Bucket: CommonStorageUtils.getBucket(filename, this.storageOptions, options),
         Key: filename,
       })
       .promise();
@@ -47,7 +47,7 @@ export class S3Storage extends AbstractStorage {
     const destination = this.getDestinationCachePath(filename, options);
 
     if (!existsSync(destination)) {
-      const bucketName = CommonStorageUtils.getBucket(this.storageOptions, options);
+      const bucketName = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
       const bucket = this.getBuket();
       const readstream = bucket.getObject({ Bucket: bucketName, Key: filename }).createReadStream();
       await this.writeFileStream(readstream, destination);
@@ -58,7 +58,7 @@ export class S3Storage extends AbstractStorage {
   public async delete(filename: string, options?: StorageOptions): Promise<void> {
     const bucket = this.getBuket();
     await bucket
-      .deleteObject({ Bucket: CommonStorageUtils.getBucket(this.storageOptions, options), Key: filename })
+      .deleteObject({ Bucket: CommonStorageUtils.getBucket(filename, this.storageOptions, options), Key: filename })
       .promise();
     unlinkSync(this.getDestinationCachePath(filename, options));
   }
@@ -67,7 +67,7 @@ export class S3Storage extends AbstractStorage {
     const bucket = this.getBuket();
     try {
       await bucket
-        .headObject({ Bucket: CommonStorageUtils.getBucket(this.storageOptions, options), Key: filename })
+        .headObject({ Bucket: CommonStorageUtils.getBucket(filename, this.storageOptions, options), Key: filename })
         .promise();
       return true;
     } catch {
@@ -77,7 +77,7 @@ export class S3Storage extends AbstractStorage {
 
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
     const bucket = this.getBuket();
-    const bucketName = CommonStorageUtils.getBucket(this.storageOptions, options);
+    const bucketName = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
     const { action, expires } = options;
 
     return bucket.getSignedUrlPromise(this.getOperation(action), {

@@ -16,7 +16,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { existsSync, unlinkSync } from "fs";
 import * as jwt from "jsonwebtoken";
 import { join } from "path";
-import { parse } from "url";
+import { URL } from "url";
 import { SIGNED_URL_CONTROLLER_PATH, SIGNED_URL_CONTROLLER_TOKEN } from "./constants";
 import type { LocalStorageProviderModuleOptions } from "./interfaces";
 
@@ -40,7 +40,7 @@ export class LocalStorage extends AbstractStorage {
     const destination = this.getDestinationCachePath(filename, options);
 
     if (!existsSync(destination)) {
-      const bucket = CommonStorageUtils.getBucket(this.storageOptions, options);
+      const bucket = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
       throw new Error(FILE_NOT_FOUND(bucket, filename));
     }
 
@@ -49,7 +49,7 @@ export class LocalStorage extends AbstractStorage {
 
   public async delete(filename: string, options?: StorageOptions): Promise<void> {
     const cacheDir = CommonStorageUtils.getCacheDir(this.storageOptions);
-    const bucket = CommonStorageUtils.getBucket(this.storageOptions, options);
+    const bucket = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
     const dest = join(cacheDir, bucket, filename);
     if (!existsSync(dest)) {
       throw new Error(FILE_NOT_FOUND(bucket, filename));
@@ -60,13 +60,13 @@ export class LocalStorage extends AbstractStorage {
 
   public async exists(filename: string, options?: StorageOptions): Promise<boolean> {
     const cacheDir = CommonStorageUtils.getCacheDir(this.storageOptions);
-    const bucket = CommonStorageUtils.getBucket(this.storageOptions, options);
+    const bucket = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
     const dest = join(cacheDir, bucket, filename);
     return existsSync(dest);
   }
 
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
-    const bucket = CommonStorageUtils.getBucket(this.storageOptions, options);
+    const bucket = CommonStorageUtils.getBucket(filename, this.storageOptions, options);
     if (!options.expires) {
       options.expires = STORAGE_DEFAULT_SIGNED_URL_EXPIRES;
     }
@@ -80,7 +80,7 @@ export class LocalStorage extends AbstractStorage {
   }
 
   public parseSignedUrl(url: string): ParsedSignedUrl {
-    const urlObject = parse(url);
+    const urlObject = new URL(url);
     const controllerPath = this.providerOptions.signedUrlController?.path || SIGNED_URL_CONTROLLER_PATH;
 
     if (!urlObject.pathname || this.countString("/", urlObject.pathname) < 3) {

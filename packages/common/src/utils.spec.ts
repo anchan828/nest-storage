@@ -7,16 +7,18 @@ describe("CommonStorageService", () => {
   describe("getBucket", () => {
     it("should throw error if bucket not defined", async () => {
       expect(() => {
-        CommonStorageUtils.getBucket({});
+        CommonStorageUtils.getBucket("", {});
       }).toThrowError(BUCKET_NOT_DEFINED_MESSAGE);
     });
-
+    it("should get bucket from filename", async () => {
+      expect(CommonStorageUtils.getBucket("dir/to/filename", {})).toBe("dir");
+    });
     it("should get bucket of modult options", async () => {
-      expect(CommonStorageUtils.getBucket({ bucket: "module" })).toBe("module");
+      expect(CommonStorageUtils.getBucket("filename", { bucket: "module" })).toBe("module");
     });
 
     it("should get bucket of options", async () => {
-      expect(CommonStorageUtils.getBucket({ bucket: "module" }, { bucket: "test" })).toBe("test");
+      expect(CommonStorageUtils.getBucket("filename", { bucket: "module" }, { bucket: "test" })).toBe("test");
     });
   });
 
