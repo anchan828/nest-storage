@@ -30,9 +30,9 @@ export class GoogleCloudStorage extends AbstractStorage {
   }
 
   public async upload(dataPath: string, filename: string, options?: StorageOptions): Promise<string> {
-    const bucket = this.getBuket(filename, options);
-    const [file] = await bucket.upload(dataPath, { destination: filename, gzip: true, resumable: false });
-    await this.copyFileAsync(dataPath, this.getDestinationCachePath(filename, options));
+    const { bucket, name } = this.getBuketAndFilename(filename, options);
+    const [file] = await bucket.upload(dataPath, { destination: name, gzip: true, resumable: false });
+    await this.copyFileAsync(dataPath, this.getDestinationCachePath(name, options));
     return file.name;
   }
 
@@ -40,31 +40,31 @@ export class GoogleCloudStorage extends AbstractStorage {
     const destination = this.getDestinationCachePath(filename, options);
 
     if (!existsSync(destination)) {
-      const bucket = this.getBuket(filename, options);
-      await bucket.file(filename).download({ destination });
+      const { bucket, name } = this.getBuketAndFilename(filename, options);
+      await bucket.file(name).download({ destination });
     }
     return destination;
   }
 
   public async delete(filename: string, options?: StorageOptions): Promise<void> {
-    const bucket = this.getBuket(filename, options);
-    await bucket.file(filename).delete();
+    const { bucket, name } = this.getBuketAndFilename(filename, options);
+    await bucket.file(name).delete();
     unlinkSync(this.getDestinationCachePath(filename, options));
   }
 
   public async exists(filename: string, options?: StorageOptions): Promise<boolean> {
-    const bucket = this.getBuket(filename, options);
+    const { bucket, name } = this.getBuketAndFilename(filename, options);
     return bucket
-      .file(filename)
+      .file(name)
       .exists()
       .then((res) => res[0]);
   }
 
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
-    const bucket = this.getBuket(filename, options);
+    const { bucket, name } = this.getBuketAndFilename(filename, options);
     const { action, contentType } = options;
     const expires = options.expires || STORAGE_DEFAULT_SIGNED_URL_EXPIRES;
-    const [url] = await bucket.file(filename).getSignedUrl({
+    const [url] = await bucket.file(name).getSignedUrl({
       action: this.getAction(action),
       contentType,
       expires: Date.now() + expires,
@@ -107,10 +107,13 @@ export class GoogleCloudStorage extends AbstractStorage {
     return result;
   }
 
-  private getBuket(filename: string, options: StorageOptions = {}): Bucket {
+  private getBuketAndFilename(filename: string, options: StorageOptions = {}): { bucket: Bucket; name: string } {
     const storage = new Storage(this.providerOptions);
-    const { bucket } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
-    return storage.bucket(bucket);
+    const { bucket, name } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
+    return {
+      bucket: storage.bucket(bucket),
+      name,
+    };
   }
 
   private countString(target: string, str: string): number {
