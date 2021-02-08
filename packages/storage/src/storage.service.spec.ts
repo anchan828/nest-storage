@@ -5,7 +5,7 @@ import { Injectable, Module } from "@nestjs/common";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import { existsSync } from "fs";
-import { dirSync, fileSync } from "tmp";
+import { dirSync, fileSync, tmpNameSync } from "tmp";
 import { StorageModule } from "./storage.module";
 import { StorageService } from "./storage.service";
 
@@ -89,6 +89,20 @@ describe("StorageService", () => {
     // tgz
     dest = await service.compress([fileSync().name, fileSync().name, fileSync().name], { compressType: "tgz" });
     expect(existsSync(dest)).toBeTruthy();
+
+    // use destination
+    dest = await service.compress([fileSync().name, fileSync().name, fileSync().name], {
+      destination: tmpNameSync({ postfix: ".zip" }),
+    });
+
+    expect(existsSync(dest)).toBeTruthy();
+
+    // throw error if unsupported extension
+    await expect(
+      service.compress([fileSync().name, fileSync().name, fileSync().name], {
+        destination: tmpNameSync({ postfix: ".png" }),
+      }),
+    ).rejects.toThrowError("The destination has unsupported extension. Please use .zip/.tar/.tar.gz instead of .png");
   });
 
   describe("getSignedUrl", () => {
