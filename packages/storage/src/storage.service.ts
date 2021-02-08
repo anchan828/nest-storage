@@ -8,6 +8,8 @@ import { STORAGE_DEFAULT_SIGNED_URL_EXPIRES, STORAGE_PROVIDER } from "@anchan828
 import { Inject, Injectable } from "@nestjs/common";
 import * as compressing from "compressing";
 import { createWriteStream } from "fs";
+import { copyFile, unlink } from "fs/promises";
+import { parse } from "path";
 import { tmpNameSync } from "tmp";
 import type { CompressFileEntry, CompressOptions, CompressType } from "./interfaces";
 import { waitUntil } from "./wait-until";
@@ -27,7 +29,8 @@ export class StorageService {
    * Download files and compress to zip/tar/tgz
    */
   public async compress(entries: (string | CompressFileEntry)[], options?: CompressOptions): Promise<any> {
-    const compressType = options?.compressType || "zip";
+    const compressType = this.getCompressType(options);
+
     const stream = this.getCompressStream(compressType);
     const dest = tmpNameSync({ postfix: this.getCompressFileExtension(compressType) });
 
@@ -49,7 +52,12 @@ export class StorageService {
     await waitUntil(() => stream.destroyed);
     await waitUntil(() => writeStream.destroyed);
 
-    return dest;
+    if (options?.destination) {
+      await copyFile(dest, options.destination);
+      await unlink(dest);
+    }
+
+    return options?.destination || dest;
   }
 
   public async delete(filename: string, options: StorageOptions = {}): Promise<void> {
@@ -110,5 +118,39 @@ export class StorageService {
       default:
         return ".zip";
     }
+  }
+
+  private getCompressTypeFromExtension(destination: string): CompressType {
+    const extension = parse(destination).ext;
+    switch (extension) {
+      case ".tar":
+        return "tar";
+      case ".tar.gz":
+        return "tgz";
+      case ".zip":
+        return "zip";
+      default:
+        throw new Error(
+          `The destination has unsupported extension. Please use .zip/.tar/.tar.gz instead of ${extension}`,
+        );
+    }
+  }
+
+  /**
+   * Get compress type. default is zip
+   *
+   * @private
+   * @param {CompressOptions} [options]
+   * @return {*}  {CompressType}
+   * @memberof StorageService
+   */
+  private getCompressType(options?: CompressOptions): CompressType {
+    let compressType = options?.compressType;
+
+    if (options?.destination) {
+      compressType = this.getCompressTypeFromExtension(options.destination);
+    }
+
+    return compressType || "zip";
   }
 }
