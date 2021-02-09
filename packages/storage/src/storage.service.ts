@@ -8,7 +8,6 @@ import { STORAGE_DEFAULT_SIGNED_URL_EXPIRES, STORAGE_PROVIDER } from "@anchan828
 import { Inject, Injectable } from "@nestjs/common";
 import * as compressing from "compressing";
 import { createWriteStream, existsSync } from "fs";
-import { copyFile, unlink } from "fs/promises";
 import { parse } from "path";
 import { tmpNameSync } from "tmp";
 import type { CompressFileEntry, CompressOptions, CompressType } from "./interfaces";
@@ -32,7 +31,7 @@ export class StorageService {
     const compressType = this.getCompressType(options);
 
     const stream = this.getCompressStream(compressType);
-    const dest = tmpNameSync({ postfix: this.getCompressFileExtension(compressType) });
+    const dest = options?.destination || tmpNameSync({ postfix: this.getCompressFileExtension(compressType) });
 
     for (const entry of entries) {
       const filename = typeof entry === "string" ? entry : entry.filename;
@@ -51,11 +50,6 @@ export class StorageService {
 
     await waitUntil(() => stream.destroyed);
     await waitUntil(() => writeStream.destroyed);
-
-    if (options?.destination) {
-      await copyFile(dest, options.destination);
-      await unlink(dest);
-    }
 
     return options?.destination || dest;
   }
