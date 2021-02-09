@@ -7,7 +7,7 @@ import type {
 import { STORAGE_DEFAULT_SIGNED_URL_EXPIRES, STORAGE_PROVIDER } from "@anchan828/nest-storage-common";
 import { Inject, Injectable } from "@nestjs/common";
 import * as compressing from "compressing";
-import { createWriteStream } from "fs";
+import { createWriteStream, existsSync } from "fs";
 import { copyFile, unlink } from "fs/promises";
 import { parse } from "path";
 import { tmpNameSync } from "tmp";
@@ -37,7 +37,7 @@ export class StorageService {
     for (const entry of entries) {
       const filename = typeof entry === "string" ? entry : entry.filename;
       const relativePath = typeof entry === "string" ? entry : entry.relativePath;
-      const dataPath = await this.storage.download(filename, options);
+      const dataPath = existsSync(filename) ? filename : await this.storage.download(filename, options);
       stream.addEntry(dataPath, { relativePath: relativePath.replace(/^\//g, "") });
     }
 
