@@ -30,14 +30,21 @@ export class StorageService {
   public async compress(entries: (string | CompressFileEntry)[], options?: CompressOptions): Promise<any> {
     const compressType = this.getCompressType(options);
 
-    const stream = this.getCompressStream(compressType);
     const dest = options?.destination || tmpNameSync({ postfix: this.getCompressFileExtension(compressType) });
+
+    const compressFileEntries: CompressFileEntry[] = [];
 
     for (const entry of entries) {
       const filename = typeof entry === "string" ? entry : entry.filename;
       const relativePath = typeof entry === "string" ? entry : entry.relativePath;
       const dataPath = existsSync(filename) ? filename : await this.storage.download(filename, options);
-      stream.addEntry(dataPath, { relativePath: relativePath.replace(/^\//g, "") });
+      compressFileEntries.push({ filename: dataPath, relativePath: relativePath.replace(/^\//g, "") });
+    }
+
+    const stream = this.getCompressStream(compressType);
+
+    for (const compressFileEntry of compressFileEntries) {
+      stream.addEntry(compressFileEntry.filename, { relativePath: compressFileEntry.relativePath });
     }
 
     const writeStream = createWriteStream(dest);
