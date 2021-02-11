@@ -1,4 +1,4 @@
-import type { StorageOptions } from "@anchan828/nest-storage-common";
+import type { StorageCoreModuleOptions, StorageOptions } from "@anchan828/nest-storage-common";
 
 export type CompressType = "zip" | "tar" | "tgz";
 
@@ -11,3 +11,5 @@ export interface CompressFileEntry {
   filename: string;
   relativePath: string;
 }
+
+export type StorageModuleOptions = StorageCoreModuleOptions;

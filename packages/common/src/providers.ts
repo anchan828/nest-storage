@@ -1,6 +1,6 @@
 import type { Provider, Type } from "@nestjs/common";
 import type { ClassProvider, FactoryProvider } from "@nestjs/common/interfaces";
-import type { AsyncOptions, StorageModuleOptions, StorageModuleOptionsFactory } from "./interfaces";
+import type { AsyncOptions, StorageCoreModuleOptions, StorageCoreModuleOptionsFactory } from "./interfaces";
 
 export function createAsyncOptionsProvider(provide: string, options: AsyncOptions): FactoryProvider {
   if (options.useFactory) {
@@ -12,11 +12,11 @@ export function createAsyncOptionsProvider(provide: string, options: AsyncOption
   }
   return {
     inject: [options.useClass || options.useExisting].filter(
-      (x): x is Type<StorageModuleOptionsFactory<any>> => x !== undefined,
+      (x): x is Type<StorageCoreModuleOptionsFactory<any>> => x !== undefined,
     ),
     provide: provide,
-    useFactory: async (optionsFactory: StorageModuleOptionsFactory<any>): Promise<StorageModuleOptions> =>
-      await optionsFactory.createStorageModuleOptions(),
+    useFactory: async (optionsFactory: StorageCoreModuleOptionsFactory<any>): Promise<StorageCoreModuleOptions> =>
+      await optionsFactory.createStorageCoreModuleOptions(),
   };
 }
 

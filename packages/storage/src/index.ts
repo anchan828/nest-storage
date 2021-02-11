@@ -2,9 +2,9 @@ export {
   AbstractStorage,
   SignedUrlActionType,
   SignedUrlOptions,
+  StorageCoreModuleOptions,
+  StorageCoreModuleOptionsFactory,
   StorageModuleAsyncOptions,
-  StorageModuleOptions,
-  StorageModuleOptionsFactory,
   StorageOptions,
 } from "@anchan828/nest-storage-common";
 export * from "./interfaces";

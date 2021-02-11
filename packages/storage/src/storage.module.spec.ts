@@ -1,11 +1,11 @@
+import type { StorageCoreModuleOptions } from "@anchan828/nest-storage-common";
 import {
   STORAGE_MODULE_OPTIONS,
   STORAGE_PROVIDER,
   STORAGE_PROVIDER_MODULE_OPTIONS,
 } from "@anchan828/nest-storage-common";
-import type { StorageModuleOptions } from "@anchan828/nest-storage-common";
-import { Test } from "@nestjs/testing";
 import type { TestingModule } from "@nestjs/testing";
+import { Test } from "@nestjs/testing";
 import { dirSync } from "tmp";
 import { LocalStorageProviderModule } from "../../express/src";
 import { StorageModule } from "./storage.module";
@@ -13,9 +13,9 @@ import { StorageService } from "./storage.service";
 
 describe("LocalStorageProviderModule", () => {
   const shouldGetProviders = (app: TestingModule): void => {
-    expect(app.get<StorageModuleOptions>(STORAGE_MODULE_OPTIONS)).toBeDefined();
-    expect(app.get<StorageModuleOptions>(STORAGE_PROVIDER_MODULE_OPTIONS)).toBeDefined();
-    expect(app.get<StorageModuleOptions>(STORAGE_PROVIDER)).toBeDefined();
+    expect(app.get<StorageCoreModuleOptions>(STORAGE_MODULE_OPTIONS)).toBeDefined();
+    expect(app.get<StorageCoreModuleOptions>(STORAGE_PROVIDER_MODULE_OPTIONS)).toBeDefined();
+    expect(app.get<StorageCoreModuleOptions>(STORAGE_PROVIDER)).toBeDefined();
     expect(app.get<StorageService>(StorageService)).toBeDefined();
   };
 

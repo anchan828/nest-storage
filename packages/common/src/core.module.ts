@@ -1,9 +1,9 @@
-import { Global, Module } from "@nestjs/common";
 import type { DynamicModule } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { STORAGE_MODULE_OPTIONS, STORAGE_PROVIDER_MODULE_OPTIONS } from "./constants";
 import type {
+  StorageCoreModuleOptions,
   StorageModuleAsyncOptions,
-  StorageModuleOptions,
   StorageProviderModuleAsyncOptions,
   StorageProviderModuleOptions,
 } from "./interfaces";
@@ -12,7 +12,7 @@ import { createAsyncProviders } from "./providers";
 @Global()
 @Module({})
 export class StorageCoreModule {
-  public static register(options: StorageModuleOptions): DynamicModule {
+  public static register(options: StorageCoreModuleOptions): DynamicModule {
     const providers = [{ provide: STORAGE_MODULE_OPTIONS, useValue: options }];
     return {
       exports: providers,
@@ -21,7 +21,7 @@ export class StorageCoreModule {
     };
   }
 
-  public static registerAsync(options: StorageModuleAsyncOptions<StorageModuleOptions>): DynamicModule {
+  public static registerAsync(options: StorageModuleAsyncOptions<StorageCoreModuleOptions>): DynamicModule {
     const asyncProviders = createAsyncProviders(STORAGE_MODULE_OPTIONS, options);
     const providers = [...asyncProviders];
     return {

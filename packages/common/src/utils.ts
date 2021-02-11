@@ -1,12 +1,12 @@
 import { existsSync, mkdirSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
-import type { StorageModuleOptions, StorageOptions } from "./interfaces";
+import type { StorageCoreModuleOptions, StorageOptions } from "./interfaces";
 import { BUCKET_NOT_DEFINED_MESSAGE } from "./messages";
 export class CommonStorageUtils {
   public static parseBuketAndFilename(
     filename: string,
-    storageOptions: StorageModuleOptions,
+    storageOptions: StorageCoreModuleOptions,
     options?: StorageOptions,
   ): { bucket: string; name: string } {
     if (options?.bucket) {
@@ -26,7 +26,7 @@ export class CommonStorageUtils {
     throw new Error(BUCKET_NOT_DEFINED_MESSAGE);
   }
 
-  public static getCacheDir(storageOptions: StorageModuleOptions): string {
+  public static getCacheDir(storageOptions: StorageCoreModuleOptions): string {
     const cacheDir = storageOptions.cacheDir || join(tmpdir(), "nest-storage");
     if (!existsSync(cacheDir)) {
       mkdirSync(cacheDir, { recursive: true });

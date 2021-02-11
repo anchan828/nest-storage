@@ -5,7 +5,7 @@ export interface LocalStorageProviderModuleOptions extends StorageProviderModule
    * Set property if you upload file using signed url. LocalStorage provider only.
    *
    * @type {SignedUrlController}
-   * @memberof StorageModuleOptions
+   * @memberof StorageCoreModuleOptions
    */
   signedUrlController?: SignedUrlController;
 }

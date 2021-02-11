@@ -1,7 +1,7 @@
 import type {
   ParsedSignedUrl,
   SignedUrlOptions,
-  StorageModuleOptions,
+  StorageCoreModuleOptions,
   StorageOptions,
 } from "@anchan828/nest-storage-common";
 import {
@@ -25,7 +25,7 @@ export class LocalStorage extends AbstractStorage {
   public provider = "local";
 
   constructor(
-    @Inject(STORAGE_MODULE_OPTIONS) protected readonly storageOptions: StorageModuleOptions,
+    @Inject(STORAGE_MODULE_OPTIONS) protected readonly storageOptions: StorageCoreModuleOptions,
     @Inject(STORAGE_PROVIDER_MODULE_OPTIONS) protected readonly providerOptions: LocalStorageProviderModuleOptions,
   ) {
     super(storageOptions);

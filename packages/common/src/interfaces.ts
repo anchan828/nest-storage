@@ -3,7 +3,7 @@ export interface StorageOptions {
   bucket?: string;
 }
 
-export interface StorageModuleOptions {
+export interface StorageCoreModuleOptions {
   bucket?: string;
   cacheDir?: string;
 }
@@ -15,19 +15,19 @@ export interface AsyncOptions extends Pick<ModuleMetadata, "imports"> {
   useClass?: Type<any>;
   useExisting?: Type<any>;
   useFactory?: (...args: any[]) => Promise<any> | any;
-  inject?: Array<Type<StorageModuleOptionsFactory<any>> | string | any>;
+  inject?: Array<Type<StorageCoreModuleOptionsFactory<any>> | string | any>;
 }
 
 export interface StorageModuleAsyncOptions<T> extends AsyncOptions {
-  useClass?: Type<StorageModuleOptionsFactory<T>>;
+  useClass?: Type<StorageCoreModuleOptionsFactory<T>>;
 
-  useExisting?: Type<StorageModuleOptionsFactory<T>>;
+  useExisting?: Type<StorageCoreModuleOptionsFactory<T>>;
   useFactory?: (...args: any[]) => Promise<T> | T;
-  inject?: Array<Type<StorageModuleOptionsFactory<T>> | string | any>;
+  inject?: Array<Type<StorageCoreModuleOptionsFactory<T>> | string | any>;
 }
 
-export interface StorageModuleOptionsFactory<T> {
-  createStorageModuleOptions(): Promise<T> | T;
+export interface StorageCoreModuleOptionsFactory<T> {
+  createStorageCoreModuleOptions(): Promise<T> | T;
 }
 
 export interface StorageProviderModuleAsyncOptions<T> extends AsyncOptions {

@@ -1,4 +1,4 @@
-import type { StorageModuleAsyncOptions, StorageModuleOptions } from "@anchan828/nest-storage-common";
+import type { StorageCoreModuleOptions, StorageModuleAsyncOptions } from "@anchan828/nest-storage-common";
 import { StorageCoreModule } from "@anchan828/nest-storage-common";
 import type { DynamicModule } from "@nestjs/common";
 import { Global, Module } from "@nestjs/common";
@@ -6,7 +6,7 @@ import { StorageService } from "./storage.service";
 @Global()
 @Module({})
 export class StorageModule {
-  public static register<Options extends StorageModuleOptions = StorageModuleOptions>(
+  public static register<Options extends StorageCoreModuleOptions = StorageCoreModuleOptions>(
     options: Options,
     storageProviderModule: DynamicModule,
   ): DynamicModule {
@@ -20,7 +20,7 @@ export class StorageModule {
   }
 
   public static registerAsync(
-    options: StorageModuleAsyncOptions<StorageModuleOptions>,
+    options: StorageModuleAsyncOptions<StorageCoreModuleOptions>,
     storageProviderModule: DynamicModule,
   ): DynamicModule {
     const providers = [StorageService];

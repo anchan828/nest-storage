@@ -2,7 +2,7 @@ import type {
   ParsedSignedUrl,
   SignedUrlActionType,
   SignedUrlOptions,
-  StorageModuleOptions,
+  StorageCoreModuleOptions,
   StorageOptions,
 } from "@anchan828/nest-storage-common";
 import {
@@ -22,7 +22,7 @@ export class GoogleCloudStorage extends AbstractStorage {
   public provider = "gcs";
 
   constructor(
-    @Inject(STORAGE_MODULE_OPTIONS) protected readonly storageOptions: StorageModuleOptions,
+    @Inject(STORAGE_MODULE_OPTIONS) protected readonly storageOptions: StorageCoreModuleOptions,
     @Inject(STORAGE_PROVIDER_MODULE_OPTIONS)
     protected readonly providerOptions: GoogleCloudStorageProviderModuleOptions,
   ) {

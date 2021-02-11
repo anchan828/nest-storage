@@ -2,7 +2,7 @@ import type {
   ParsedSignedUrl,
   SignedUrlActionType,
   SignedUrlOptions,
-  StorageModuleOptions,
+  StorageCoreModuleOptions,
   StorageOptions,
 } from "@anchan828/nest-storage-common";
 import {
@@ -24,7 +24,7 @@ export class S3Storage extends AbstractStorage {
   public provider = "s3";
 
   constructor(
-    @Inject(STORAGE_MODULE_OPTIONS) protected readonly storageOptions: StorageModuleOptions,
+    @Inject(STORAGE_MODULE_OPTIONS) protected readonly storageOptions: StorageCoreModuleOptions,
     @Inject(STORAGE_PROVIDER_MODULE_OPTIONS) protected readonly providerOptions: S3StorageProviderModuleOptions,
   ) {
     super(storageOptions);
