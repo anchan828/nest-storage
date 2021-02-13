@@ -76,7 +76,7 @@ export class StorageService {
     for (const entry of entries) {
       const filename = typeof entry === "string" ? entry : entry.filename;
       const relativePath = typeof entry === "string" ? entry : entry.relativePath;
-      const dataPath = existsSync(filename) ? filename : await this.storage.download(filename, options);
+      const dataPath = existsSync(filename) ? filename : await this.download(filename, options);
       compressFileEntries.push({ filename: dataPath, relativePath: relativePath.replace(/^\//g, "") });
     }
 
