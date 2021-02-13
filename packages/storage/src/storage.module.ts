@@ -1,12 +1,19 @@
 import type { StorageCoreModuleOptions, StorageModuleAsyncOptions } from "@anchan828/nest-storage-common";
 import { StorageCoreModule } from "@anchan828/nest-storage-common";
-import type { DynamicModule } from "@nestjs/common";
+import type { DynamicModule, OnModuleDestroy } from "@nestjs/common";
 import { Global, Module } from "@nestjs/common";
+import type { StorageModuleOptions } from "./interfaces";
 import { StorageService } from "./storage.service";
 @Global()
 @Module({})
-export class StorageModule {
-  public static register<Options extends StorageCoreModuleOptions = StorageCoreModuleOptions>(
+export class StorageModule implements OnModuleDestroy {
+  constructor(private readonly service: StorageService) {}
+
+  async onModuleDestroy(): Promise<void> {
+    await this.service.close();
+  }
+
+  public static register<Options extends StorageModuleOptions = StorageModuleOptions>(
     options: Options,
     storageProviderModule: DynamicModule,
   ): DynamicModule {

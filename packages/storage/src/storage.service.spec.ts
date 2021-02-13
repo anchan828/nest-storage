@@ -1,10 +1,11 @@
-import type { ParsedSignedUrl, SignedUrlOptions } from "@anchan828/nest-storage-common";
-import { AbstractStorage, STORAGE_PROVIDER } from "@anchan828/nest-storage-common";
+import type { ParsedSignedUrl, SignedUrlOptions, StorageCoreModuleOptions } from "@anchan828/nest-storage-common";
+import { AbstractStorage, STORAGE_MODULE_OPTIONS, STORAGE_PROVIDER } from "@anchan828/nest-storage-common";
 import type { DynamicModule } from "@nestjs/common";
-import { Injectable, Module } from "@nestjs/common";
+import { Inject, Injectable, Module } from "@nestjs/common";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
-import { existsSync } from "fs";
+import { existsSync, writeFileSync } from "fs";
+import { join } from "path";
 import { dirSync, fileSync, tmpNameSync } from "tmp";
 import { StorageModule } from "./storage.module";
 import { StorageService } from "./storage.service";
@@ -13,6 +14,10 @@ describe("StorageService", () => {
   @Injectable()
   class CustomStorage extends AbstractStorage {
     public provider = "custom";
+
+    constructor(@Inject(STORAGE_MODULE_OPTIONS) protected readonly storageOptions: StorageCoreModuleOptions) {
+      super(storageOptions);
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async upload(dataPath: string, filename: string): Promise<string> {
@@ -54,10 +59,15 @@ describe("StorageService", () => {
   }
   let app: TestingModule;
   let service: StorageService;
+  let cacheDir: string;
   beforeEach(async () => {
+    cacheDir = dirSync().name;
     app = await Test.createTestingModule({
       imports: [
-        StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name }, CustomStorageProviderModule.register()),
+        StorageModule.register(
+          { bucket: "bucket", cacheDir, redis: { options: {}, ttl: 30 } },
+          CustomStorageProviderModule.register(),
+        ),
       ],
     }).compile();
     service = app.get<StorageService>(StorageService);
@@ -70,11 +80,12 @@ describe("StorageService", () => {
   });
 
   it("should call methods", async () => {
-    await service.delete("test.txt");
-    await service.download("test.txt");
+    writeFileSync(join(cacheDir, "test.txt"), "test");
+    await service.upload(join(cacheDir, "test.txt"), "test.txt");
     await service.exists("test.txt");
+    await service.download("test.txt");
     service.parseSignedUrl(await service.getSignedUrl("test.txt", { action: "download" }));
-    await service.upload("test.txt", "test.txt");
+    await service.delete("test.txt");
   });
 
   it("should call compress", async () => {

@@ -4,23 +4,46 @@ import type {
   SignedUrlOptions,
   StorageOptions,
 } from "@anchan828/nest-storage-common";
-import { STORAGE_DEFAULT_SIGNED_URL_EXPIRES, STORAGE_PROVIDER } from "@anchan828/nest-storage-common";
+import {
+  STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
+  STORAGE_MODULE_OPTIONS,
+  STORAGE_PROVIDER,
+} from "@anchan828/nest-storage-common";
 import { Inject, Injectable } from "@nestjs/common";
 import * as compressing from "compressing";
 import { createWriteStream, existsSync } from "fs";
 import { parse } from "path";
 import { tmpNameSync } from "tmp";
-import type { CompressFileEntry, CompressOptions, CompressType } from "./interfaces";
+import type { CompressFileEntry, CompressOptions, CompressType, StorageModuleOptions } from "./interfaces";
+import { RedisService } from "./redis.service";
 import { waitUntil } from "./wait-until";
 @Injectable()
 export class StorageService {
-  constructor(@Inject(STORAGE_PROVIDER) private readonly storage: AbstractStorage) {}
+  #redis?: RedisService;
+
+  constructor(
+    @Inject(STORAGE_MODULE_OPTIONS) moduleOptions: StorageModuleOptions,
+    @Inject(STORAGE_PROVIDER) private readonly storage: AbstractStorage,
+  ) {
+    if (moduleOptions.redis) {
+      this.#redis = new RedisService(moduleOptions.redis);
+    }
+  }
 
   public async upload(dataPath: string, filename: string, options: StorageOptions = {}): Promise<string> {
-    return this.storage.upload(dataPath, filename, options);
+    const dest = await this.storage.upload(dataPath, filename, options);
+
+    if (this.#redis) {
+      await this.#redis.upload(dataPath, this.storage.getDestinationCachePath(filename, options));
+    }
+
+    return dest;
   }
 
   public async download(filename: string, options: StorageOptions = {}): Promise<string> {
+    if (this.#redis) {
+      await this.#redis.download(this.storage.getDestinationCachePath(filename, options));
+    }
     return this.storage.download(filename, options);
   }
 
@@ -93,6 +116,12 @@ export class StorageService {
 
   public parseSignedUrl(url: string): ParsedSignedUrl {
     return this.storage.parseSignedUrl(url);
+  }
+
+  public async close(): Promise<void> {
+    if (this.#redis) {
+      await this.#redis.quit();
+    }
   }
 
   private getCompressStream(
