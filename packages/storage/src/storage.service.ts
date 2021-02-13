@@ -41,10 +41,19 @@ export class StorageService {
   }
 
   public async download(filename: string, options: StorageOptions = {}): Promise<string> {
+    let existsRedisCache = false;
+
     if (this.#redis) {
-      await this.#redis.download(this.storage.getDestinationCachePath(filename, options));
+      existsRedisCache = await this.#redis.download(this.storage.getDestinationCachePath(filename, options));
     }
-    return this.storage.download(filename, options);
+
+    const dataPath = await this.storage.download(filename, options);
+
+    if (this.#redis && !existsRedisCache) {
+      await this.#redis.upload(dataPath, this.storage.getDestinationCachePath(filename, options));
+    }
+
+    return dataPath;
   }
 
   /**

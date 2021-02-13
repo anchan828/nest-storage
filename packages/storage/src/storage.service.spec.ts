@@ -5,6 +5,7 @@ import { Inject, Injectable, Module } from "@nestjs/common";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import { existsSync, writeFileSync } from "fs";
+import * as Redis from "ioredis";
 import { join } from "path";
 import { dirSync, fileSync, tmpNameSync } from "tmp";
 import { StorageModule } from "./storage.module";
@@ -25,7 +26,7 @@ describe("StorageService", () => {
     }
 
     async download(filename: string): Promise<string> {
-      return filename;
+      return this.getDestinationCachePath(filename, this.storageOptions);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
@@ -59,13 +60,11 @@ describe("StorageService", () => {
   }
   let app: TestingModule;
   let service: StorageService;
-  let cacheDir: string;
   beforeEach(async () => {
-    cacheDir = dirSync().name;
     app = await Test.createTestingModule({
       imports: [
         StorageModule.register(
-          { bucket: "bucket", cacheDir, redis: { options: {}, ttl: 30 } },
+          { bucket: "bucket", cacheDir: dirSync().name, redis: { options: {}, ttl: 30 } },
           CustomStorageProviderModule.register(),
         ),
       ],
@@ -80,9 +79,15 @@ describe("StorageService", () => {
   });
 
   it("should call methods", async () => {
-    writeFileSync(join(cacheDir, "test.txt"), "test");
-    await service.upload(join(cacheDir, "test.txt"), "test.txt");
+    const dataPath = join(dirSync().name, "test.txt");
+    writeFileSync(dataPath, "test");
+    await service.upload(dataPath, "test.txt");
     await service.exists("test.txt");
+    await service.download("test.txt");
+
+    const redis = new Redis();
+    await redis.del(...(await redis.keys("*")));
+
     await service.download("test.txt");
     service.parseSignedUrl(await service.getSignedUrl("test.txt", { action: "download" }));
     await service.delete("test.txt");

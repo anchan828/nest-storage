@@ -22,14 +22,23 @@ export class RedisService {
     }
   }
 
-  public async download(destination: string): Promise<void> {
+  /**
+   * Returns true if download data from redis
+   *
+   * @param {string} destination
+   * @return {*}  {Promise<boolean>}
+   * @memberof RedisService
+   */
+  public async download(destination: string): Promise<boolean> {
     const key = `${this.options.prefixKey}:${destination}`;
     const exists = await this.#client.exists(key);
 
-    if (exists) {
+    if (exists === 1) {
       const data = await this.#client.getBuffer(key);
       await writeFileAsync(destination, data);
     }
+
+    return exists === 1;
   }
 
   public async quit(): Promise<void> {
