@@ -31,16 +31,16 @@
     "watch": "node ../../node_modules/typescript/bin/tsc -w"
   },
   "types": "./dist/index.d.ts",
-  "version": "0.2.41",
+  "version": "0.3.0",
   "dependencies": {
-    "@anchan828/nest-storage-common": "^0.2.36",
+    "@anchan828/nest-storage-common": "^0.3.0",
     "compressing": "1.5.1",
     "ioredis": "4.22.0",
     "tmp": "0.2.1"
   },
   "devDependencies": {
-    "@types/supertest": "2.0.10",
     "@types/ioredis": "4.19.4",
+    "@types/supertest": "2.0.10",
     "@types/tmp": "0.2.0",
     "supertest": "6.1.3"
   }
