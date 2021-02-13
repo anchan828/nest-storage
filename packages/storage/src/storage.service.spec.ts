@@ -87,6 +87,7 @@ describe("StorageService", () => {
 
     const redis = new Redis();
     await redis.del(...(await redis.keys("*")));
+    await redis.quit();
 
     await service.download("test.txt");
     service.parseSignedUrl(await service.getSignedUrl("test.txt", { action: "download" }));
