@@ -1,5 +1,5 @@
 import type { StorageCoreModuleOptions, StorageOptions } from "@anchan828/nest-storage-common";
-
+import type { RedisOptions } from "ioredis";
 export type CompressType = "zip" | "tar" | "tgz";
 
 export interface CompressOptions extends StorageOptions {
@@ -12,4 +12,12 @@ export interface CompressFileEntry {
   relativePath: string;
 }
 
-export type StorageModuleOptions = StorageCoreModuleOptions;
+export interface StorageRedisOptions {
+  options: RedisOptions;
+  ttl?: number;
+  prefixKey?: string;
+}
+
+export interface StorageModuleOptions extends StorageCoreModuleOptions {
+  redis?: StorageRedisOptions;
+}

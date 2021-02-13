@@ -7,7 +7,7 @@ const copyFileAsync = promisify(copyFile);
 export abstract class AbstractStorage {
   constructor(protected readonly storageOptions: StorageCoreModuleOptions) {}
 
-  protected getDestinationCachePath(filename: string, options?: StorageOptions): string {
+  public getDestinationCachePath(filename: string, options?: StorageOptions): string {
     const cacheDir = CommonStorageUtils.getCacheDir(this.storageOptions);
 
     const { bucket, name } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
