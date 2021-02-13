@@ -7,6 +7,14 @@ export interface CompressOptions extends StorageOptions {
   destination?: string;
 }
 
+export interface UploadStorageOptions extends StorageOptions {
+  disableRedisCaching?: boolean;
+}
+
+export interface DownloadStorageOptions extends StorageOptions {
+  disableRedisCaching?: boolean;
+}
+
 export interface CompressFileEntry {
   filename: string;
   relativePath: string;

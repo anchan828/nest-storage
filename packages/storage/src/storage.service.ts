@@ -14,7 +14,14 @@ import * as compressing from "compressing";
 import { createWriteStream, existsSync } from "fs";
 import { parse } from "path";
 import { tmpNameSync } from "tmp";
-import type { CompressFileEntry, CompressOptions, CompressType, StorageModuleOptions } from "./interfaces";
+import type {
+  CompressFileEntry,
+  CompressOptions,
+  CompressType,
+  DownloadStorageOptions,
+  StorageModuleOptions,
+  UploadStorageOptions,
+} from "./interfaces";
 import { RedisService } from "./redis.service";
 import { waitUntil } from "./wait-until";
 @Injectable()
@@ -30,26 +37,26 @@ export class StorageService {
     }
   }
 
-  public async upload(dataPath: string, filename: string, options: StorageOptions = {}): Promise<string> {
+  public async upload(dataPath: string, filename: string, options: UploadStorageOptions = {}): Promise<string> {
     const dest = await this.storage.upload(dataPath, filename, options);
 
-    if (this.#redis) {
+    if (this.#redis && !options.disableRedisCaching) {
       await this.#redis.upload(dataPath, this.storage.getDestinationCachePath(filename, options));
     }
 
     return dest;
   }
 
-  public async download(filename: string, options: StorageOptions = {}): Promise<string> {
+  public async download(filename: string, options: DownloadStorageOptions = {}): Promise<string> {
     let existsRedisCache = false;
 
-    if (this.#redis) {
+    if (this.#redis && !options.disableRedisCaching) {
       existsRedisCache = await this.#redis.download(this.storage.getDestinationCachePath(filename, options));
     }
 
     const dataPath = await this.storage.download(filename, options);
 
-    if (this.#redis && !existsRedisCache) {
+    if (this.#redis && !existsRedisCache && !options.disableRedisCaching) {
       await this.#redis.upload(dataPath, this.storage.getDestinationCachePath(filename, options));
     }
 

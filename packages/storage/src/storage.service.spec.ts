@@ -82,8 +82,10 @@ describe("StorageService", () => {
     const dataPath = join(dirSync().name, "test.txt");
     writeFileSync(dataPath, "test");
     await service.upload(dataPath, "test.txt");
+    await service.upload(dataPath, "test.txt", { disableRedisCaching: true });
     await service.exists("test.txt");
     await service.download("test.txt");
+    await service.download("test.txt", { disableRedisCaching: true });
 
     const redis = new Redis();
     await redis.del(...(await redis.keys("*")));
