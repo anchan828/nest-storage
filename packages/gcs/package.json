@@ -31,10 +31,10 @@
     "watch": "node ../../node_modules/typescript/bin/tsc -w"
   },
   "types": "./dist/index.d.ts",
-  "version": "0.3.0",
+  "version": "0.3.5",
   "dependencies": {
-    "@anchan828/nest-storage-common": "^0.3.0",
-    "@google-cloud/storage": "5.7.4"
+    "@anchan828/nest-storage-common": "^0.3.5",
+    "@google-cloud/storage": "5.8.0"
   },
   "devDependencies": {
     "@types/tmp": "0.2.0",
