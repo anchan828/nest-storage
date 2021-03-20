@@ -2,12 +2,12 @@ import type {
   ParsedSignedUrl,
   SignedUrlActionType,
   SignedUrlOptions,
-  StorageCoreModuleOptions,
   StorageOptions,
 } from "@anchan828/nest-storage-common";
 import {
   AbstractStorage,
   CommonStorageUtils,
+  StorageCoreModuleOptions,
   STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
   STORAGE_MODULE_OPTIONS,
   STORAGE_PROVIDER_MODULE_OPTIONS,
@@ -17,7 +17,7 @@ import * as s3UriParser from "amazon-s3-uri";
 import { S3 } from "aws-sdk";
 import { createReadStream, createWriteStream, existsSync, unlinkSync } from "fs";
 import type { Readable } from "stream";
-import type { S3StorageProviderModuleOptions } from "./s3-storage.interface";
+import { S3StorageProviderModuleOptions } from "./s3-storage.interface";
 
 @Injectable()
 export class S3Storage extends AbstractStorage {
