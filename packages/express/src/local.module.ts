@@ -11,7 +11,7 @@ import * as cors from "cors";
 import * as multer from "multer";
 import { join } from "path";
 import { SIGNED_URL_CONTROLLER_PATH } from "./constants";
-import type { LocalStorageProviderModuleOptions } from "./interfaces";
+import { LocalStorageProviderModuleOptions } from "./interfaces";
 import { LocalStorage } from "./local.storage";
 import { StorageDeleteMiddleware, StorageDownloadMiddleware, StorageUploadMiddleware } from "./middlewares";
 

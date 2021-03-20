@@ -1,10 +1,6 @@
-import type {
-  AbstractStorage,
-  ParsedSignedUrl,
-  SignedUrlOptions,
-  StorageOptions,
-} from "@anchan828/nest-storage-common";
+import type { ParsedSignedUrl, SignedUrlOptions, StorageOptions } from "@anchan828/nest-storage-common";
 import {
+  AbstractStorage,
   STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
   STORAGE_MODULE_OPTIONS,
   STORAGE_PROVIDER,
@@ -19,9 +15,9 @@ import type {
   CompressOptions,
   CompressType,
   DownloadStorageOptions,
-  StorageModuleOptions,
   UploadStorageOptions,
 } from "./interfaces";
+import { StorageModuleOptions } from "./interfaces";
 import { RedisService } from "./redis.service";
 import { waitUntil } from "./wait-until";
 @Injectable()
