@@ -1,9 +1,4 @@
-import type {
-  ParsedSignedUrl,
-  SignedUrlOptions,
-  StorageCoreModuleOptions,
-  StorageOptions,
-} from "@anchan828/nest-storage-common";
+import type { ParsedSignedUrl, SignedUrlOptions, StorageOptions } from "@anchan828/nest-storage-common";
 import {
   AbstractStorage,
   CommonStorageUtils,
@@ -11,6 +6,7 @@ import {
   STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
   STORAGE_MODULE_OPTIONS,
   STORAGE_PROVIDER_MODULE_OPTIONS,
+  StorageCoreModuleOptions,
 } from "@anchan828/nest-storage-common";
 import { Inject, Injectable } from "@nestjs/common";
 import { existsSync, unlinkSync } from "fs";
@@ -18,7 +14,7 @@ import * as jwt from "jsonwebtoken";
 import { join } from "path";
 import { URL } from "url";
 import { SIGNED_URL_CONTROLLER_PATH, SIGNED_URL_CONTROLLER_TOKEN } from "./constants";
-import type { LocalStorageProviderModuleOptions } from "./interfaces";
+import { LocalStorageProviderModuleOptions } from "./interfaces";
 
 @Injectable()
 export class LocalStorage extends AbstractStorage {
