@@ -12,7 +12,8 @@ describe("LocalStorage", () => {
   beforeEach(async () => {
     const app = await Test.createTestingModule({
       imports: [
-        StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name }, LocalStorageProviderModule.register()),
+        StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name }),
+        LocalStorageProviderModule.register(),
       ],
     }).compile();
     service = app.get<StorageService>(StorageService);
@@ -110,15 +111,13 @@ describe("LocalStorage", () => {
     it("should set signedUrlController property", async () => {
       const app = await Test.createTestingModule({
         imports: [
-          StorageModule.register(
-            {
-              bucket: "bucket",
-              cacheDir: dirSync().name,
-            },
-            LocalStorageProviderModule.register({
-              signedUrlController: { endpoint: "http://localhost:3000", path: "changedPath", token: "changedToken" },
-            }),
-          ),
+          StorageModule.register({
+            bucket: "bucket",
+            cacheDir: dirSync().name,
+          }),
+          LocalStorageProviderModule.register({
+            signedUrlController: { endpoint: "http://localhost:3000", path: "changedPath", token: "changedToken" },
+          }),
         ],
       }).compile();
       service = app.get<StorageService>(StorageService);

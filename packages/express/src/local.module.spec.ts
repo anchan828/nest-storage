@@ -7,7 +7,7 @@ describe("LocalStorageProviderModule", () => {
 
   it("should set middlewares (register - register)", async () => {
     const module = await Test.createTestingModule({
-      imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageProviderModule.register())],
+      imports: [StorageModule.register({ bucket: "bucket" }), LocalStorageProviderModule.register()],
     }).compile();
     app = module.createNestApplication(undefined, { bodyParser: false });
     await app.init();
@@ -17,10 +17,8 @@ describe("LocalStorageProviderModule", () => {
   it("should set middlewares (register - registerAsync)", async () => {
     const module = await Test.createTestingModule({
       imports: [
-        StorageModule.register(
-          { bucket: "bucket" },
-          LocalStorageProviderModule.registerAsync({ useFactory: () => ({}) }),
-        ),
+        StorageModule.register({ bucket: "bucket" }),
+        LocalStorageProviderModule.registerAsync({ useFactory: () => ({}) }),
       ],
     }).compile();
     app = module.createNestApplication(undefined, { bodyParser: false });
@@ -31,10 +29,8 @@ describe("LocalStorageProviderModule", () => {
   it("should set middlewares (registerAsync - registerAsync)", async () => {
     const module = await Test.createTestingModule({
       imports: [
-        StorageModule.registerAsync(
-          { useFactory: () => ({ bucket: "bucket" }) },
-          LocalStorageProviderModule.registerAsync({ useFactory: () => ({}) }),
-        ),
+        StorageModule.registerAsync({ useFactory: () => ({ bucket: "bucket" }) }),
+        LocalStorageProviderModule.registerAsync({ useFactory: () => ({}) }),
       ],
     }).compile();
     app = module.createNestApplication(undefined, { bodyParser: false });
@@ -45,10 +41,8 @@ describe("LocalStorageProviderModule", () => {
   it("should set middlewares (registerAsync - register)", async () => {
     const module = await Test.createTestingModule({
       imports: [
-        StorageModule.registerAsync(
-          { useFactory: () => ({ bucket: "bucket" }) },
-          LocalStorageProviderModule.register({}),
-        ),
+        StorageModule.registerAsync({ useFactory: () => ({ bucket: "bucket" }) }),
+        LocalStorageProviderModule.register({}),
       ],
     }).compile();
     app = module.createNestApplication(undefined, { bodyParser: false });

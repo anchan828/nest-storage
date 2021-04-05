@@ -8,14 +8,24 @@ npm i @anchan828/nest-storage @anchan828/nest-storage-express
 
 ## Usage
 
+You need to import 2 modules
+
+- StorageModule
+  - This is core module
+- ProviderModule
+  - The storage provider you want to use
+
 ```ts
-StorageModule.register(
-  {
-    bucket: "bucket",
-    cacheDir: "path/to/cacheDir",
-  },
-  LocalStorageProviderModule.register(),
-);
+@Module({
+  imports: [
+    StorageModule.register({
+      bucket: "bucket",
+      cacheDir: "path/to/cacheDir",
+    }),
+    LocalStorageProviderModule.register(),
+  ],
+})
+export class AppModule {}
 ```
 
 ```ts

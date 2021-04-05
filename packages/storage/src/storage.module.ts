@@ -13,32 +13,22 @@ export class StorageModule implements OnModuleDestroy {
     await this.service.close();
   }
 
-  public static register<Options extends StorageModuleOptions = StorageModuleOptions>(
-    options: Options,
-    storageProviderModule: DynamicModule,
-  ): DynamicModule {
+  public static register<Options extends StorageModuleOptions = StorageModuleOptions>(options: Options): DynamicModule {
     const providers = [StorageService];
     return {
       exports: providers,
-      imports: [
-        StorageCoreModule.registerAsync({
-          imports: [storageProviderModule],
-          useFactory: () => options,
-        }),
-      ],
+      imports: [StorageCoreModule.register(options)],
       module: StorageModule,
       providers,
     };
   }
 
-  public static registerAsync(
-    options: StorageModuleAsyncOptions<StorageCoreModuleOptions>,
-    storageProviderModule: DynamicModule,
-  ): DynamicModule {
+  public static registerAsync(options: StorageModuleAsyncOptions<StorageCoreModuleOptions>): DynamicModule {
     const providers = [StorageService];
+
     return {
       exports: providers,
-      imports: [StorageCoreModule.registerAsync(options), storageProviderModule],
+      imports: [StorageCoreModule.registerAsync(options)],
       module: StorageModule,
       providers,
     };

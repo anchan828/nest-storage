@@ -9,16 +9,19 @@ npm i @anchan828/nest-storage @anchan828/nest-storage-s3
 ## Usage
 
 ```ts
-StorageModule.register(
-  {
-    bucket: "bucket",
-    cacheDir: "path/to/cacheDir",
-  },
-  S3ProviderModule.register({
-    accessKeyId: "AWSAccessKeyId",
-    secretAccessKey: "AWSSecretKey",
-  }),
-);
+@Module({
+  imports: [
+    StorageModule.register({
+      bucket: "bucket",
+      cacheDir: "path/to/cacheDir",
+    }),
+    S3ProviderModule.register({
+      accessKeyId: "AWSAccessKeyId",
+      secretAccessKey: "AWSSecretKey",
+    }),
+  ],
+})
+export class AppModule {}
 ```
 
 ```ts

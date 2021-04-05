@@ -26,12 +26,10 @@ describe("LocalStorageProviderModule", () => {
   it("should compile register", async () => {
     const app = await Test.createTestingModule({
       imports: [
-        StorageModule.register(
-          {
-            cacheDir: dirSync().name,
-          },
-          LocalStorageProviderModule.register(),
-        ),
+        StorageModule.register({
+          cacheDir: dirSync().name,
+        }),
+        LocalStorageProviderModule.register(),
       ],
     }).compile();
     shouldGetProviders(app);
@@ -40,18 +38,16 @@ describe("LocalStorageProviderModule", () => {
   it("should compile register with signedUrlController", async () => {
     const app = await Test.createTestingModule({
       imports: [
-        StorageModule.register(
-          {
-            cacheDir: dirSync().name,
+        StorageModule.register({
+          cacheDir: dirSync().name,
+        }),
+        LocalStorageProviderModule.register({
+          signedUrlController: {
+            endpoint: "http://localhost:3000",
+            path: "changed",
+            token: "change token",
           },
-          LocalStorageProviderModule.register({
-            signedUrlController: {
-              endpoint: "http://localhost:3000",
-              path: "changed",
-              token: "change token",
-            },
-          }),
-        ),
+        }),
       ],
     }).compile();
     shouldGetProviders(app);
@@ -60,26 +56,49 @@ describe("LocalStorageProviderModule", () => {
   it("should compile registerAsync", async () => {
     const app = await Test.createTestingModule({
       imports: [
-        StorageModule.registerAsync(
-          {
-            useFactory: () => {
-              return {
-                cacheDir: dirSync().name,
-              };
-            },
+        StorageModule.registerAsync({
+          useFactory: () => {
+            return {
+              cacheDir: dirSync().name,
+            };
           },
-          LocalStorageProviderModule.registerAsync({
-            useFactory: () => {
-              return {
-                signedUrlController: {
-                  endpoint: "http://localhost:3000",
-                  path: "changed",
-                  token: "change token",
-                },
-              };
-            },
-          }),
-        ),
+        }),
+        LocalStorageProviderModule.registerAsync({
+          useFactory: () => {
+            return {
+              signedUrlController: {
+                endpoint: "http://localhost:3000",
+                path: "changed",
+                token: "change token",
+              },
+            };
+          },
+        }),
+      ],
+    }).compile();
+    shouldGetProviders(app);
+  });
+  it("should compile registerAsync", async () => {
+    const app = await Test.createTestingModule({
+      imports: [
+        StorageModule.registerAsync({
+          useFactory: () => {
+            return {
+              cacheDir: dirSync().name,
+            };
+          },
+        }),
+        LocalStorageProviderModule.registerAsync({
+          useFactory: () => {
+            return {
+              signedUrlController: {
+                endpoint: "http://localhost:3000",
+                path: "changed",
+                token: "change token",
+              },
+            };
+          },
+        }),
       ],
     }).compile();
     shouldGetProviders(app);

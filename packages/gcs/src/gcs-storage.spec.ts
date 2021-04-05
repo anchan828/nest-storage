@@ -16,15 +16,10 @@ describe("GoogleCloudStorage", () => {
     cacheDir = dirSync().name;
     const app = await Test.createTestingModule({
       imports: [
-        StorageModule.register(
-          {
-            bucket,
-            cacheDir,
-          },
-          GoogleCloudStorageProviderModule.register({
-            keyFilename: process.env.NEST_STORAGE_GCS_KEY,
-          }),
-        ),
+        StorageModule.register({ bucket, cacheDir }),
+        GoogleCloudStorageProviderModule.register({
+          keyFilename: process.env.NEST_STORAGE_GCS_KEY,
+        }),
       ],
     }).compile();
     service = app.get<StorageService>(StorageService);

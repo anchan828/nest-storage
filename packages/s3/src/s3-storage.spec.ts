@@ -14,17 +14,15 @@ describe("S3Storage", () => {
     cacheDir = dirSync().name;
     const app = await Test.createTestingModule({
       imports: [
-        StorageModule.register(
-          {
-            bucket,
-            cacheDir,
-          },
-          S3ProviderModule.register({
-            accessKeyId: process.env.NEST_STORAGE_S3_KEY,
-            region: "ap-northeast-1",
-            secretAccessKey: process.env.NEST_STORAGE_S3_SECRET_KEY,
-          }),
-        ),
+        StorageModule.register({
+          bucket,
+          cacheDir,
+        }),
+        S3ProviderModule.register({
+          accessKeyId: process.env.NEST_STORAGE_S3_KEY,
+          region: "ap-northeast-1",
+          secretAccessKey: process.env.NEST_STORAGE_S3_SECRET_KEY,
+        }),
       ],
     }).compile();
     service = app.get<StorageService>(StorageService);

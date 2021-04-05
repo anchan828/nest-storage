@@ -69,10 +69,8 @@ describe("StorageService", () => {
   beforeEach(async () => {
     app = await Test.createTestingModule({
       imports: [
-        StorageModule.register(
-          { bucket: "bucket", cacheDir: dirSync().name, redis: { options: {}, ttl: 30 } },
-          CustomStorageProviderModule.register(),
-        ),
+        StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name, redis: { options: {}, ttl: 30 } }),
+        CustomStorageProviderModule.register(),
       ],
     }).compile();
     service = app.get<StorageService>(StorageService);
