@@ -20,7 +20,12 @@ export class StorageModule implements OnModuleDestroy {
     const providers = [StorageService];
     return {
       exports: providers,
-      imports: [StorageCoreModule.register(options), storageProviderModule],
+      imports: [
+        StorageCoreModule.registerAsync({
+          imports: [storageProviderModule],
+          useFactory: () => options,
+        }),
+      ],
       module: StorageModule,
       providers,
     };

@@ -6,7 +6,7 @@ import {
   STORAGE_PROVIDER_MODULE_OPTIONS,
 } from "@anchan828/nest-storage-common";
 import type { ClassProvider, DynamicModule, MiddlewareConsumer, NestModule } from "@nestjs/common";
-import { Inject, Module, RequestMethod } from "@nestjs/common";
+import { Global, Inject, Module, RequestMethod } from "@nestjs/common";
 import * as cors from "cors";
 import * as multer from "multer";
 import { join } from "path";
@@ -18,6 +18,7 @@ import { StorageDeleteMiddleware, StorageDownloadMiddleware, StorageUploadMiddle
 const storageProvider = { provide: STORAGE_PROVIDER, useClass: LocalStorage } as ClassProvider;
 
 @Module({})
+@Global()
 export class LocalStorageProviderModule implements NestModule {
   public static register(options: LocalStorageProviderModuleOptions = {}): DynamicModule {
     return {
