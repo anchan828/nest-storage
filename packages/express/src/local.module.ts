@@ -44,7 +44,7 @@ export class LocalStorageProviderModule implements NestModule {
 
   public configure(consumer: MiddlewareConsumer): void {
     const prefix = this.providerOptions.signedUrlController?.path || SIGNED_URL_CONTROLLER_PATH;
-    const path = `${prefix}/:bucket/*`;
+    const path = `/${prefix}/:bucket/*`.replace(/^\/{1,}/g, "/");
     const upload = multer({ dest: join(CommonStorageUtils.getCacheDir({}), ".multer") }).any();
     consumer
       .apply(cors({ credentials: true, origin: true }), StorageDownloadMiddleware)

@@ -3,10 +3,10 @@ import {
   AbstractStorage,
   CommonStorageUtils,
   FILE_NOT_FOUND,
+  StorageCoreModuleOptions,
   STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
   STORAGE_MODULE_OPTIONS,
   STORAGE_PROVIDER_MODULE_OPTIONS,
-  StorageCoreModuleOptions,
 } from "@anchan828/nest-storage-common";
 import { Inject, Injectable } from "@nestjs/common";
 import { existsSync, unlinkSync } from "fs";
@@ -67,14 +67,18 @@ export class LocalStorage extends AbstractStorage {
       options.expires = STORAGE_DEFAULT_SIGNED_URL_EXPIRES;
     }
 
-    const endpoint = this.providerOptions.signedUrlController?.endpoint;
+    const endpoint = this.providerOptions.signedUrlController?.endpoint || "/";
     const controllerPath = this.providerOptions.signedUrlController?.path || SIGNED_URL_CONTROLLER_PATH;
     const token = this.providerOptions.signedUrlController?.token || SIGNED_URL_CONTROLLER_TOKEN;
     const signature = jwt.sign({ action: options.action, bucket, filename: name }, token, {
       expiresIn: options.expires,
     });
-
-    return [endpoint, controllerPath, bucket, name].filter((x) => x).join("/") + `?signature=${signature}`;
+    return (
+      [endpoint, controllerPath, bucket, name]
+        .filter((x) => x)
+        .join("/")
+        .replace(/^\/{1,}/g, "/") + `?signature=${signature}`
+    );
   }
 
   public parseSignedUrl(url: string): ParsedSignedUrl {
@@ -86,7 +90,11 @@ export class LocalStorage extends AbstractStorage {
         `Invalid pathname '${urlObject.pathname}'. pathname should be '${controllerPath}/bucket/path/to/filename.txt'`,
       );
     }
-    const [, bucket, ...filename] = urlObject.pathname.replace(new RegExp(`^/?${controllerPath}`), "").split("/");
+
+    const [, bucket, ...filename] = urlObject.pathname
+      .replace(/^\/{1,}/g, "/")
+      .replace(new RegExp(`^/?${controllerPath}`), "")
+      .split("/");
 
     return {
       bucket,
