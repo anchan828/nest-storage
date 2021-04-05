@@ -1,4 +1,8 @@
-import type { StorageCoreModuleOptions, StorageOptions } from "@anchan828/nest-storage-common";
+import type {
+  StorageCoreModuleOptions,
+  StorageCoreModuleOptionsFactory,
+  StorageOptions,
+} from "@anchan828/nest-storage-common";
 import type { RedisOptions } from "ioredis";
 export type CompressType = "zip" | "tar" | "tgz";
 
@@ -29,3 +33,5 @@ export interface StorageRedisOptions {
 export interface StorageModuleOptions extends StorageCoreModuleOptions {
   redis?: StorageRedisOptions;
 }
+
+export type StorageModuleOptionsFactory = StorageCoreModuleOptionsFactory<StorageModuleOptions>;
