@@ -40,7 +40,7 @@ export class StorageProviderCoreModule {
     const providers = [{ provide: STORAGE_PROVIDER_MODULE_OPTIONS, useValue: options }];
     return {
       exports: providers,
-      module: StorageCoreModule,
+      module: StorageProviderCoreModule,
       providers,
     };
   }
@@ -51,7 +51,7 @@ export class StorageProviderCoreModule {
     return {
       exports: providers,
       imports: [...(options.imports || [])],
-      module: StorageCoreModule,
+      module: StorageProviderCoreModule,
       providers,
     };
   }
