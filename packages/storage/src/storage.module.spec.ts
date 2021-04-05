@@ -46,6 +46,7 @@ describe("LocalStorageProviderModule", () => {
           },
           LocalStorageProviderModule.register({
             signedUrlController: {
+              endpoint: "http://localhost:3000",
               path: "changed",
               token: "change token",
             },
@@ -71,6 +72,7 @@ describe("LocalStorageProviderModule", () => {
             useFactory: () => {
               return {
                 signedUrlController: {
+                  endpoint: "http://localhost:3000",
                   path: "changed",
                   token: "change token",
                 },

@@ -11,7 +11,7 @@ export interface LocalStorageProviderModuleOptions extends StorageProviderModule
 }
 
 export interface SignedUrlController {
-  endpoint?: string;
+  endpoint: string;
   path?: string;
   token?: string;
 }

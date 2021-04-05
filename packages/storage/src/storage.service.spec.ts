@@ -6,7 +6,7 @@ import {
   STORAGE_PROVIDER,
 } from "@anchan828/nest-storage-common";
 import type { DynamicModule } from "@nestjs/common";
-import { Inject, Injectable, Module } from "@nestjs/common";
+import { Global, Inject, Injectable, Module } from "@nestjs/common";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import { existsSync, writeFileSync } from "fs";
@@ -54,6 +54,7 @@ describe("StorageService", () => {
   }
 
   @Module({})
+  @Global()
   class CustomStorageProviderModule {
     public static register(): DynamicModule {
       return {

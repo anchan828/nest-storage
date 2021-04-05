@@ -1,6 +1,6 @@
 import { StorageProviderCoreModule, STORAGE_PROVIDER } from "@anchan828/nest-storage-common";
 import type { ClassProvider, DynamicModule } from "@nestjs/common";
-import { Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import type {
   GoogleCloudStorageProviderModuleAsyncOptions,
   GoogleCloudStorageProviderModuleOptions,
@@ -10,6 +10,7 @@ import { GoogleCloudStorage } from "./gcs.storage";
 const storageProvider = { provide: STORAGE_PROVIDER, useClass: GoogleCloudStorage } as ClassProvider;
 
 @Module({})
+@Global()
 export class GoogleCloudStorageProviderModule {
   public static register(options: GoogleCloudStorageProviderModuleOptions = {}): DynamicModule {
     return {
