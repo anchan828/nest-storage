@@ -12,7 +12,7 @@ describe("StorageUploadMiddleware", () => {
   let service: StorageService;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageProviderModule.register())],
+      imports: [StorageModule.register({ bucket: "bucket" }), LocalStorageProviderModule.register()],
     }).compile();
     app = module.createNestApplication(undefined, { bodyParser: false });
     await app.init();
@@ -65,7 +65,7 @@ describe("StorageUploadMiddleware", () => {
   it("should throw error if body parser enabled and upload json", async () => {
     await app.close();
     const module = await Test.createTestingModule({
-      imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageProviderModule.register())],
+      imports: [StorageModule.register({ bucket: "bucket" }), LocalStorageProviderModule.register()],
     }).compile();
     app = module.createNestApplication();
     await app.init();

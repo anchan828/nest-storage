@@ -9,7 +9,7 @@ describe("StorageDeleteMiddleware", () => {
   let service: StorageService;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [StorageModule.register({ bucket: "bucket" }, LocalStorageProviderModule.register())],
+      imports: [StorageModule.register({ bucket: "bucket" }), LocalStorageProviderModule.register()],
     }).compile();
     service = module.get<StorageService>(StorageService);
     app = await module.createNestApplication(undefined, { bodyParser: false });
