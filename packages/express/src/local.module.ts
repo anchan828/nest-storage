@@ -1,4 +1,3 @@
-import type { StorageProviderModuleAsyncOptions } from "@anchan828/nest-storage-common";
 import {
   CommonStorageUtils,
   StorageProviderCoreModule,
@@ -11,6 +10,7 @@ import * as cors from "cors";
 import * as multer from "multer";
 import { join } from "path";
 import { SIGNED_URL_CONTROLLER_PATH } from "./constants";
+import type { LocalStorageProviderModuleAsyncOptions } from "./interfaces";
 import { LocalStorageProviderModuleOptions } from "./interfaces";
 import { LocalStorage } from "./local.storage";
 import { StorageDeleteMiddleware, StorageDownloadMiddleware, StorageUploadMiddleware } from "./middlewares";
@@ -29,9 +29,7 @@ export class LocalStorageProviderModule implements NestModule {
     };
   }
 
-  public static registerAsync(
-    options: StorageProviderModuleAsyncOptions<LocalStorageProviderModuleOptions> = {},
-  ): DynamicModule {
+  public static registerAsync(options: LocalStorageProviderModuleAsyncOptions = {}): DynamicModule {
     return {
       exports: [storageProvider],
       imports: [StorageProviderCoreModule.registerAsync(options)],

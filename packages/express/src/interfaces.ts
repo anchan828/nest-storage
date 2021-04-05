@@ -1,4 +1,8 @@
-import type { StorageProviderModuleOptions } from "@anchan828/nest-storage-common";
+import type {
+  StorageProviderModuleAsyncOptions,
+  StorageProviderModuleOptions,
+  StorageProviderModuleOptionsFactory,
+} from "@anchan828/nest-storage-common";
 
 export interface LocalStorageProviderModuleOptions extends StorageProviderModuleOptions {
   /**
@@ -9,6 +13,9 @@ export interface LocalStorageProviderModuleOptions extends StorageProviderModule
    */
   signedUrlController?: SignedUrlController;
 }
+
+export type LocalStorageProviderModuleAsyncOptions = StorageProviderModuleAsyncOptions<LocalStorageProviderModuleOptions>;
+export type LocalStorageProviderModuleOptionsFactory = StorageProviderModuleOptionsFactory<LocalStorageProviderModuleOptions>;
 
 export interface SignedUrlController {
   endpoint: string;
