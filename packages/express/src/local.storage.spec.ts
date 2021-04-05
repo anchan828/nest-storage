@@ -125,6 +125,26 @@ describe("LocalStorage", () => {
         expect.stringContaining("http://localhost:3000/changedPath/bucket/hoge.txt"),
       );
     });
+
+    it("should set signedUrlController property", async () => {
+      const app = await Test.createTestingModule({
+        imports: [
+          StorageModule.register({
+            bucket: "bucket",
+            cacheDir: dirSync().name,
+          }),
+          LocalStorageProviderModule.register({
+            signedUrlController: {
+              endpoint: "http://localhost:3000/storage",
+            },
+          }),
+        ],
+      }).compile();
+      service = app.get<StorageService>(StorageService);
+      await expect(service.getSignedUrl("hoge.txt", { action: "upload" })).resolves.toEqual(
+        expect.stringContaining("http://localhost:3000/storage/_signed_url/bucket/hoge.txt"),
+      );
+    });
   });
 
   describe("parseSignedUrl", () => {
@@ -147,7 +167,7 @@ describe("LocalStorage", () => {
       expect(() => {
         service.parseSignedUrl("http://localhost:3000/_digfe/bucket");
       }).toThrowError(
-        "Invalid pathname '/_digfe/bucket'. pathname should be '/_signed_url/bucket/path/to/filename.txt'",
+        "Invalid pathname '/_digfe/bucket'. pathname should be '_signed_url/bucket/path/to/filename.txt'",
       );
     });
 

@@ -1,4 +1,4 @@
-export const SIGNED_URL_CONTROLLER_PATH = "/_signed_url";
+export const SIGNED_URL_CONTROLLER_PATH = "_signed_url";
 
 /**
  * Default token. You should change token on production
