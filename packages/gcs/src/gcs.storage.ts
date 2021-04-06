@@ -64,13 +64,23 @@ export class GoogleCloudStorage extends AbstractStorage {
     const { bucket, name } = this.getBuketAndFilename(filename, options);
     const { action, contentType } = options;
     const expires = options.expires || STORAGE_DEFAULT_SIGNED_URL_EXPIRES;
-    const [url] = await bucket.file(name).getSignedUrl({
+
+    const customHost = this.providerOptions.signedUrlOptions?.endpoint;
+
+    let [url] = await bucket.file(name).getSignedUrl({
       action: this.getAction(action),
-      cname: this.providerOptions.signedUrlOptions?.endpoint,
+      cname: customHost,
       contentType,
       expires: Date.now() + expires,
       version: "v4",
     });
+
+    if (customHost && this.providerOptions.signedUrlOptions?.excludeBucketName !== true) {
+      const urlObject = new URL(url);
+      urlObject.pathname = `/${bucket.name}${urlObject.pathname}`;
+      url = urlObject.toString();
+    }
+
     return url;
   }
 

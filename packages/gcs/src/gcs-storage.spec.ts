@@ -126,6 +126,42 @@ describe("GoogleCloudStorage", () => {
           .then((res) => res.status),
       ).resolves.toBe(200);
     });
+
+    it("should get signed url with custom host", async () => {
+      cacheDir = dirSync().name;
+      const app = await Test.createTestingModule({
+        imports: [
+          StorageModule.register({ bucket, cacheDir }),
+          GoogleCloudStorageProviderModule.register({
+            apiEndpoint: "http://localhost:4443",
+            keyFilename: process.env.NEST_STORAGE_GCS_KEY,
+            signedUrlOptions: { endpoint: "http://localhost:3000" },
+          }),
+        ],
+      }).compile();
+
+      await expect(
+        app.get<StorageService>(StorageService).getSignedUrl("hoge.txt", { action: "download" }),
+      ).resolves.toEqual(expect.stringContaining("http://localhost:3000/nestjs-storage/hoge.txt?X-Goog-Algorithm="));
+    });
+
+    it("should get signed url with custom host without bucket name", async () => {
+      cacheDir = dirSync().name;
+      const app = await Test.createTestingModule({
+        imports: [
+          StorageModule.register({ bucket, cacheDir }),
+          GoogleCloudStorageProviderModule.register({
+            apiEndpoint: "http://localhost:4443",
+            keyFilename: process.env.NEST_STORAGE_GCS_KEY,
+            signedUrlOptions: { endpoint: "http://localhost:3000", excludeBucketName: true },
+          }),
+        ],
+      }).compile();
+
+      await expect(
+        app.get<StorageService>(StorageService).getSignedUrl("hoge.txt", { action: "download" }),
+      ).resolves.toEqual(expect.stringContaining("http://localhost:3000/hoge.txt?X-Goog-Algorithm="));
+    });
   });
   describe("exists", () => {
     it("should be defined", () => {
