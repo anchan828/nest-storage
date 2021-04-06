@@ -69,5 +69,5 @@ export interface ParsedSignedUrl {
 }
 
 export interface StorageProviderSignedUrlOptions {
-  endpoint: string;
+  endpoint?: string;
 }
