@@ -62,21 +62,18 @@ export class LocalStorage extends AbstractStorage {
   }
 
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
-    if (!this.providerOptions.signedUrlOptions) {
-      throw Error("The signedUrlOptions option is required to use getSignedUrl.");
-    }
-
     const { bucket, name } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
     if (!options.expires) {
       options.expires = STORAGE_DEFAULT_SIGNED_URL_EXPIRES;
     }
 
-    const host = this.providerOptions.signedUrlOptions.endpoint || "/";
-    const controllerPath = this.providerOptions.signedUrlOptions.path || SIGNED_URL_CONTROLLER_PATH;
-    const token = this.providerOptions.signedUrlOptions.token || SIGNED_URL_CONTROLLER_TOKEN;
+    const host = this.providerOptions.signedUrlOptions?.endpoint || "/";
+    const controllerPath = this.providerOptions.signedUrlOptions?.path || SIGNED_URL_CONTROLLER_PATH;
+    const token = this.providerOptions.signedUrlOptions?.token || SIGNED_URL_CONTROLLER_TOKEN;
     const signature = jwt.sign({ action: options.action, bucket, filename: name }, token, {
       expiresIn: options.expires,
     });
+
     return (
       [host, controllerPath, bucket, name]
         .filter((x) => x)
@@ -86,12 +83,8 @@ export class LocalStorage extends AbstractStorage {
   }
 
   public parseSignedUrl(url: string): ParsedSignedUrl {
-    if (!this.providerOptions.signedUrlOptions) {
-      throw Error("The signedUrlOptions option is required to use parseSignedUrl.");
-    }
-
     const urlObject = new URL(url);
-    const controllerPath = this.providerOptions.signedUrlOptions.path || SIGNED_URL_CONTROLLER_PATH;
+    const controllerPath = this.providerOptions.signedUrlOptions?.path || SIGNED_URL_CONTROLLER_PATH;
 
     if (!urlObject.pathname || this.countString("/", urlObject.pathname) < 3) {
       throw new Error(

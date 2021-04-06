@@ -102,20 +102,7 @@ describe("LocalStorage", () => {
     it("should be defined", () => {
       expect(service.getSignedUrl).toBeDefined();
     });
-    it("should throw error", async () => {
-      const app = await Test.createTestingModule({
-        imports: [
-          StorageModule.register({
-            bucket: "bucket",
-            cacheDir: dirSync().name,
-          }),
-          LocalStorageProviderModule.register({}),
-        ],
-      }).compile();
-      await expect(
-        app.get<StorageService>(StorageService).getSignedUrl("hoge.txt", { action: "upload" }),
-      ).rejects.toThrowError("The signedUrlOptions option is required to use getSignedUrl.");
-    });
+
     it("should get signed url", async () => {
       await expect(service.getSignedUrl("hoge.txt", { action: "delete" })).resolves.toEqual(expect.any(String));
       await expect(service.getSignedUrl("hoge.txt", { action: "download" })).resolves.toEqual(expect.any(String));
@@ -162,21 +149,6 @@ describe("LocalStorage", () => {
   describe("parseSignedUrl", () => {
     it("should be defined", () => {
       expect(service.parseSignedUrl).toBeDefined();
-    });
-
-    it("should throw error", async () => {
-      const app = await Test.createTestingModule({
-        imports: [
-          StorageModule.register({
-            bucket: "bucket",
-            cacheDir: dirSync().name,
-          }),
-          LocalStorageProviderModule.register({}),
-        ],
-      }).compile();
-      expect(() => {
-        app.get<StorageService>(StorageService).parseSignedUrl(`http://localhost:3000/`);
-      }).toThrowError("The signedUrlOptions option is required to use parseSignedUrl.");
     });
 
     it("should throw error", () => {

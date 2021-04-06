@@ -43,19 +43,17 @@ export class LocalStorageProviderModule implements NestModule {
   ) {}
 
   public configure(consumer: MiddlewareConsumer): void {
-    if (this.providerOptions.signedUrlOptions) {
-      const prefix = this.providerOptions.signedUrlOptions.path || SIGNED_URL_CONTROLLER_PATH;
-      const path = `/${prefix}/:bucket/*`.replace(/^\/{1,}/g, "/");
-      const upload = multer({ dest: join(CommonStorageUtils.getCacheDir({}), ".multer") }).any();
-      consumer
-        .apply(cors({ credentials: true, origin: true }), StorageDownloadMiddleware)
-        .forRoutes({ method: RequestMethod.GET, path });
-      consumer
-        .apply(cors({ credentials: true, origin: true }), upload, StorageUploadMiddleware)
-        .forRoutes({ method: RequestMethod.PUT, path });
-      consumer
-        .apply(cors({ credentials: true, origin: true }), StorageDeleteMiddleware)
-        .forRoutes({ method: RequestMethod.DELETE, path });
-    }
+    const prefix = this.providerOptions.signedUrlOptions?.path || SIGNED_URL_CONTROLLER_PATH;
+    const path = `/${prefix}/:bucket/*`.replace(/^\/{1,}/g, "/");
+    const upload = multer({ dest: join(CommonStorageUtils.getCacheDir({}), ".multer") }).any();
+    consumer
+      .apply(cors({ credentials: true, origin: true }), StorageDownloadMiddleware)
+      .forRoutes({ method: RequestMethod.GET, path });
+    consumer
+      .apply(cors({ credentials: true, origin: true }), upload, StorageUploadMiddleware)
+      .forRoutes({ method: RequestMethod.PUT, path });
+    consumer
+      .apply(cors({ credentials: true, origin: true }), StorageDeleteMiddleware)
+      .forRoutes({ method: RequestMethod.DELETE, path });
   }
 }
