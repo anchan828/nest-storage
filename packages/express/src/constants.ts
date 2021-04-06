@@ -4,7 +4,7 @@ export const SIGNED_URL_CONTROLLER_PATH = "_signed_url";
  * Default token. You should change token on production
  * @example
  * StorageModule.register({
- *   signedUrlController: {
+ *   signedUrlOptions: {
  *     token: "change token",
  *   },
  * }),

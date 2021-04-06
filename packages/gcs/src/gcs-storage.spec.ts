@@ -146,6 +146,7 @@ describe("GoogleCloudStorage", () => {
     it("should be defined", () => {
       expect(service.parseSignedUrl).toBeDefined();
     });
+
     it("should throw error if invalid host", () => {
       expect(() => {
         service.parseSignedUrl("https://invalid.googleapis.com/nestjs-storage/path/to/hoge.txt");
@@ -175,6 +176,24 @@ describe("GoogleCloudStorage", () => {
         bucket: "nestjs-storage",
         filename: "path/to/hoge.txt",
       } as ParsedSignedUrl);
+    });
+
+    it("should parse signed url with custom host", async () => {
+      cacheDir = dirSync().name;
+      const app = await Test.createTestingModule({
+        imports: [
+          StorageModule.register({ bucket, cacheDir }),
+          GoogleCloudStorageProviderModule.register({
+            apiEndpoint: "http://localhost:4443",
+            keyFilename: process.env.NEST_STORAGE_GCS_KEY,
+            signedUrlOptions: { endpoint: "http://localhost:3000" },
+          }),
+        ],
+      }).compile();
+
+      expect(
+        app.get<StorageService>(StorageService).parseSignedUrl("http://localhost:3000/nestjs-storage/path/to/hoge.txt"),
+      ).toEqual({ bucket: "nestjs-storage", filename: "path/to/hoge.txt" });
     });
   });
 

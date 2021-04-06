@@ -67,14 +67,15 @@ export class LocalStorage extends AbstractStorage {
       options.expires = STORAGE_DEFAULT_SIGNED_URL_EXPIRES;
     }
 
-    const endpoint = this.providerOptions.signedUrlController?.endpoint || "/";
-    const controllerPath = this.providerOptions.signedUrlController?.path || SIGNED_URL_CONTROLLER_PATH;
-    const token = this.providerOptions.signedUrlController?.token || SIGNED_URL_CONTROLLER_TOKEN;
+    const host = this.providerOptions.signedUrlOptions?.endpoint || "/";
+    const controllerPath = this.providerOptions.signedUrlOptions?.path || SIGNED_URL_CONTROLLER_PATH;
+    const token = this.providerOptions.signedUrlOptions?.token || SIGNED_URL_CONTROLLER_TOKEN;
     const signature = jwt.sign({ action: options.action, bucket, filename: name }, token, {
       expiresIn: options.expires,
     });
+
     return (
-      [endpoint, controllerPath, bucket, name]
+      [host, controllerPath, bucket, name]
         .filter((x) => x)
         .join("/")
         .replace(/^\/{1,}/g, "/") + `?signature=${signature}`
@@ -83,7 +84,7 @@ export class LocalStorage extends AbstractStorage {
 
   public parseSignedUrl(url: string): ParsedSignedUrl {
     const urlObject = new URL(url);
-    const controllerPath = this.providerOptions.signedUrlController?.path || SIGNED_URL_CONTROLLER_PATH;
+    const controllerPath = this.providerOptions.signedUrlOptions?.path || SIGNED_URL_CONTROLLER_PATH;
 
     if (!urlObject.pathname || this.countString("/", urlObject.pathname) < 3) {
       throw new Error(

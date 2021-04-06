@@ -13,7 +13,7 @@ describe("LocalStorage", () => {
     const app = await Test.createTestingModule({
       imports: [
         StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name }),
-        LocalStorageProviderModule.register(),
+        LocalStorageProviderModule.register({ signedUrlOptions: { endpoint: "http://localhost:3000" } }),
       ],
     }).compile();
     service = app.get<StorageService>(StorageService);
@@ -102,13 +102,14 @@ describe("LocalStorage", () => {
     it("should be defined", () => {
       expect(service.getSignedUrl).toBeDefined();
     });
+
     it("should get signed url", async () => {
       await expect(service.getSignedUrl("hoge.txt", { action: "delete" })).resolves.toEqual(expect.any(String));
       await expect(service.getSignedUrl("hoge.txt", { action: "download" })).resolves.toEqual(expect.any(String));
       await expect(service.getSignedUrl("hoge.txt", { action: "upload" })).resolves.toEqual(expect.any(String));
     });
 
-    it("should set signedUrlController property", async () => {
+    it("should set signedUrlOptions property", async () => {
       const app = await Test.createTestingModule({
         imports: [
           StorageModule.register({
@@ -116,17 +117,16 @@ describe("LocalStorage", () => {
             cacheDir: dirSync().name,
           }),
           LocalStorageProviderModule.register({
-            signedUrlController: { endpoint: "http://localhost:3000", path: "changedPath", token: "changedToken" },
+            signedUrlOptions: { endpoint: "http://localhost:3000", path: "changedPath", token: "changedToken" },
           }),
         ],
       }).compile();
-      service = app.get<StorageService>(StorageService);
-      await expect(service.getSignedUrl("hoge.txt", { action: "upload" })).resolves.toEqual(
-        expect.stringContaining("http://localhost:3000/changedPath/bucket/hoge.txt"),
-      );
+      await expect(
+        app.get<StorageService>(StorageService).getSignedUrl("hoge.txt", { action: "upload" }),
+      ).resolves.toEqual(expect.stringContaining("http://localhost:3000/changedPath/bucket/hoge.txt"));
     });
 
-    it("should set signedUrlController property", async () => {
+    it("should set signedUrlOptions property", async () => {
       const app = await Test.createTestingModule({
         imports: [
           StorageModule.register({
@@ -134,27 +134,15 @@ describe("LocalStorage", () => {
             cacheDir: dirSync().name,
           }),
           LocalStorageProviderModule.register({
-            signedUrlController: {
+            signedUrlOptions: {
               endpoint: "http://localhost:3000/storage",
             },
           }),
         ],
       }).compile();
-      service = app.get<StorageService>(StorageService);
-      await expect(service.getSignedUrl("hoge.txt", { action: "upload" })).resolves.toEqual(
-        expect.stringContaining("http://localhost:3000/storage/_signed_url/bucket/hoge.txt"),
-      );
-    });
-  });
-
-  describe("parseSignedUrl", () => {
-    it("should be defined", () => {
-      expect(service.getSignedUrl).toBeDefined();
-    });
-    it("should get signed url", async () => {
-      await expect(service.getSignedUrl("hoge.txt", { action: "delete" })).resolves.toEqual(expect.any(String));
-      await expect(service.getSignedUrl("hoge.txt", { action: "download" })).resolves.toEqual(expect.any(String));
-      await expect(service.getSignedUrl("hoge.txt", { action: "upload" })).resolves.toEqual(expect.any(String));
+      await expect(
+        app.get<StorageService>(StorageService).getSignedUrl("hoge.txt", { action: "upload" }),
+      ).resolves.toEqual(expect.stringContaining("http://localhost:3000/storage/_signed_url/bucket/hoge.txt"));
     });
   });
 
@@ -173,7 +161,7 @@ describe("LocalStorage", () => {
 
     it("should parse signed url", async () => {
       const url = await service.getSignedUrl("path/to/hoge.txt", { action: "upload" });
-      expect(service.parseSignedUrl(`http://localhost:3000/${url}`)).toEqual({
+      expect(service.parseSignedUrl(url)).toEqual({
         bucket: "bucket",
         filename: "path/to/hoge.txt",
       } as ParsedSignedUrl);

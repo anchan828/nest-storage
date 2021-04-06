@@ -2,6 +2,6 @@ export {
   LocalStorageProviderModuleAsyncOptions,
   LocalStorageProviderModuleOptions,
   LocalStorageProviderModuleOptionsFactory,
-  SignedUrlController,
+  signedUrlOptions,
 } from "./interfaces";
 export { LocalStorageProviderModule } from "./local.module";
