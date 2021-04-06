@@ -66,6 +66,7 @@ export class GoogleCloudStorage extends AbstractStorage {
     const expires = options.expires || STORAGE_DEFAULT_SIGNED_URL_EXPIRES;
     const [url] = await bucket.file(name).getSignedUrl({
       action: this.getAction(action),
+      cname: this.providerOptions.signedUrlOptions?.endpoint,
       contentType,
       expires: Date.now() + expires,
       version: "v4",
@@ -86,8 +87,10 @@ export class GoogleCloudStorage extends AbstractStorage {
 
   public parseSignedUrl(url: string): ParsedSignedUrl {
     const urlObject = new URL(url);
-    const endopint = new URL(new Storage({ ...this.providerOptions, autoRetry: true, maxRetries: 5 }).apiEndpoint);
-
+    const endopint = new URL(
+      this.providerOptions.signedUrlOptions?.endpoint ||
+        new Storage({ ...this.providerOptions, autoRetry: true, maxRetries: 5 }).apiEndpoint,
+    );
     if (urlObject.host !== endopint.host) {
       throw new Error(`Invalid endopint '${urlObject.host}'. endpoint should be ${endopint.host}`);
     }

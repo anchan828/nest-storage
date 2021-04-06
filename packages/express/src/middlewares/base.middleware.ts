@@ -18,7 +18,7 @@ export abstract class StorageBaseMiddleware implements NestMiddleware<Request, R
   public async use(req: Request, res: Response): Promise<void> {
     const { "0": filename, bucket } = req.params as { "0": string; bucket: string };
     const { signature } = req.query as { signature: string };
-    const token = this.moduleOptions.signedUrlController?.token || SIGNED_URL_CONTROLLER_TOKEN;
+    const token = this.moduleOptions.signedUrlOptions?.token || SIGNED_URL_CONTROLLER_TOKEN;
     const decoded = jwt.verify(signature, token) as { action: SignedUrlActionType; bucket: string; filename: string };
     const action = this.getAction();
     if (decoded.action !== action) {

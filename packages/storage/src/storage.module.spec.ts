@@ -35,14 +35,14 @@ describe("LocalStorageProviderModule", () => {
     shouldGetProviders(app);
   });
 
-  it("should compile register with signedUrlController", async () => {
+  it("should compile register with signedUrlOptions", async () => {
     const app = await Test.createTestingModule({
       imports: [
         StorageModule.register({
           cacheDir: dirSync().name,
         }),
         LocalStorageProviderModule.register({
-          signedUrlController: {
+          signedUrlOptions: {
             endpoint: "http://localhost:3000",
             path: "changed",
             token: "change token",
@@ -66,7 +66,7 @@ describe("LocalStorageProviderModule", () => {
         LocalStorageProviderModule.registerAsync({
           useFactory: () => {
             return {
-              signedUrlController: {
+              signedUrlOptions: {
                 endpoint: "http://localhost:3000",
                 path: "changed",
                 token: "change token",
@@ -91,7 +91,7 @@ describe("LocalStorageProviderModule", () => {
         LocalStorageProviderModule.registerAsync({
           useFactory: () => {
             return {
-              signedUrlController: {
+              signedUrlOptions: {
                 endpoint: "http://localhost:3000",
                 path: "changed",
                 token: "change token",

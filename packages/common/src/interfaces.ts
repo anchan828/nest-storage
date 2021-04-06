@@ -9,7 +9,9 @@ export interface StorageCoreModuleOptions {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface StorageProviderModuleOptions extends StorageOptions {}
+export interface StorageProviderModuleOptions extends StorageOptions {
+  signedUrlOptions?: StorageProviderSignedUrlOptions;
+}
 
 export interface AsyncOptions extends Pick<ModuleMetadata, "imports"> {
   useClass?: Type<any>;
@@ -64,4 +66,8 @@ interface CacheService {
 export interface ParsedSignedUrl {
   bucket: string;
   filename: string;
+}
+
+export interface StorageProviderSignedUrlOptions {
+  endpoint: string;
 }
