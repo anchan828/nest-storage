@@ -18,9 +18,7 @@ describe("GoogleCloudStorage", () => {
       imports: [
         StorageModule.register({ bucket, cacheDir }),
         GoogleCloudStorageProviderModule.register({
-          apiEndpoint: "http://localhost:4443",
           keyFilename: process.env.NEST_STORAGE_GCS_KEY,
-          signedUrlOptions: { endpoint: "http://localhost:3000" },
         }),
       ],
     }).compile();
