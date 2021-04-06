@@ -84,7 +84,7 @@ describe("GoogleCloudStorage", () => {
     });
 
     it("should get signed url", async () => {
-      await expect(service.getSignedUrl("hoge.txt", { action: "delete" })).resolves.toEqual("diujeidjeoi");
+      await expect(service.getSignedUrl("hoge.txt", { action: "delete" })).resolves.toEqual(expect.any(String));
 
       await expect(service.getSignedUrl("hoge.txt", { action: "download" })).resolves.toEqual(expect.any(String));
 
