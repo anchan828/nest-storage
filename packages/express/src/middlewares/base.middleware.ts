@@ -5,6 +5,7 @@ import { BadRequestException, Inject } from "@nestjs/common";
 import type { Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
 import { SIGNED_URL_CONTROLLER_TOKEN } from "../constants";
+import type { MiddlewareHandlerParams, SignedUrlPayload } from "../interfaces";
 import { LocalStorageProviderModuleOptions } from "../interfaces";
 export abstract class StorageBaseMiddleware implements NestMiddleware<Request, Response> {
   constructor(
@@ -13,17 +14,16 @@ export abstract class StorageBaseMiddleware implements NestMiddleware<Request, R
 
   abstract getAction(): SignedUrlActionType;
 
-  abstract handler(bucket: string, filename: string, req?: Request, res?: Response): Promise<void>;
+  abstract handler(params: MiddlewareHandlerParams, req?: Request, res?: Response): Promise<void>;
 
   public async use(req: Request, res: Response): Promise<void> {
     const { "0": filename, bucket } = req.params as { "0": string; bucket: string };
     const { signature } = req.query as { signature: string };
     const token = this.moduleOptions.signedUrlOptions?.token || SIGNED_URL_CONTROLLER_TOKEN;
-    const decoded = jwt.verify(signature, token) as { action: SignedUrlActionType; bucket: string; filename: string };
-    const action = this.getAction();
-    if (decoded.action !== action) {
+    const decoded = jwt.verify(signature, token) as SignedUrlPayload;
+    if (decoded.action !== this.getAction()) {
       // invalid action
-      throw new BadRequestException(`Invalid action '${decoded.action}'. action should be '${action}'`);
+      throw new BadRequestException(`Invalid action '${decoded.action}'. action should be '${this.getAction()}'`);
     }
 
     if (decoded.bucket !== bucket) {
@@ -36,7 +36,11 @@ export abstract class StorageBaseMiddleware implements NestMiddleware<Request, R
       throw new BadRequestException(`Invalid filename '${filename}'`);
     }
 
-    await this.handler(bucket, filename, req, res);
+    await this.handler(
+      { bucket, filename, responseDispositionFilename: decoded.responseDispositionFilename },
+      req,
+      res,
+    );
 
     if (!res.writableEnded) {
       res.status(200).end();

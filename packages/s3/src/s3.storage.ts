@@ -16,6 +16,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import * as s3UriParser from "amazon-s3-uri";
 import { S3 } from "aws-sdk";
 import { createReadStream, createWriteStream, existsSync, unlinkSync } from "fs";
+import { basename } from "path";
 import type { Readable } from "stream";
 import { S3StorageProviderModuleOptions } from "./s3-storage.interface";
 
@@ -103,6 +104,9 @@ export class S3Storage extends AbstractStorage {
       Bucket,
       Expires: this.getExpires(expires),
       Key,
+      ResponseContentDisposition: options.responseDispositionFilename
+        ? `attachment; filename="${basename(options.responseDispositionFilename)}"`
+        : undefined,
     });
   }
 

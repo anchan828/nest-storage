@@ -70,9 +70,18 @@ export class LocalStorage extends AbstractStorage {
     const host = this.providerOptions.signedUrlOptions?.endpoint || "/";
     const controllerPath = this.providerOptions.signedUrlOptions?.path || SIGNED_URL_CONTROLLER_PATH;
     const token = this.providerOptions.signedUrlOptions?.token || SIGNED_URL_CONTROLLER_TOKEN;
-    const signature = jwt.sign({ action: options.action, bucket, filename: name }, token, {
-      expiresIn: options.expires,
-    });
+    const signature = jwt.sign(
+      {
+        action: options.action,
+        bucket,
+        filename: name,
+        responseDispositionFilename: options.responseDispositionFilename,
+      },
+      token,
+      {
+        expiresIn: options.expires,
+      },
+    );
 
     return (
       [host, controllerPath, bucket, name]

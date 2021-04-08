@@ -16,6 +16,7 @@ import type { Bucket } from "@google-cloud/storage";
 import { Storage } from "@google-cloud/storage";
 import { Inject } from "@nestjs/common";
 import { existsSync, unlinkSync } from "fs";
+import { basename } from "path";
 import { URL } from "url";
 import { GoogleCloudStorageProviderModuleOptions } from "./gcs-storage.interface";
 export class GoogleCloudStorage extends AbstractStorage {
@@ -72,6 +73,9 @@ export class GoogleCloudStorage extends AbstractStorage {
       cname: customHost,
       contentType,
       expires: Date.now() + expires,
+      responseDisposition: options.responseDispositionFilename
+        ? `attachment; filename="${basename(options.responseDispositionFilename)}"`
+        : undefined,
       version: "v4",
     });
 

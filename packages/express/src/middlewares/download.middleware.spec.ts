@@ -36,6 +36,28 @@ describe("StorageDownloadMiddleware", () => {
 
     url = await service.getSignedUrl("path/to/download-test.txt", { action: "download" });
 
-    await request(app.getHttpServer()).get(url).expect(200);
+    await request(app.getHttpServer())
+      .get(url)
+      .expect(200)
+      .expect((res) => {
+        expect(res.headers["content-disposition"]).toEqual(`attachment; filename="download-test.txt"`);
+      });
+  });
+
+  it("should download file (responseDispositionFilename)", async () => {
+    let url = await service.getSignedUrl("path/to/download-test.txt", { action: "upload" });
+    await request(app.getHttpServer()).put(url).attach("file", Buffer.from("test"), "test.txt").expect(204);
+
+    url = await service.getSignedUrl("path/to/download-test.txt", {
+      action: "download",
+      responseDispositionFilename: "changed.txt",
+    });
+
+    await request(app.getHttpServer())
+      .get(url)
+      .expect(200)
+      .expect((res) => {
+        expect(res.headers["content-disposition"]).toEqual(`attachment; filename="changed.txt"`);
+      });
   });
 });

@@ -1,4 +1,5 @@
 import type {
+  SignedUrlActionType,
   StorageProviderModuleAsyncOptions,
   StorageProviderModuleOptions,
   StorageProviderModuleOptionsFactory,
@@ -21,4 +22,17 @@ export type LocalStorageProviderModuleOptionsFactory = StorageProviderModuleOpti
 export interface signedUrlOptions extends StorageProviderSignedUrlOptions {
   path?: string;
   token?: string;
+}
+
+export interface SignedUrlPayload {
+  action: SignedUrlActionType;
+  bucket: string;
+  filename: string;
+
+  responseDispositionFilename?: string;
+}
+export interface MiddlewareHandlerParams {
+  bucket: string;
+  filename: string;
+  responseDispositionFilename?: string;
 }
