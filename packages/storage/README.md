@@ -61,3 +61,15 @@ await this.service.getSignedUrl(filename, {
 });
 // => /_signed_url/bucket/test.txt?signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY3Rpb24iOiJ1cGxvYWQiLCJleHBpcmVzIjo5MDAwMDAsImJ1Y2tldCI6ImJ1Y2tldCIsImZpbGVuYW1lIjoidGVzdC50eHQiLCJpYXQiOjE1NzkzMjM2MTYsImV4cCI6MTU4MDIyMzYxNn0.iJfq01VBExCvlGhKcT8hQ9d2lGTLW4miiACX3sG5HO8
 ```
+
+### responseDispositionFilename
+
+You can use the option to customize the file name when downloading file.
+If you use this, `content-disposition: attachment; filename=\"${filename}\"` will be added to the header when downloading.
+
+```ts
+await this.service.getSignedUrl(filename, {
+  action: "download",
+  responseDispositionFilename: "changed-filename.txt",
+});
+```
