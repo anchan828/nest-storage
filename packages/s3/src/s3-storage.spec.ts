@@ -136,7 +136,7 @@ describe("S3Storage", () => {
     it("should download file with responseDispositionFilename", async () => {
       const filename = "path/to/signed-test.txt";
       const url = await service.getSignedUrl(filename, {
-        action: "upload",
+        action: "download",
         responseDispositionFilename: "changed.txt",
       });
       await expect(axios.get(url).then((res) => res.headers["content-disposition"])).resolves.toBe(
