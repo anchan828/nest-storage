@@ -127,6 +127,17 @@ describe("GoogleCloudStorage", () => {
       ).resolves.toBe(200);
     });
 
+    it("should download file with responseDispositionFilename", async () => {
+      const filename = "path/to/signed-test.txt";
+      const url = await service.getSignedUrl(filename, {
+        action: "download",
+        responseDispositionFilename: "changed.txt",
+      });
+      await expect(axios.get(url).then((res) => res.headers["content-disposition"])).resolves.toBe(
+        `attachment; filename=\"changed.txt\"`,
+      );
+    });
+
     it("should get signed url with custom host", async () => {
       cacheDir = dirSync().name;
       const app = await Test.createTestingModule({

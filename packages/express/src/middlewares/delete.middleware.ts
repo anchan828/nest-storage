@@ -1,6 +1,7 @@
 import type { SignedUrlActionType } from "@anchan828/nest-storage-common";
 import { STORAGE_PROVIDER, STORAGE_PROVIDER_MODULE_OPTIONS } from "@anchan828/nest-storage-common";
 import { BadRequestException, Inject, Injectable } from "@nestjs/common";
+import type { SignedUrlPayload } from "../interfaces";
 import { LocalStorageProviderModuleOptions } from "../interfaces";
 import { LocalStorage } from "../local.storage";
 import { StorageBaseMiddleware } from "./base.middleware";
@@ -17,7 +18,7 @@ export class StorageDeleteMiddleware extends StorageBaseMiddleware {
     return "delete";
   }
 
-  async handler(bucket: string, filename: string): Promise<void> {
+  async handler({ bucket, filename }: SignedUrlPayload): Promise<void> {
     await this.storage.delete(filename, { bucket }).catch((e) => {
       throw new BadRequestException(e.message);
     });

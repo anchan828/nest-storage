@@ -5,6 +5,7 @@ import type { Request, Response } from "express";
 import { createWriteStream, statSync } from "fs";
 import { extname } from "path";
 import { tmpNameSync } from "tmp";
+import type { SignedUrlPayload } from "../interfaces";
 import { LocalStorageProviderModuleOptions } from "../interfaces";
 import { LocalStorage } from "../local.storage";
 import { StorageBaseMiddleware } from "./base.middleware";
@@ -21,7 +22,7 @@ export class StorageUploadMiddleware extends StorageBaseMiddleware {
     return "upload";
   }
 
-  async handler(bucket: string, filename: string, req: Request, res: Response): Promise<void> {
+  async handler({ bucket, filename }: SignedUrlPayload, req: Request, res: Response): Promise<void> {
     if (req.body && Object.keys(req.body).length !== 0 && extname(filename) === ".json") {
       throw new BadRequestException(
         "Could not upload json file. Is body-parser enabled? It should be disable: 'NestFactory.create(AppModule, { bodyParser: false })'",

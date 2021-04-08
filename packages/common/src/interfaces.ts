@@ -52,6 +52,8 @@ export interface SignedUrlOptions extends StorageOptions {
 
   contentType?: string;
 
+  responseDispositionFilename?: string;
+
   /**
    * This is used to cache the retrieved URLs.
    */

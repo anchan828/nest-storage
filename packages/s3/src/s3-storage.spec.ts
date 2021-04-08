@@ -132,6 +132,17 @@ describe("S3Storage", () => {
           .then((res) => res.status),
       ).resolves.toBe(200);
     });
+
+    it("should download file with responseDispositionFilename", async () => {
+      const filename = "path/to/signed-test.txt";
+      const url = await service.getSignedUrl(filename, {
+        action: "upload",
+        responseDispositionFilename: "changed.txt",
+      });
+      await expect(axios.get(url).then((res) => res.headers["content-disposition"])).resolves.toBe(
+        `attachment; filename=\"changed.txt\"`,
+      );
+    });
   });
 
   describe("parseSignedUrl", () => {
