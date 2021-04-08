@@ -21,10 +21,9 @@ export abstract class StorageBaseMiddleware implements NestMiddleware<Request, R
     const { signature } = req.query as { signature: string };
     const token = this.moduleOptions.signedUrlOptions?.token || SIGNED_URL_CONTROLLER_TOKEN;
     const decoded = jwt.verify(signature, token) as SignedUrlPayload;
-    const action = this.getAction();
-    if (decoded.action !== action) {
+    if (decoded.action !== this.getAction()) {
       // invalid action
-      throw new BadRequestException(`Invalid action '${decoded.action}'. action should be '${action}'`);
+      throw new BadRequestException(`Invalid action '${decoded.action}'. action should be '${this.getAction()}'`);
     }
 
     if (decoded.bucket !== bucket) {
@@ -38,11 +37,7 @@ export abstract class StorageBaseMiddleware implements NestMiddleware<Request, R
     }
 
     await this.handler(
-      {
-        bucket,
-        filename,
-        responseDispositionFilename: decoded.responseDispositionFilename,
-      },
+      { bucket, filename, responseDispositionFilename: decoded.responseDispositionFilename },
       req,
       res,
     );
