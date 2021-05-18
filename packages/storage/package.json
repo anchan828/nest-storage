@@ -39,7 +39,7 @@
     "tmp": "0.2.1"
   },
   "devDependencies": {
-    "@types/ioredis": "4.26.3",
+    "@types/ioredis": "4.26.4",
     "@types/supertest": "2.0.11",
     "@types/tmp": "0.2.0",
     "supertest": "6.1.3"
