@@ -31,7 +31,7 @@ describe("StorageService", () => {
     }
 
     async download(filename: string): Promise<string> {
-      return this.getDestinationCachePath(filename, this.storageOptions);
+      return await this.getDestinationCachePath(filename, this.storageOptions);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function

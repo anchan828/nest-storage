@@ -9,7 +9,7 @@ import {
   STORAGE_PROVIDER_MODULE_OPTIONS,
 } from "@anchan828/nest-storage-common";
 import { Inject, Injectable } from "@nestjs/common";
-import { existsSync, unlinkSync } from "fs";
+import { existsSync, promises } from "fs";
 import * as jwt from "jsonwebtoken";
 import { join } from "path";
 import { URL } from "url";
@@ -28,12 +28,12 @@ export class LocalStorage extends AbstractStorage {
   }
 
   public async upload(dataPath: string, filename: string, options?: StorageOptions): Promise<string> {
-    await this.copyFileAsync(dataPath, this.getDestinationCachePath(filename, options));
+    await promises.copyFile(dataPath, await this.getDestinationCachePath(filename, options));
     return filename;
   }
 
   public async download(filename: string, options?: StorageOptions): Promise<string> {
-    const destination = this.getDestinationCachePath(filename, options);
+    const destination = await this.getDestinationCachePath(filename, options);
 
     if (!existsSync(destination)) {
       const { bucket, name } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
@@ -51,7 +51,7 @@ export class LocalStorage extends AbstractStorage {
       throw new Error(FILE_NOT_FOUND(bucket, name));
     }
 
-    unlinkSync(dest);
+    await promises.unlink(dest);
   }
 
   public async exists(filename: string, options?: StorageOptions): Promise<boolean> {

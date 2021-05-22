@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync } from "fs";
+import { existsSync, promises } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
 import type { StorageCoreModuleOptions, StorageOptions } from "./interfaces";
@@ -29,7 +29,7 @@ export class CommonStorageUtils {
   public static getCacheDir(storageOptions: StorageCoreModuleOptions): string {
     const cacheDir = storageOptions.cacheDir || join(tmpdir(), "nest-storage");
     if (!existsSync(cacheDir)) {
-      mkdirSync(cacheDir, { recursive: true });
+      await promises.mkdir(cacheDir, { recursive: true });
     }
     return cacheDir;
   }

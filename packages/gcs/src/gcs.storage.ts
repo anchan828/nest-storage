@@ -15,7 +15,7 @@ import {
 import type { Bucket } from "@google-cloud/storage";
 import { Storage } from "@google-cloud/storage";
 import { Inject } from "@nestjs/common";
-import { existsSync, unlinkSync } from "fs";
+import { existsSync, promises } from "fs";
 import { basename } from "path";
 import { URL } from "url";
 import { GoogleCloudStorageProviderModuleOptions } from "./gcs-storage.interface";
@@ -33,12 +33,12 @@ export class GoogleCloudStorage extends AbstractStorage {
   public async upload(dataPath: string, filename: string, options?: StorageOptions): Promise<string> {
     const { bucket, name } = this.getBuketAndFilename(filename, options);
     const [file] = await bucket.upload(dataPath, { destination: name, gzip: true, resumable: false });
-    await this.copyFileAsync(dataPath, this.getDestinationCachePath(filename, options));
+    await promises.copyFile(dataPath, await this.getDestinationCachePath(filename, options));
     return file.name;
   }
 
   public async download(filename: string, options?: StorageOptions): Promise<string> {
-    const destination = this.getDestinationCachePath(filename, options);
+    const destination = await this.getDestinationCachePath(filename, options);
 
     if (!existsSync(destination)) {
       const { bucket, name } = this.getBuketAndFilename(filename, options);
@@ -50,7 +50,7 @@ export class GoogleCloudStorage extends AbstractStorage {
   public async delete(filename: string, options?: StorageOptions): Promise<void> {
     const { bucket, name } = this.getBuketAndFilename(filename, options);
     await bucket.file(name).delete();
-    unlinkSync(this.getDestinationCachePath(filename, options));
+    await promises.unlink(await this.getDestinationCachePath(filename, options));
   }
 
   public async exists(filename: string, options?: StorageOptions): Promise<boolean> {
