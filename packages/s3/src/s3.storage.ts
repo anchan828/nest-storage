@@ -15,7 +15,7 @@ import {
 import { Inject, Injectable } from "@nestjs/common";
 import * as s3UriParser from "amazon-s3-uri";
 import { S3 } from "aws-sdk";
-import { createReadStream, createWriteStream, existsSync, unlinkSync } from "fs";
+import { createReadStream, createWriteStream, existsSync, promises } from "fs";
 import { basename } from "path";
 import type { Readable } from "stream";
 import { S3StorageProviderModuleOptions } from "./s3-storage.interface";
@@ -45,12 +45,12 @@ export class S3Storage extends AbstractStorage {
         Key,
       })
       .promise();
-    await this.copyFileAsync(dataPath, this.getDestinationCachePath(filename, options));
+    await promises.copyFile(dataPath, await this.getDestinationCachePath(filename, options));
     return res.Key;
   }
 
   public async download(filename: string, options?: StorageOptions): Promise<string> {
-    const destination = this.getDestinationCachePath(filename, options);
+    const destination = await this.getDestinationCachePath(filename, options);
 
     if (!existsSync(destination)) {
       const { bucket: Bucket, name: Key } = CommonStorageUtils.parseBuketAndFilename(
@@ -73,7 +73,7 @@ export class S3Storage extends AbstractStorage {
       options,
     );
     await bucket.deleteObject({ Bucket, Key }).promise();
-    unlinkSync(this.getDestinationCachePath(filename, options));
+    await promises.unlink(await this.getDestinationCachePath(filename, options));
   }
 
   public async exists(filename: string, options?: StorageOptions): Promise<boolean> {

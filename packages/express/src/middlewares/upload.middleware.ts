@@ -2,7 +2,7 @@ import type { SignedUrlActionType } from "@anchan828/nest-storage-common";
 import { STORAGE_PROVIDER, STORAGE_PROVIDER_MODULE_OPTIONS } from "@anchan828/nest-storage-common";
 import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import type { Request, Response } from "express";
-import { createWriteStream, statSync } from "fs";
+import { createWriteStream, promises } from "fs";
 import { extname } from "path";
 import { tmpNameSync } from "tmp";
 import type { SignedUrlPayload } from "../interfaces";
@@ -44,7 +44,8 @@ export class StorageUploadMiddleware extends StorageBaseMiddleware {
       dataPath = req.files[0].path;
     } else {
       const file = await this.writeFileStream(req, filename);
-      if (statSync(file).size !== 0) {
+      const stat = await promises.stat(file);
+      if (stat.size !== 0) {
         dataPath = file;
       }
     }

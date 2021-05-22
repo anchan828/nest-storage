@@ -1,10 +1,7 @@
-import { readFile, writeFile } from "fs";
+import { promises } from "fs";
 import * as Redis from "ioredis";
-import { promisify } from "util";
 import type { StorageRedisOptions } from "./interfaces";
 
-const readFileAsync = promisify(readFile);
-const writeFileAsync = promisify(writeFile);
 export class RedisService {
   #client: Redis.Redis;
 
@@ -15,7 +12,7 @@ export class RedisService {
 
   public async upload(dataPath: string, destination: string): Promise<void> {
     const key = `${this.options.prefixKey}:${destination}`;
-    const value = await readFileAsync(dataPath);
+    const value = await promises.readFile(dataPath);
     await this.#client.setBuffer(key, value);
     if (this.options.ttl) {
       await this.#client.expire(key, this.options.ttl);
@@ -35,7 +32,7 @@ export class RedisService {
 
     if (exists === 1) {
       const data = await this.#client.getBuffer(key);
-      await writeFileAsync(destination, data);
+      await promises.writeFile(destination, data);
     }
 
     return exists === 1;

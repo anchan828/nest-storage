@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync } from "fs";
+import { existsSync, promises } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
 import type { StorageCoreModuleOptions, StorageOptions } from "./interfaces";
@@ -26,10 +26,10 @@ export class CommonStorageUtils {
     throw new Error(BUCKET_NOT_DEFINED_MESSAGE);
   }
 
-  public static getCacheDir(storageOptions: StorageCoreModuleOptions): string {
+  public static async getCacheDir(storageOptions: StorageCoreModuleOptions): Promise<string> {
     const cacheDir = storageOptions.cacheDir || join(tmpdir(), "nest-storage");
     if (!existsSync(cacheDir)) {
-      mkdirSync(cacheDir, { recursive: true });
+      await promises.mkdir(cacheDir, { recursive: true });
     }
     return cacheDir;
   }

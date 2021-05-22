@@ -37,7 +37,7 @@ export class StorageService {
     const dest = await this.storage.upload(dataPath, filename, options);
 
     if (this.#redis && !options.disableRedisCaching) {
-      await this.#redis.upload(dataPath, this.storage.getDestinationCachePath(filename, options));
+      await this.#redis.upload(dataPath, await this.storage.getDestinationCachePath(filename, options));
     }
 
     return dest;
@@ -47,13 +47,13 @@ export class StorageService {
     let existsRedisCache = false;
 
     if (this.#redis && !options.disableRedisCaching) {
-      existsRedisCache = await this.#redis.download(this.storage.getDestinationCachePath(filename, options));
+      existsRedisCache = await this.#redis.download(await this.storage.getDestinationCachePath(filename, options));
     }
 
     const dataPath = await this.storage.download(filename, options);
 
     if (this.#redis && !existsRedisCache && !options.disableRedisCaching) {
-      await this.#redis.upload(dataPath, this.storage.getDestinationCachePath(filename, options));
+      await this.#redis.upload(dataPath, await this.storage.getDestinationCachePath(filename, options));
     }
 
     return dataPath;
