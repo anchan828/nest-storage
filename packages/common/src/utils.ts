@@ -26,7 +26,7 @@ export class CommonStorageUtils {
     throw new Error(BUCKET_NOT_DEFINED_MESSAGE);
   }
 
-  public static getCacheDir(storageOptions: StorageCoreModuleOptions): string {
+  public static async getCacheDir(storageOptions: StorageCoreModuleOptions): Promise<string> {
     const cacheDir = storageOptions.cacheDir || join(tmpdir(), "nest-storage");
     if (!existsSync(cacheDir)) {
       await promises.mkdir(cacheDir, { recursive: true });

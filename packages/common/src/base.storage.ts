@@ -6,7 +6,7 @@ export abstract class AbstractStorage {
   constructor(protected readonly storageOptions: StorageCoreModuleOptions) {}
 
   public async getDestinationCachePath(filename: string, options?: StorageOptions): Promise<string> {
-    const cacheDir = CommonStorageUtils.getCacheDir(this.storageOptions);
+    const cacheDir = await CommonStorageUtils.getCacheDir(this.storageOptions);
 
     const { bucket, name } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
 

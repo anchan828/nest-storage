@@ -31,10 +31,10 @@ describe("CommonStorageService", () => {
     });
   });
 
-  describe("getCacheDir", () => {
+  describe("getCacheDir", async () => {
     it("should get cache dir path", async () => {
-      expect(CommonStorageUtils.getCacheDir({})).toEqual(expect.any(String));
-      expect(CommonStorageUtils.getCacheDir({ cacheDir: "test" })).toBe("test");
+      await expect(CommonStorageUtils.getCacheDir({})).resolves.toEqual(expect.any(String));
+      await expect(CommonStorageUtils.getCacheDir({ cacheDir: "test" })).resolves.toBe("test");
     });
   });
 });

@@ -44,7 +44,7 @@ export class LocalStorage extends AbstractStorage {
   }
 
   public async delete(filename: string, options?: StorageOptions): Promise<void> {
-    const cacheDir = CommonStorageUtils.getCacheDir(this.storageOptions);
+    const cacheDir = await CommonStorageUtils.getCacheDir(this.storageOptions);
     const { bucket, name } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
     const dest = join(cacheDir, bucket, name);
     if (!existsSync(dest)) {
@@ -55,7 +55,7 @@ export class LocalStorage extends AbstractStorage {
   }
 
   public async exists(filename: string, options?: StorageOptions): Promise<boolean> {
-    const cacheDir = CommonStorageUtils.getCacheDir(this.storageOptions);
+    const cacheDir = await CommonStorageUtils.getCacheDir(this.storageOptions);
     const { bucket, name } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
     const dest = join(cacheDir, bucket, name);
     return existsSync(dest);

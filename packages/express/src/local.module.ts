@@ -42,10 +42,11 @@ export class LocalStorageProviderModule implements NestModule {
     @Inject(STORAGE_PROVIDER_MODULE_OPTIONS) private readonly providerOptions: LocalStorageProviderModuleOptions,
   ) {}
 
-  public configure(consumer: MiddlewareConsumer): void {
+  public async configure(consumer: MiddlewareConsumer): Promise<void> {
     const prefix = this.providerOptions.signedUrlOptions?.path || SIGNED_URL_CONTROLLER_PATH;
     const path = `/${prefix}/:bucket/*`.replace(/^\/{1,}/g, "/");
-    const upload = multer({ dest: join(CommonStorageUtils.getCacheDir({}), ".multer") }).any();
+    const cacheDir = await CommonStorageUtils.getCacheDir({});
+    const upload = multer({ dest: join(cacheDir, ".multer") }).any();
     consumer
       .apply(cors({ credentials: true, origin: true }), StorageDownloadMiddleware)
       .forRoutes({ method: RequestMethod.GET, path });
