@@ -16,8 +16,10 @@ export interface LocalStorageProviderModuleOptions extends StorageProviderModule
   signedUrlOptions?: signedUrlOptions;
 }
 
-export type LocalStorageProviderModuleAsyncOptions = StorageProviderModuleAsyncOptions<LocalStorageProviderModuleOptions>;
-export type LocalStorageProviderModuleOptionsFactory = StorageProviderModuleOptionsFactory<LocalStorageProviderModuleOptions>;
+export type LocalStorageProviderModuleAsyncOptions =
+  StorageProviderModuleAsyncOptions<LocalStorageProviderModuleOptions>;
+export type LocalStorageProviderModuleOptionsFactory =
+  StorageProviderModuleOptionsFactory<LocalStorageProviderModuleOptions>;
 
 export interface signedUrlOptions extends StorageProviderSignedUrlOptions {
   path?: string;

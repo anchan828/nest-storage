@@ -8,8 +8,10 @@ import type { StorageOptions as GCSStorageOptions } from "@google-cloud/storage"
 export interface GoogleCloudStorageProviderModuleOptions extends StorageProviderModuleOptions, GCSStorageOptions {
   signedUrlOptions?: GoogleCloudStorageProviderSignedUrlOptions;
 }
-export type GoogleCloudStorageProviderModuleAsyncOptions = StorageProviderModuleAsyncOptions<GoogleCloudStorageProviderModuleOptions>;
-export type GoogleCloudStorageProviderModuleOptionsFactory = StorageProviderModuleOptionsFactory<GoogleCloudStorageProviderModuleOptions>;
+export type GoogleCloudStorageProviderModuleAsyncOptions =
+  StorageProviderModuleAsyncOptions<GoogleCloudStorageProviderModuleOptions>;
+export type GoogleCloudStorageProviderModuleOptionsFactory =
+  StorageProviderModuleOptionsFactory<GoogleCloudStorageProviderModuleOptions>;
 
 export interface GoogleCloudStorageProviderSignedUrlOptions extends StorageProviderSignedUrlOptions {
   /**
