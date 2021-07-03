@@ -31,7 +31,7 @@ describe("CommonStorageService", () => {
     });
   });
 
-  describe("getCacheDir", async () => {
+  describe("getCacheDir", () => {
     it("should get cache dir path", async () => {
       await expect(CommonStorageUtils.getCacheDir({})).resolves.toEqual(expect.any(String));
       await expect(CommonStorageUtils.getCacheDir({ cacheDir: "test" })).resolves.toBe("test");
