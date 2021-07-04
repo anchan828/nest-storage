@@ -13,11 +13,11 @@ jobs:
       - uses: actions/checkout@master
       - name: Checkout master
         run: git checkout master
-      - name: Install npm packages
       - uses: actions/setup-node@v2
         with:
           node-version: 16
           cache: npm
+      - name: Install npm package
         run: npm ci
       - name: Bootstrap monorepo packages
         run: |
