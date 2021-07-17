@@ -18,6 +18,12 @@
     "type": "git",
     "url": "git+https://github.com/anchan828/nest-storage.git"
   },
+  "peerDependencies": {
+    "@nestjs/common": "8.0.4"
+  },
+  "devDependencies": {
+    "@nestjs/common": "8.0.4"
+  },
   "scripts": {
     "build": "node ../../node_modules/typescript/bin/tsc -p tsconfig.build.json",
     "build:watch": "node ../../node_modules/typescript/bin/tsc --watch",
