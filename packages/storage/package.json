@@ -42,6 +42,7 @@
     "@nestjs/common": "8.0.4"
   },
   "devDependencies": {
+    "@nestjs/testing": "8.0.4",
     "@types/ioredis": "4.26.6",
     "@types/supertest": "2.0.11",
     "@types/tmp": "0.2.1",
