@@ -31,7 +31,7 @@
     "watch": "node ../../node_modules/typescript/bin/tsc -w"
   },
   "types": "./dist/index.d.ts",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "dependencies": {
     "@anchan828/nest-storage-common": "^0.5.19",
     "@google-cloud/storage": "5.8.5"
@@ -40,11 +40,11 @@
     "@nestjs/common": "^8.0.0"
   },
   "devDependencies": {
+    "@nestjs/common": "8.0.4",
     "@nestjs/testing": "8.0.4",
     "@types/tmp": "0.2.1",
     "axios": "0.21.1",
-    "tmp": "0.2.1",
-    "@nestjs/common": "8.0.4",
-    "rxjs": "7.2.0"
+    "rxjs": "7.2.0",
+    "tmp": "0.2.1"
   }
 }
