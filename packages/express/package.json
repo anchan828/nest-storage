@@ -33,7 +33,7 @@
   "types": "./dist/index.d.ts",
   "version": "0.6.4",
   "dependencies": {
-    "@anchan828/nest-storage-common": "^0.5.19",
+    "@anchan828/nest-storage-common": "*",
     "cors": "^2.8.5",
     "jsonwebtoken": "8.5.1",
     "multer": "1.4.2",
@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@nestjs/common": "8.0.5",
+    "@nestjs/core": "8.0.5",
     "@nestjs/testing": "8.0.5",
     "@types/cors": "2.8.12",
     "@types/express": "4.17.13",
