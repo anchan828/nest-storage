@@ -33,15 +33,16 @@
   "types": "./dist/index.d.ts",
   "version": "0.6.4",
   "dependencies": {
-    "@anchan828/nest-storage-common": "^0.5.19",
+    "@anchan828/nest-storage-common": "*",
     "@google-cloud/storage": "5.11.0"
   },
   "peerDependencies": {
     "@nestjs/common": "^8.0.0"
   },
   "devDependencies": {
-    "@nestjs/common": "8.0.4",
-    "@nestjs/testing": "8.0.4",
+    "@nestjs/common": "8.0.5",
+    "@nestjs/core": "8.0.5",
+    "@nestjs/testing": "8.0.5",
     "@types/tmp": "0.2.1",
     "axios": "0.21.1",
     "rxjs": "7.3.0",
