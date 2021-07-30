@@ -40,8 +40,8 @@
     "@nestjs/common": "^8.0.0"
   },
   "devDependencies": {
-    "@nestjs/common": "8.0.4",
-    "@nestjs/testing": "8.0.4",
+    "@nestjs/common": "8.0.5",
+    "@nestjs/testing": "8.0.5",
     "@types/tmp": "0.2.1",
     "axios": "0.21.1",
     "rxjs": "7.3.0",
