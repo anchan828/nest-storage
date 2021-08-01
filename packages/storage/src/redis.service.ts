@@ -38,6 +38,17 @@ export class RedisService {
     return exists === 1;
   }
 
+  public async delete(destination: string): Promise<boolean> {
+    const key = `${this.options.prefixKey}:${destination}`;
+    const exists = await this.#client.exists(key);
+
+    if (exists === 1) {
+      await this.#client.del(key);
+    }
+
+    return exists === 1;
+  }
+
   public async quit(): Promise<void> {
     await this.#client.quit();
   }

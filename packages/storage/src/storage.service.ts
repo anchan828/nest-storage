@@ -14,6 +14,7 @@ import type {
   CompressFileEntry,
   CompressOptions,
   CompressType,
+  DeleteStorageOptions,
   DownloadStorageOptions,
   UploadStorageOptions,
 } from "./interfaces";
@@ -96,7 +97,11 @@ export class StorageService {
     return options?.destination || dest;
   }
 
-  public async delete(filename: string, options: StorageOptions = {}): Promise<void> {
+  public async delete(filename: string, options: DeleteStorageOptions = {}): Promise<void> {
+    if (this.#redis && !options.disableRedisCaching) {
+      await this.#redis.delete(await this.storage.getDestinationCachePath(filename, options));
+    }
+
     return this.storage.delete(filename, options);
   }
 

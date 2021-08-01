@@ -19,6 +19,10 @@ export interface DownloadStorageOptions extends StorageOptions {
   disableRedisCaching?: boolean;
 }
 
+export interface DeleteStorageOptions extends StorageOptions {
+  disableRedisCaching?: boolean;
+}
+
 export interface CompressFileEntry {
   filename: string;
   relativePath: string;
