@@ -40,7 +40,7 @@ export class StorageDownloadMiddleware extends StorageBaseMiddleware {
             resolve();
           },
         );
-      } catch (e) {
+      } catch (e: any) {
         rejects(new BadRequestException(e.message));
       }
     });
