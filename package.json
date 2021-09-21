@@ -36,7 +36,7 @@
     "@commitlint/config-conventional": "13.1.0",
     "@compodoc/compodoc": "1.1.15",
     "@types/glob": "7.1.4",
-    "@types/jest": "27.0.1",
+    "@types/jest": "27.0.2",
     "@types/node": "16.3.2",
     "@types/prettier": "2.3.2",
     "@types/rimraf": "3.0.2",
