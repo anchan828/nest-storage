@@ -127,7 +127,7 @@ describe("S3Storage", () => {
       await expect(
         axios
           .put(url, createReadStream(tmpFileName), {
-            headers: { "Content-Length": statSync(tmpFileName).size, "Content-Type": contentType },
+            headers: { "Content-Length": `${statSync(tmpFileName).size}`, "Content-Type": contentType },
           })
           .then((res) => res.status),
       ).resolves.toBe(200);
