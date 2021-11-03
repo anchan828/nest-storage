@@ -94,6 +94,30 @@ describe("S3Storage", () => {
     });
   });
 
+  describe("copy", () => {
+    it("should be defined", () => {
+      expect(service.copy).toBeDefined();
+    });
+
+    it("should copy file", async () => {
+      const srcFilename = await service.upload(fileSync().name, "path/to/test.txt");
+      const destFilename = "path/to/copy/test.txt";
+
+      await expect(service.copy(srcFilename, destFilename)).resolves.toBeUndefined();
+      await expect(service.exists("path/to/copy/test.txt")).resolves.toBeTruthy();
+    });
+
+    it("should copy file between bucket", async () => {
+      const srcFilename = await service.upload(fileSync().name, "path/to/test.txt", { bucket: "nestjs-storage-1" });
+      const destFilename = "path/to/copy/test.txt";
+
+      await expect(
+        service.copy(srcFilename, destFilename, { bucket: "nestjs-storage-1" }, { bucket: "nestjs-storage-2" }),
+      ).resolves.toBeUndefined();
+      await expect(service.exists("path/to/copy/test.txt", { bucket: "nestjs-storage-2" })).resolves.toBeTruthy();
+    });
+  });
+
   describe("getSignedUrl", () => {
     it("should be defined", () => {
       expect(service.getSignedUrl).toBeDefined();

@@ -21,10 +21,22 @@ describe("CommonStorageService", () => {
         bucket: "module",
         name: "filename",
       });
+
+      expect(CommonStorageUtils.parseBuketAndFilename("module/filename", { bucket: "module" })).toEqual({
+        bucket: "module",
+        name: "filename",
+      });
     });
 
     it("should get bucket of options", async () => {
       expect(CommonStorageUtils.parseBuketAndFilename("filename", { bucket: "module" }, { bucket: "test" })).toEqual({
+        bucket: "test",
+        name: "filename",
+      });
+
+      expect(
+        CommonStorageUtils.parseBuketAndFilename("test/filename", { bucket: "module" }, { bucket: "test" }),
+      ).toEqual({
         bucket: "test",
         name: "filename",
       });

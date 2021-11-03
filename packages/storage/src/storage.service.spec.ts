@@ -1,4 +1,4 @@
-import type { ParsedSignedUrl, SignedUrlOptions } from "@anchan828/nest-storage-common";
+import type { ParsedSignedUrl, SignedUrlOptions, StorageOptions } from "@anchan828/nest-storage-common";
 import {
   AbstractStorage,
   StorageCoreModuleOptions,
@@ -41,6 +41,18 @@ describe("StorageService", () => {
     async exists(filename: string): Promise<boolean> {
       return false;
     }
+
+    async copy(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      srcFilename: string,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      destFilename: string,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      srcOptions?: StorageOptions,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      destOptions?: StorageOptions,
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+    ): Promise<void> {}
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {

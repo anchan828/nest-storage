@@ -12,6 +12,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { existsSync, promises } from "fs";
 import * as jwt from "jsonwebtoken";
 import { join } from "path";
+import { dirname } from "path/posix";
 import { URL } from "url";
 import { SIGNED_URL_CONTROLLER_PATH, SIGNED_URL_CONTROLLER_TOKEN } from "./constants";
 import { LocalStorageProviderModuleOptions } from "./interfaces";
@@ -28,7 +29,9 @@ export class LocalStorage extends AbstractStorage {
   }
 
   public async upload(dataPath: string, filename: string, options?: StorageOptions): Promise<string> {
-    await promises.copyFile(dataPath, await this.getDestinationCachePath(filename, options));
+    const dest = await this.getDestinationCachePath(filename, options);
+    await promises.mkdir(dirname(dest), { recursive: true });
+    await promises.copyFile(dataPath, dest);
     return filename;
   }
 
@@ -59,6 +62,27 @@ export class LocalStorage extends AbstractStorage {
     const { bucket, name } = CommonStorageUtils.parseBuketAndFilename(filename, this.storageOptions, options);
     const dest = join(cacheDir, bucket, name);
     return existsSync(dest);
+  }
+
+  public async copy(
+    srcFilename: string,
+    destFilename: string,
+    srcOptions?: StorageOptions,
+    destOptions?: StorageOptions,
+  ): Promise<void> {
+    const cacheDir = await CommonStorageUtils.getCacheDir(this.storageOptions);
+    const src = CommonStorageUtils.parseBuketAndFilename(srcFilename, this.storageOptions, srcOptions);
+    const dest = CommonStorageUtils.parseBuketAndFilename(destFilename, this.storageOptions, destOptions);
+
+    const srcRealname = join(cacheDir, src.bucket, src.name);
+    const destRealname = join(cacheDir, dest.bucket, dest.name);
+
+    if (!existsSync(srcRealname)) {
+      throw new Error(FILE_NOT_FOUND(src.bucket, src.name));
+    }
+
+    await promises.mkdir(dirname(destRealname), { recursive: true });
+    await promises.copyFile(srcRealname, destRealname);
   }
 
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {

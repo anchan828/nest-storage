@@ -27,6 +27,13 @@ export abstract class AbstractStorage {
 
   public abstract exists(filename: string, options?: StorageOptions): Promise<boolean>;
 
+  public abstract copy(
+    srcFilename: string,
+    destFilename: string,
+    srcOptions?: StorageOptions,
+    destOptions?: StorageOptions,
+  ): Promise<void>;
+
   public abstract getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string>;
 
   public abstract parseSignedUrl(url: string): ParsedSignedUrl;

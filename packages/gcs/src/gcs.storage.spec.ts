@@ -4,7 +4,7 @@ import axios from "axios";
 import { createReadStream, existsSync, writeFileSync } from "fs";
 import { basename, join } from "path";
 import { dirSync, fileSync, tmpNameSync } from "tmp";
-import { StorageModule, StorageService } from "../../storage";
+import { StorageModule, StorageService } from "../../storage/dist";
 import { GoogleCloudStorageProviderModule } from "./gcs.module";
 import { GoogleCloudStorage } from "./gcs.storage";
 
@@ -75,6 +75,30 @@ describe("GoogleCloudStorage", () => {
       const destFilename = `path/to/${basename(srcFilename)}.txt`;
       await expect(service.upload(srcFilename, destFilename)).resolves.toBe(destFilename);
       await expect(service.delete(destFilename)).resolves.toBeUndefined();
+    });
+  });
+
+  describe("copy", () => {
+    it("should be defined", () => {
+      expect(service.copy).toBeDefined();
+    });
+
+    it("should copy file", async () => {
+      const srcFilename = await service.upload(fileSync().name, "path/to/test.txt");
+      const destFilename = "path/to/copy/test.txt";
+
+      await expect(service.copy(srcFilename, destFilename)).resolves.toBeUndefined();
+      await expect(service.exists("path/to/copy/test.txt")).resolves.toBeTruthy();
+    });
+
+    it("should copy file between bucket", async () => {
+      const srcFilename = await service.upload(fileSync().name, "path/to/test.txt", { bucket: "nestjs-storage-1" });
+      const destFilename = "path/to/copy/test.txt";
+
+      await expect(
+        service.copy(srcFilename, destFilename, { bucket: "nestjs-storage-1" }, { bucket: "nestjs-storage-2" }),
+      ).resolves.toBeUndefined();
+      await expect(service.exists("path/to/copy/test.txt", { bucket: "nestjs-storage-2" })).resolves.toBeTruthy();
     });
   });
 

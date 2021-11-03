@@ -10,11 +10,14 @@ export class CommonStorageUtils {
     options?: StorageOptions,
   ): { bucket: string; name: string } {
     if (options?.bucket) {
-      return { bucket: options.bucket, name: filename };
+      return { bucket: options.bucket, name: filename.replace(new RegExp(`^${options.bucket}\/`, "g"), "") };
     }
 
     if (storageOptions.bucket) {
-      return { bucket: storageOptions.bucket, name: filename };
+      return {
+        bucket: storageOptions.bucket,
+        name: filename.replace(new RegExp(`^${storageOptions.bucket}\/`, "g"), ""),
+      };
     }
 
     const [bucket, ...names] = filename.split("/");
