@@ -109,6 +109,15 @@ export class StorageService {
     return this.storage.exists(filename, options);
   }
 
+  public async copy(
+    srcFilename: string,
+    destFilename: string,
+    srcOptions?: StorageOptions,
+    destOptions?: StorageOptions,
+  ): Promise<void> {
+    return this.storage.copy(srcFilename, destFilename, srcOptions, destOptions);
+  }
+
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
     const cacheKey = `__signed-url-caches:${filename}`;
     if (options.cache?.getCache) {

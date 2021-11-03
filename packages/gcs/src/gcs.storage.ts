@@ -18,7 +18,7 @@ import { Inject } from "@nestjs/common";
 import { existsSync, promises } from "fs";
 import { basename } from "path";
 import { URL } from "url";
-import { GoogleCloudStorageProviderModuleOptions } from "./gcs-storage.interface";
+import { GoogleCloudStorageProviderModuleOptions } from "./gcs.storage.interface";
 export class GoogleCloudStorage extends AbstractStorage {
   public provider = "gcs";
 
@@ -55,10 +55,22 @@ export class GoogleCloudStorage extends AbstractStorage {
 
   public async exists(filename: string, options?: StorageOptions): Promise<boolean> {
     const { bucket, name } = this.getBuketAndFilename(filename, options);
+
     return bucket
       .file(name)
       .exists()
       .then((res) => res[0]);
+  }
+
+  public async copy(
+    srcFilename: string,
+    destFilename: string,
+    srcOptions?: StorageOptions,
+    destOptions?: StorageOptions,
+  ): Promise<void> {
+    const src = this.getBuketAndFilename(srcFilename, srcOptions);
+    const dest = this.getBuketAndFilename(destFilename, destOptions);
+    await src.bucket.file(src.name).copy(dest.bucket.file(dest.name));
   }
 
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {

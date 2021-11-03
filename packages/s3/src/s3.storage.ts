@@ -91,6 +91,18 @@ export class S3Storage extends AbstractStorage {
     }
   }
 
+  public async copy(
+    srcFilename: string,
+    destFilename: string,
+    srcOptions?: StorageOptions,
+    destOptions?: StorageOptions,
+  ): Promise<void> {
+    const bucket = this.getBuket();
+    const src = CommonStorageUtils.parseBuketAndFilename(srcFilename, this.storageOptions, srcOptions);
+    const dest = CommonStorageUtils.parseBuketAndFilename(destFilename, this.storageOptions, destOptions);
+    await bucket.copyObject({ Bucket: dest.bucket, CopySource: `${src.bucket}/${src.name}`, Key: dest.name }).promise();
+  }
+
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
     const bucket = this.getBuket();
     const { bucket: Bucket, name: Key } = CommonStorageUtils.parseBuketAndFilename(
