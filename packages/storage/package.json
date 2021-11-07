@@ -31,9 +31,9 @@
     "watch": "node ../../node_modules/typescript/bin/tsc -w"
   },
   "types": "./dist/index.d.ts",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "dependencies": {
-    "@anchan828/nest-storage-common": "^0.7.0",
+    "@anchan828/nest-storage-common": "^0.7.1",
     "compressing": "1.5.1",
     "ioredis": "4.28.0",
     "tmp": "0.2.1"
