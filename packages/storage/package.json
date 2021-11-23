@@ -35,7 +35,7 @@
   "dependencies": {
     "@anchan828/nest-storage-common": "^0.7.3",
     "compressing": "1.5.1",
-    "ioredis": "4.28.0",
+    "ioredis": "4.28.1",
     "tmp": "0.2.1"
   },
   "peerDependencies": {
