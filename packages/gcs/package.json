@@ -34,7 +34,7 @@
   "version": "0.7.4",
   "dependencies": {
     "@anchan828/nest-storage-common": "^0.7.4",
-    "@google-cloud/storage": "5.16.0"
+    "@google-cloud/storage": "5.16.1"
   },
   "peerDependencies": {
     "@nestjs/common": "^8.0.0"
