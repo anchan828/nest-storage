@@ -40,5 +40,5 @@
     "watch": "node ../../node_modules/typescript/bin/tsc -w"
   },
   "types": "./dist/index.d.ts",
-  "version": "0.7.4"
+  "version": "0.7.5"
 }
