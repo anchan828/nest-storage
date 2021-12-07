@@ -36,7 +36,7 @@
     "@anchan828/nest-storage-common": "^0.7.5",
     "cors": "^2.8.5",
     "jsonwebtoken": "8.5.1",
-    "multer": "1.4.3",
+    "multer": "1.4.4",
     "tmp": "0.2.1"
   },
   "peerDependencies": {
