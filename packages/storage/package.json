@@ -49,6 +49,6 @@
     "@types/supertest": "2.0.11",
     "@types/tmp": "0.2.3",
     "rxjs": "7.5.2",
-    "supertest": "6.2.1"
+    "supertest": "6.2.2"
   }
 }
