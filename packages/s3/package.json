@@ -45,7 +45,7 @@
     "@nestjs/core": "8.3.1",
     "@nestjs/testing": "8.3.1",
     "@types/tmp": "0.2.3",
-    "axios": "0.24.0",
+    "axios": "0.26.0",
     "rxjs": "7.5.4",
     "tmp": "0.2.1"
   }
