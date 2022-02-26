@@ -19,12 +19,15 @@
     "url": "git+https://github.com/anchan828/nest-storage.git"
   },
   "peerDependencies": {
+    "@nestjs/axios": "^0.0.6",
     "@nestjs/common": "^8.0.0"
   },
   "devDependencies": {
+    "@nestjs/axios": "0.0.6",
     "@nestjs/common": "8.3.1",
     "@nestjs/core": "8.3.1",
     "@nestjs/testing": "8.3.1",
+    "axios": "0.26.0",
     "rxjs": "7.5.4"
   },
   "scripts": {
