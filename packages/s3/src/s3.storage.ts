@@ -73,7 +73,12 @@ export class S3Storage extends AbstractStorage {
       options,
     );
     await bucket.deleteObject({ Bucket, Key }).promise();
-    await promises.unlink(await this.getDestinationCachePath(filename, options));
+
+    const cachePath = await this.getDestinationCachePath(filename, options);
+
+    if (existsSync(cachePath)) {
+      await promises.unlink(cachePath);
+    }
   }
 
   public async exists(filename: string, options?: StorageOptions): Promise<boolean> {
