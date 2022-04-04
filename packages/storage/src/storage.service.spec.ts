@@ -10,7 +10,7 @@ import { Global, Inject, Injectable, Module } from "@nestjs/common";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import { existsSync, writeFileSync } from "fs";
-import * as Redis from "ioredis";
+import Redis from "ioredis";
 import { join } from "path";
 import { dirSync, fileSync, tmpNameSync } from "tmp";
 import { StorageModule } from "./storage.module";
