@@ -1,9 +1,9 @@
 import { promises } from "fs";
-import * as Redis from "ioredis";
+import Redis from "ioredis";
 import type { StorageRedisOptions } from "./interfaces";
 
 export class RedisService {
-  #client: Redis.Redis;
+  #client: Redis;
 
   constructor(private readonly options: StorageRedisOptions) {
     this.#client = new Redis(options.options);
@@ -13,7 +13,7 @@ export class RedisService {
   public async upload(dataPath: string, destination: string): Promise<void> {
     const key = `${this.options.prefixKey}:${destination}`;
     const value = await promises.readFile(dataPath);
-    await this.#client.setBuffer(key, value);
+    await this.#client.setBuffer(key, value, "GET");
     if (this.options.ttl) {
       await this.#client.expire(key, this.options.ttl);
     }
@@ -32,7 +32,9 @@ export class RedisService {
 
     if (exists === 1) {
       const data = await this.#client.getBuffer(key);
-      await promises.writeFile(destination, data);
+      if (data) {
+        await promises.writeFile(destination, data);
+      }
     }
 
     return exists === 1;
