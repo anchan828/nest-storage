@@ -4,7 +4,7 @@ import axios from "axios";
 import { createReadStream, existsSync, writeFileSync } from "fs";
 import { basename, join } from "path";
 import { dirSync, fileSync, tmpNameSync } from "tmp";
-import { StorageModule, StorageService } from "../../storage/dist";
+import { StorageModule, StorageService } from "@anchan828/nest-storage";
 import { GoogleCloudStorageProviderModule } from "./gcs.module";
 import { GoogleCloudStorage } from "./gcs.storage";
 
