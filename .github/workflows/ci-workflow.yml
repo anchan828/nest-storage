@@ -2,6 +2,10 @@ name: CI
 
 on: [push]
 
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
 jobs:
   test:
     name: Test
@@ -22,16 +26,13 @@ jobs:
       - name: Set NEST_STORAGE_GCS_KEY env
         run: echo "NEST_STORAGE_GCS_KEY=$HOME/credentials.json" >> $GITHUB_ENV
       - name: Install npm packages
-        run: npm i
+        run: npm ci
       - name: Lint
         run: npm run lint
       - name: Test monorepo packages
-        if: github.repository != 'anchan828/nest-lerna-template'
-        uses: paambaati/codeclimate-action@v3.0.0
+        run: npm test
         env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           NEST_STORAGE_S3_KEY: ${{ secrets.NEST_STORAGE_S3_KEY }}
           NEST_STORAGE_S3_SECRET_KEY: ${{ secrets.NEST_STORAGE_S3_SECRET_KEY }}
-        with:
-          coverageCommand: npm test
-          debug: true
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
