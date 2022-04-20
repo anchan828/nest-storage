@@ -1,23 +1,25 @@
 {
-  "author": "anchan828 <anchan828@gmail.com>",
+  "name": "@anchan828/nest-storage",
+  "version": "0.7.25",
+  "description": "> TODO: description",
+  "homepage": "https://github.com/anchan828/nest-storage/tree/master/packages/storage#readme",
   "bugs": {
     "url": "https://github.com/anchan828/nest-storage/issues"
   },
-  "description": "> TODO: description",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anchan828/nest-storage.git"
+  },
+  "license": "MIT",
+  "author": "anchan828 <anchan828@gmail.com>",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "directories": {
     "dist": "dist"
   },
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/anchan828/nest-storage/tree/master/packages/storage#readme",
-  "license": "MIT",
-  "main": "./dist/index.js",
-  "name": "@anchan828/nest-storage",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/anchan828/nest-storage.git"
-  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "build:watch": "tsc --watch",
@@ -30,16 +32,11 @@
     "test:watch": "jest --watch",
     "watch": "tsc -w"
   },
-  "types": "./dist/index.d.ts",
-  "version": "0.7.25",
   "dependencies": {
     "@anchan828/nest-storage-common": "^0.7.25",
     "compressing": "1.5.1",
     "ioredis": "5.0.4",
     "tmp": "0.2.1"
-  },
-  "peerDependencies": {
-    "@nestjs/common": "^8.0.0"
   },
   "devDependencies": {
     "@nestjs/common": "8.4.4",
@@ -49,5 +46,8 @@
     "@types/tmp": "0.2.3",
     "rxjs": "7.5.5",
     "supertest": "6.2.2"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^8.0.0"
   }
 }
