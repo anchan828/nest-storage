@@ -1,6 +1,6 @@
 {
   "name": "@anchan828/nest-storage-gcs",
-  "version": "0.7.25",
+  "version": "0.7.26",
   "description": "> TODO: description",
   "homepage": "https://github.com/anchan828/nest-storage/tree/master/packages/gcs#readme",
   "bugs": {
@@ -33,11 +33,11 @@
     "watch": "tsc -w"
   },
   "dependencies": {
-    "@anchan828/nest-storage-common": "^0.7.25",
+    "@anchan828/nest-storage-common": "^0.7.26",
     "@google-cloud/storage": "5.19.3"
   },
   "devDependencies": {
-    "@anchan828/nest-storage": "^0.7.24",
+    "@anchan828/nest-storage": "^0.7.26",
     "@nestjs/axios": "0.0.7",
     "@nestjs/common": "8.4.4",
     "@nestjs/core": "8.4.4",
