@@ -119,7 +119,7 @@ export class GoogleCloudStorage extends AbstractStorage {
     const urlObject = new URL(url);
     const endopint = new URL(
       this.providerOptions.signedUrlOptions?.endpoint ||
-        new Storage({ ...this.providerOptions, autoRetry: true, maxRetries: 5 }).apiEndpoint,
+        new Storage({ ...this.providerOptions, retryOptions: { autoRetry: true, maxRetries: 5 } }).apiEndpoint,
     );
     if (urlObject.host !== endopint.host) {
       throw new Error(`Invalid endopint '${urlObject.host}'. endpoint should be ${endopint.host}`);
