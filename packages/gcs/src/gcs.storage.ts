@@ -49,13 +49,12 @@ export class GoogleCloudStorage extends AbstractStorage {
 
   public async delete(filename: string, options?: StorageOptions): Promise<void> {
     const { bucket, name } = this.getBuketAndFilename(filename, options);
-    await bucket.file(name).delete();
-
     const cachePath = await this.getDestinationCachePath(filename, options);
 
     if (existsSync(cachePath)) {
       await promises.unlink(cachePath);
     }
+    await bucket.file(name).delete();
   }
 
   public async exists(filename: string, options?: StorageOptions): Promise<boolean> {
