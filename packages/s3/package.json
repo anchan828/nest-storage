@@ -1,6 +1,6 @@
 {
   "name": "@anchan828/nest-storage-s3",
-  "version": "0.7.30",
+  "version": "0.8.0",
   "description": "> TODO: description",
   "homepage": "https://github.com/anchan828/nest-storage/tree/master/packages/s3#readme",
   "bugs": {
@@ -33,7 +33,7 @@
     "watch": "tsc -w"
   },
   "dependencies": {
-    "@anchan828/nest-storage-common": "^0.7.30",
+    "@anchan828/nest-storage-common": "^0.8.0",
     "amazon-s3-uri": "0.1.1",
     "aws-sdk": "2.1142.0"
   },
