@@ -19,45 +19,20 @@ import type {
   UploadStorageOptions,
 } from "./interfaces";
 import { StorageModuleOptions } from "./interfaces";
-import { RedisService } from "./redis.service";
 import { waitUntil } from "./wait-until";
 @Injectable()
 export class StorageService {
-  #redis?: RedisService;
-
   constructor(
     @Inject(STORAGE_MODULE_OPTIONS) moduleOptions: StorageModuleOptions,
     @Inject(STORAGE_PROVIDER) private readonly storage: AbstractStorage,
-  ) {
-    if (moduleOptions.redis) {
-      this.#redis = new RedisService(moduleOptions.redis);
-    }
-  }
+  ) {}
 
   public async upload(dataPath: string, filename: string, options: UploadStorageOptions = {}): Promise<string> {
-    const dest = await this.storage.upload(dataPath, filename, options);
-
-    if (this.#redis && !options.disableRedisCaching) {
-      await this.#redis.upload(dataPath, await this.storage.getDestinationCachePath(filename, options));
-    }
-
-    return dest;
+    return await this.storage.upload(dataPath, filename, options);
   }
 
   public async download(filename: string, options: DownloadStorageOptions = {}): Promise<string> {
-    let existsRedisCache = false;
-
-    if (this.#redis && !options.disableRedisCaching) {
-      existsRedisCache = await this.#redis.download(await this.storage.getDestinationCachePath(filename, options));
-    }
-
-    const dataPath = await this.storage.download(filename, options);
-
-    if (this.#redis && !existsRedisCache && !options.disableRedisCaching) {
-      await this.#redis.upload(dataPath, await this.storage.getDestinationCachePath(filename, options));
-    }
-
-    return dataPath;
+    return await this.storage.download(filename, options);
   }
 
   /**
@@ -98,10 +73,6 @@ export class StorageService {
   }
 
   public async delete(filename: string, options: DeleteStorageOptions = {}): Promise<void> {
-    if (this.#redis && !options.disableRedisCaching) {
-      await this.#redis.delete(await this.storage.getDestinationCachePath(filename, options));
-    }
-
     return this.storage.delete(filename, options);
   }
 
@@ -142,12 +113,6 @@ export class StorageService {
 
   public parseSignedUrl(url: string): ParsedSignedUrl {
     return this.storage.parseSignedUrl(url);
-  }
-
-  public async close(): Promise<void> {
-    if (this.#redis) {
-      await this.#redis.quit();
-    }
   }
 
   private getCompressStream(

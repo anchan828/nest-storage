@@ -3,7 +3,6 @@ import type {
   StorageCoreModuleOptionsFactory,
   StorageOptions,
 } from "@anchan828/nest-storage-common";
-import type { RedisOptions } from "ioredis";
 export type CompressType = "zip" | "tar" | "tgz";
 
 export interface CompressOptions extends StorageOptions {
@@ -11,31 +10,17 @@ export interface CompressOptions extends StorageOptions {
   destination?: string;
 }
 
-export interface UploadStorageOptions extends StorageOptions {
-  disableRedisCaching?: boolean;
-}
+export type UploadStorageOptions = StorageOptions;
 
-export interface DownloadStorageOptions extends StorageOptions {
-  disableRedisCaching?: boolean;
-}
+export type DownloadStorageOptions = StorageOptions;
 
-export interface DeleteStorageOptions extends StorageOptions {
-  disableRedisCaching?: boolean;
-}
+export type DeleteStorageOptions = StorageOptions;
 
 export interface CompressFileEntry {
   filename: string;
   relativePath: string;
 }
 
-export interface StorageRedisOptions {
-  options: RedisOptions;
-  ttl?: number;
-  prefixKey?: string;
-}
-
-export interface StorageModuleOptions extends StorageCoreModuleOptions {
-  redis?: StorageRedisOptions;
-}
+export type StorageModuleOptions = StorageCoreModuleOptions;
 
 export type StorageModuleOptionsFactory = StorageCoreModuleOptionsFactory<StorageModuleOptions>;
