@@ -16,8 +16,6 @@ jobs:
         with:
           node-version: 16
           cache: npm
-      - name: Set up docker-compose
-        run: docker-compose up -d
       - uses: anchan828/save-to-file@master
         with:
           text: ${{ secrets.GCP_SA_KEY }}

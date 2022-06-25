@@ -10,7 +10,6 @@ import { Global, Inject, Injectable, Module } from "@nestjs/common";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import { existsSync, writeFileSync } from "fs";
-import Redis from "ioredis";
 import { join } from "path";
 import { dirSync, fileSync, tmpNameSync } from "tmp";
 import { StorageModule } from "./storage.module";
@@ -81,7 +80,7 @@ describe("StorageService", () => {
   beforeEach(async () => {
     app = await Test.createTestingModule({
       imports: [
-        StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name, redis: { options: {}, ttl: 30 } }),
+        StorageModule.register({ bucket: "bucket", cacheDir: dirSync().name }),
         CustomStorageProviderModule.register(),
       ],
     }).compile();
@@ -98,16 +97,9 @@ describe("StorageService", () => {
     const dataPath = join(dirSync().name, "test.txt");
     writeFileSync(dataPath, "test");
     await service.upload(dataPath, "test.txt");
-    await service.upload(dataPath, "test.txt", { disableRedisCaching: true });
     await service.exists("test.txt");
     await service.download("test.txt");
-    await service.download("test.txt", { disableRedisCaching: true });
 
-    const redis = new Redis();
-    await redis.del(...(await redis.keys("*")));
-    await redis.quit();
-
-    await service.download("test.txt");
     service.parseSignedUrl(await service.getSignedUrl("test.txt", { action: "download" }));
     await service.delete("test.txt");
   });
