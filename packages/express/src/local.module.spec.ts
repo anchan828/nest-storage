@@ -1,4 +1,5 @@
 import type { INestApplication } from "@nestjs/common";
+import { ExpressAdapter } from "@nestjs/platform-express";
 import { Test } from "@nestjs/testing";
 import { StorageModule } from "../../storage/src/storage.module";
 import { LocalStorageProviderModule } from "./local.module";
@@ -9,7 +10,7 @@ describe("LocalStorageProviderModule", () => {
     const module = await Test.createTestingModule({
       imports: [StorageModule.register({ bucket: "bucket" }), LocalStorageProviderModule.register()],
     }).compile();
-    app = module.createNestApplication(undefined, { bodyParser: false });
+    app = module.createNestApplication(new ExpressAdapter(), { bodyParser: false });
     await app.init();
     await app.close();
   });
@@ -21,7 +22,7 @@ describe("LocalStorageProviderModule", () => {
         LocalStorageProviderModule.registerAsync({ useFactory: () => ({}) }),
       ],
     }).compile();
-    app = module.createNestApplication(undefined, { bodyParser: false });
+    app = module.createNestApplication(new ExpressAdapter(), { bodyParser: false });
     await app.init();
     await app.close();
   });
@@ -33,7 +34,7 @@ describe("LocalStorageProviderModule", () => {
         LocalStorageProviderModule.registerAsync({ useFactory: () => ({}) }),
       ],
     }).compile();
-    app = module.createNestApplication(undefined, { bodyParser: false });
+    app = module.createNestApplication(new ExpressAdapter(), { bodyParser: false });
     await app.init();
     await app.close();
   });
@@ -45,7 +46,7 @@ describe("LocalStorageProviderModule", () => {
         LocalStorageProviderModule.register({}),
       ],
     }).compile();
-    app = module.createNestApplication(undefined, { bodyParser: false });
+    app = module.createNestApplication(new ExpressAdapter(), { bodyParser: false });
     await app.init();
     await app.close();
   });

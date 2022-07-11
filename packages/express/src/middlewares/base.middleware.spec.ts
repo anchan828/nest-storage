@@ -1,4 +1,5 @@
 import type { INestApplication } from "@nestjs/common";
+import { ExpressAdapter } from "@nestjs/platform-express";
 import { Test } from "@nestjs/testing";
 import * as request from "supertest";
 import { StorageModule } from "../../../storage/src/storage.module";
@@ -12,7 +13,7 @@ describe("StorageBaseMiddleware", () => {
       imports: [StorageModule.register({ bucket: "bucket" }), LocalStorageProviderModule.register()],
     }).compile();
     service = module.get<StorageService>(StorageService);
-    app = await module.createNestApplication(undefined, { bodyParser: false });
+    app = await module.createNestApplication(new ExpressAdapter(), { bodyParser: false });
     await app.init();
   });
 
