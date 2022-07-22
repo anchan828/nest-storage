@@ -53,16 +53,6 @@ export interface SignedUrlOptions extends StorageOptions {
   contentType?: string;
 
   responseDispositionFilename?: string;
-
-  /**
-   * This is used to cache the retrieved URLs.
-   */
-  cache?: CacheService;
-}
-
-interface CacheService {
-  getCache: (key: string) => Promise<string | undefined>;
-  setCache: (key: string, signedUrl: string, ttl?: number) => Promise<void>;
 }
 
 export interface ParsedSignedUrl {

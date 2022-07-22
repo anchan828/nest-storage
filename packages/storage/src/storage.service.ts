@@ -1,10 +1,5 @@
 import type { ParsedSignedUrl, SignedUrlOptions, StorageOptions } from "@anchan828/nest-storage-common";
-import {
-  AbstractStorage,
-  STORAGE_DEFAULT_SIGNED_URL_EXPIRES,
-  STORAGE_MODULE_OPTIONS,
-  STORAGE_PROVIDER,
-} from "@anchan828/nest-storage-common";
+import { AbstractStorage, STORAGE_MODULE_OPTIONS, STORAGE_PROVIDER } from "@anchan828/nest-storage-common";
 import { Inject, Injectable } from "@nestjs/common";
 import * as compressing from "compressing";
 import { createWriteStream, existsSync } from "fs";
@@ -90,25 +85,7 @@ export class StorageService {
   }
 
   public async getSignedUrl(filename: string, options: SignedUrlOptions): Promise<string> {
-    const cacheKey = `__signed-url-caches:${filename}`;
-    if (options.cache?.getCache) {
-      const cache = await options.cache.getCache(cacheKey);
-      if (cache) {
-        return cache;
-      }
-    }
-
-    const signedUrl = await this.storage.getSignedUrl(filename, options);
-
-    if (options.cache?.setCache) {
-      await options.cache.setCache(
-        cacheKey,
-        signedUrl,
-        Math.floor((options.expires ?? STORAGE_DEFAULT_SIGNED_URL_EXPIRES) / 1000),
-      );
-    }
-
-    return signedUrl;
+    return await this.storage.getSignedUrl(filename, options);
   }
 
   public parseSignedUrl(url: string): ParsedSignedUrl {
