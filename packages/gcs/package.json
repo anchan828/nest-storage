@@ -39,9 +39,9 @@
   "devDependencies": {
     "@anchan828/nest-storage": "^1.0.3",
     "@nestjs/axios": "0.1.0",
-    "@nestjs/common": "9.0.5",
-    "@nestjs/core": "9.0.5",
-    "@nestjs/testing": "9.0.5",
+    "@nestjs/common": "9.0.7",
+    "@nestjs/core": "9.0.7",
+    "@nestjs/testing": "9.0.7",
     "@types/tmp": "0.2.3",
     "axios": "0.27.2",
     "rxjs": "7.5.6",
