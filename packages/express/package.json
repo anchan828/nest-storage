@@ -1,6 +1,6 @@
 {
   "name": "@anchan828/nest-storage-express",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "> TODO: description",
   "homepage": "https://github.com/anchan828/nest-storage/tree/master/packages/express#readme",
   "bugs": {
@@ -33,7 +33,7 @@
     "watch": "tsc -w"
   },
   "dependencies": {
-    "@anchan828/nest-storage-common": "^1.0.4",
+    "@anchan828/nest-storage-common": "^1.0.5",
     "cors": "^2.8.5",
     "jsonwebtoken": "8.5.1",
     "multer": "1.4.4",
