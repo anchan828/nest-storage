@@ -38,9 +38,9 @@
     "tmp": "0.2.1"
   },
   "devDependencies": {
-    "@nestjs/common": "9.0.7",
-    "@nestjs/core": "9.0.7",
-    "@nestjs/testing": "9.0.7",
+    "@nestjs/common": "9.0.9",
+    "@nestjs/core": "9.0.9",
+    "@nestjs/testing": "9.0.9",
     "@types/supertest": "2.0.12",
     "@types/tmp": "0.2.3",
     "rxjs": "7.5.6",

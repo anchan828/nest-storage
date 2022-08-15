@@ -38,9 +38,9 @@
     "aws-sdk": "2.1194.0"
   },
   "devDependencies": {
-    "@nestjs/common": "9.0.7",
-    "@nestjs/core": "9.0.7",
-    "@nestjs/testing": "9.0.7",
+    "@nestjs/common": "9.0.9",
+    "@nestjs/core": "9.0.9",
+    "@nestjs/testing": "9.0.9",
     "@types/tmp": "0.2.3",
     "axios": "0.27.2",
     "rxjs": "7.5.6",
