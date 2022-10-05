@@ -19,9 +19,11 @@ describe("S3Storage", () => {
           cacheDir,
         }),
         S3ProviderModule.register({
-          accessKeyId: process.env.NEST_STORAGE_S3_KEY,
+          accessKeyId: "test",
+          endpoint: "http://localhost:9090",
           region: "ap-northeast-1",
-          secretAccessKey: process.env.NEST_STORAGE_S3_SECRET_KEY,
+          s3ForcePathStyle: true,
+          secretAccessKey: "test",
         }),
       ],
     }).compile();

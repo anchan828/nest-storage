@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  s3:
+    image: adobe/s3mock
+    ports:
+      - "9090:9090"
+    # tmpfs:
+    #   - /data/nestjs-storage
+    environment:
+      - initialBuckets=nestjs-storage,nestjs-storage-1,nestjs-storage-2
+  gcs:
+    image: fsouza/fake-gcs-server:1.37.12
+    ports:
+      - "4443:4443"
+    command: -scheme http -public-host localhost:4443

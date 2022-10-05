@@ -29,8 +29,5 @@ jobs:
         run: npm run lint
       - name: Test monorepo packages
         run: npm test
-        env:
-          NEST_STORAGE_S3_KEY: ${{ secrets.NEST_STORAGE_S3_KEY }}
-          NEST_STORAGE_S3_SECRET_KEY: ${{ secrets.NEST_STORAGE_S3_SECRET_KEY }}
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
