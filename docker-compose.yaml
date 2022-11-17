@@ -10,7 +10,7 @@ services:
     environment:
       - initialBuckets=nestjs-storage,nestjs-storage-1,nestjs-storage-2
   gcs:
-    image: fsouza/fake-gcs-server:1.42.1
+    image: fsouza/fake-gcs-server:1.42.2
     ports:
       - "4443:4443"
     command: -scheme http -public-host localhost:4443
