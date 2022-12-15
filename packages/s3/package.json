@@ -43,7 +43,7 @@
     "@nestjs/testing": "^9.2.0",
     "@types/tmp": "^0.2.3",
     "axios": "^1.2.0",
-    "rxjs": "^7.6.0",
+    "rxjs": "^7.8.0",
     "tmp": "^0.2.1"
   },
   "peerDependencies": {
