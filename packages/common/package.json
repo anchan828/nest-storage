@@ -37,7 +37,7 @@
     "@nestjs/common": "^9.2.0",
     "@nestjs/core": "^9.2.0",
     "@nestjs/testing": "^9.2.0",
-    "axios": "^1.2.0",
+    "axios": "^1.2.1",
     "rxjs": "^7.8.0"
   },
   "peerDependencies": {
