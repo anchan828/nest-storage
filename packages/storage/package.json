@@ -1,6 +1,6 @@
 {
   "name": "@anchan828/nest-storage",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "description": "> TODO: description",
   "homepage": "https://github.com/anchan828/nest-storage/tree/master/packages/storage#readme",
   "bugs": {
@@ -33,7 +33,7 @@
     "watch": "tsc -w"
   },
   "dependencies": {
-    "@anchan828/nest-storage-common": "^1.0.23",
+    "@anchan828/nest-storage-common": "^1.0.24",
     "compressing": "^1.6.2",
     "tmp": "^0.2.1"
   },
