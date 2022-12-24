@@ -33,7 +33,7 @@
     "watch": "tsc -w"
   },
   "devDependencies": {
-    "@nestjs/axios": "^1.0.0",
+    "@nestjs/axios": "^1.0.1",
     "@nestjs/common": "^9.2.1",
     "@nestjs/core": "^9.2.1",
     "@nestjs/testing": "^9.2.1",
