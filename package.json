@@ -32,8 +32,8 @@
     "watch": "turbo run watch"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.3.0",
-    "@commitlint/config-conventional": "^17.3.0",
+    "@commitlint/cli": "^17.4.0",
+    "@commitlint/config-conventional": "^17.4.0",
     "@compodoc/compodoc": "^1.1.19",
     "@lerna-lite/cli": "^1.13.0",
     "@types/glob": "^8.0.0",
