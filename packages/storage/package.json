@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@anchan828/nest-storage-common": "^1.0.33",
-    "compressing": "^1.7.0",
+    "compressing": "^1.8.0",
     "tmp": "^0.2.1"
   },
   "devDependencies": {
