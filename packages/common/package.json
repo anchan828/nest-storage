@@ -35,7 +35,7 @@
   "devDependencies": {
     "@nestjs/axios": "^2.0.0",
     "@nestjs/common": "^9.3.8",
-    "@nestjs/core": "^9.3.8",
+    "@nestjs/core": "^9.0.0",
     "@nestjs/testing": "^9.3.8",
     "axios": "^1.3.3",
     "rxjs": "^7.8.0"
