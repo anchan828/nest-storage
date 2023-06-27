@@ -35,7 +35,7 @@
   "dependencies": {
     "@anchan828/nest-storage-common": "^1.0.46",
     "amazon-s3-uri": "^0.1.1",
-    "aws-sdk": "^2.1404.0"
+    "aws-sdk": "^2.1405.0"
   },
   "devDependencies": {
     "@nestjs/common": "^10.0.3",
