@@ -1,6 +1,7 @@
 import { promises } from "fs";
 import { dirname, join } from "path";
-import type { ParsedSignedUrl, SignedUrlOptions, StorageCoreModuleOptions, StorageOptions } from "./interfaces";
+import type { ParsedSignedUrl, SignedUrlOptions, StorageOptions } from "./interfaces";
+import { StorageCoreModuleOptions } from "./interfaces";
 import { CommonStorageUtils } from "./utils";
 export abstract class AbstractStorage {
   constructor(protected readonly storageOptions: StorageCoreModuleOptions) {}
