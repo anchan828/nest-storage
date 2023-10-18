@@ -42,7 +42,7 @@
     "@nestjs/common": "10.2.7",
     "@nestjs/core": "10.2.7",
     "@nestjs/testing": "10.2.7",
-    "@types/tmp": "0.2.4",
+    "@types/tmp": "0.2.5",
     "axios": "1.5.1",
     "rxjs": "7.8.1",
     "tmp": "0.2.1"
