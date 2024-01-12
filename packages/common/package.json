@@ -34,10 +34,10 @@
   },
   "devDependencies": {
     "@nestjs/axios": "3.0.1",
-    "@nestjs/common": "10.2.10",
-    "@nestjs/core": "10.2.10",
-    "@nestjs/testing": "10.2.10",
-    "axios": "1.6.2",
+    "@nestjs/common": "10.3.0",
+    "@nestjs/core": "10.3.0",
+    "@nestjs/testing": "10.3.0",
+    "axios": "1.6.5",
     "rxjs": "7.8.1"
   },
   "peerDependencies": {
