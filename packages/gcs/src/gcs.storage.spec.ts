@@ -1,10 +1,10 @@
+import { StorageModule, StorageService } from "@anchan828/nest-storage";
 import type { ParsedSignedUrl } from "@anchan828/nest-storage-common";
 import { Test } from "@nestjs/testing";
 import axios from "axios";
 import { createReadStream, existsSync, writeFileSync } from "fs";
 import { basename, join } from "path";
 import { dirSync, fileSync, tmpNameSync } from "tmp";
-import { StorageModule, StorageService } from "@anchan828/nest-storage";
 import { GoogleCloudStorageProviderModule } from "./gcs.module";
 import { GoogleCloudStorage } from "./gcs.storage";
 
@@ -15,12 +15,7 @@ describe("GoogleCloudStorage", () => {
   beforeEach(async () => {
     cacheDir = dirSync().name;
     const app = await Test.createTestingModule({
-      imports: [
-        StorageModule.register({ bucket, cacheDir }),
-        GoogleCloudStorageProviderModule.register({
-          keyFilename: process.env.NEST_STORAGE_GCS_KEY,
-        }),
-      ],
+      imports: [StorageModule.register({ bucket, cacheDir }), GoogleCloudStorageProviderModule.register({})],
     }).compile();
     service = app.get<StorageService>(StorageService);
   });
@@ -169,7 +164,6 @@ describe("GoogleCloudStorage", () => {
           StorageModule.register({ bucket, cacheDir }),
           GoogleCloudStorageProviderModule.register({
             apiEndpoint: "http://localhost:4443",
-            keyFilename: process.env.NEST_STORAGE_GCS_KEY,
             signedUrlOptions: { endpoint: "http://localhost:3000" },
           }),
         ],
@@ -187,7 +181,6 @@ describe("GoogleCloudStorage", () => {
           StorageModule.register({ bucket, cacheDir }),
           GoogleCloudStorageProviderModule.register({
             apiEndpoint: "http://localhost:4443",
-            keyFilename: process.env.NEST_STORAGE_GCS_KEY,
             signedUrlOptions: { endpoint: "http://localhost:3000", excludeBucketName: true },
           }),
         ],
@@ -256,7 +249,6 @@ describe("GoogleCloudStorage", () => {
           StorageModule.register({ bucket, cacheDir }),
           GoogleCloudStorageProviderModule.register({
             apiEndpoint: "http://localhost:4443",
-            keyFilename: process.env.NEST_STORAGE_GCS_KEY,
             signedUrlOptions: { endpoint: "http://localhost:3000" },
           }),
         ],
